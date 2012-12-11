@@ -197,7 +197,7 @@ unified_inventory.get_formspec = function(player,page)
 			formspec=formspec.."label[4,.9;Home set to:]"
 			formspec=formspec.."label[5.7,.9;("..math.floor(home.x)..","..math.floor(home.y)..","..math.floor(home.z)..")]"
 		end	
-		if minetest.setting_getbool("creative_mode") then
+		if minetest.check_player_privs(player_name, {settime=true}) then
 			formspec=formspec.."button[0,2;2,0.5;misc_set_day;Set Day]"
 			formspec=formspec.."button[2,2;2,0.5;misc_set_night;Set Night]"
 		end
