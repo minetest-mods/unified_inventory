@@ -1,0 +1,17 @@
+Complete overhaul of player's inventory
+Credits to creators of separate parts i used there:
+Cornernote, Jeija, PilzAdam and others.
+
+License: GPLv3
+
+Browse code: https://github.com/RealBadAngel/unifiedinventory
+Download link: http://realbadangel.pl/unified_inventory.zip
+Please make sure you dont have any previous versions of the mod installed.
+No need to rename anything, just download and unpack.
+
+Installation: download modpack, put it into your mods directory.
+Go to /games/minetest_game/mods  and delete /creative folder from there. You wont need it anymore (if you omit this step you will suffer glitches).
+
+IMPORTANT: you need to run Minetest 0.4.4 at least.
+
+Please post any ideas you may have to help improve it.
