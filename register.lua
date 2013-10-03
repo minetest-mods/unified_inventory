@@ -140,7 +140,7 @@ unified_inventory.register_page("craftguide", {
 		formspec = formspec.."list[detached:"..player_name.."craftrecipe;output;6,1;1,1;]"
 		formspec = formspec.."label[2,0.5;Input:]"
 		formspec = formspec.."label[6,0.5;Output:]"
-		formspec = formspec.."label[6,2.6;Method:]"
+		formspec = formspec.."label[6,3.35;Method:]"
 		local item_name = unified_inventory.current_item[player_name]
 		local craft = nil
 		if item_name then
@@ -152,6 +152,7 @@ unified_inventory.register_page("craftguide", {
 				alternates = #crafts
 				craft = crafts[alternate]
 				local method = craft.type
+				local allow_auto_craft = ((method == "normal") or (method == "shapeless"))
 				if craft.type == "normal" then
 					method = "crafting"
 				elseif craft.type == "shapeless" then
@@ -159,7 +160,13 @@ unified_inventory.register_page("craftguide", {
 				elseif craft.type == "alloy" then
 					method = "alloy cooking"
 				end
-				formspec = formspec.."label[6,3;"..method.."]"
+				formspec = formspec.."label[6,3.75;"..method.."]"
+				if allow_auto_craft then
+					formspec = formspec.."label[6,1.95;Copy to craft grid:]"
+					formspec = formspec.."button[6,2.5;0.6,0.5;craftguide_craft_1;1]"
+					formspec = formspec.."button[6.6,2.5;0.6,0.5;craftguide_craft_10;10]"
+					formspec = formspec.."button[7.2,2.5;0.6,0.5;craftguide_craft_max;All]"
+				end
 			end
 			if alternates > 1 then
 				formspec = formspec.."label[0,2.6;Recipe "
@@ -213,3 +220,76 @@ unified_inventory.register_page("craftguide", {
 	end,
 })
 
+
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	local amount
+	for k, v in pairs(fields) do
+		amount = k:match("craftguide_craft_(.*)")
+		if amount then break end
+	end
+	if not amount then return end
+	local player_name = player:get_player_name()
+	local recipe_inv = minetest.get_inventory({
+		type="detached",
+		name=player_name.."craftrecipe",
+	})
+
+	local output = unified_inventory.current_item[player_name]
+	if (not output) or (output == "") then return end
+
+	local player_inv = player:get_inventory()
+
+	local crafts = unified_inventory.crafts_table[output]
+	if (not crafts) or (#crafts == 0) then return end
+
+	local alternate = unified_inventory.alternate[player_name]
+
+	local craft = crafts[alternate]
+	if craft.width > 3 then return end
+
+	local needed = craft.items
+
+	local craft_list = player_inv:get_list("craft")
+
+	local width = craft.width
+	if width == 0 then
+		-- Shapeless recipe
+		width = 3
+	end
+
+	if amount == "max" then
+		amount = 99 -- Arbitrary; need better way to do this.
+	else
+		amount = tonumber(amount)
+	end
+
+	for iter = 1, amount do
+		local index = 1
+		for y = 1, 3 do
+			for x = 1, width do
+				local needed_item = needed[index]
+				if needed_item then
+					local craft_index = ((y - 1) * 3) + x
+					local craft_item = craft_list[craft_index]
+					if (not craft_item) or (craft_item:is_empty()) or (craft_item:get_name() == needed_item) then
+						itemname = craft_item and craft_item:get_name() or needed_item
+						local needed_stack = ItemStack(needed_item)
+						if player_inv:contains_item("main", needed_stack) then
+							local count = (craft_item and craft_item:get_count() or 0) + 1
+							if count <= needed_stack:get_definition().stack_max then
+								local stack = ItemStack({name=needed_item, count=count})
+								craft_list[craft_index] = stack
+								player_inv:remove_item("main", needed_stack)
+							end
+						end
+					end
+				end
+				index = index + 1
+			end
+		end
+	end
+
+	player_inv:set_list("craft", craft_list)
+
+	unified_inventory.set_inventory_formspec(player, "craft")
+end)
