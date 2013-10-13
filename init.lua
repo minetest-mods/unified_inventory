@@ -24,6 +24,8 @@ unified_inventory.buttons = {}
 unified_inventory.home_pos = {}
 unified_inventory.home_filename =
 		worldpath.."/unified_inventory_home.home"
+unified_inventory.mine_filename =
+		worldpath.."/unified_inventory_mine.mine"
 		
 -- Default inventory page
 unified_inventory.default = "craft"

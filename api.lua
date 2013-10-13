@@ -45,6 +45,28 @@ local function load_home()
 end
 load_home()
 
+
+-- load_mine
+local function load_mine()
+	local input = io.open(unified_inventory.mine_filename, "r")
+	if input then
+		while true do
+			local x = input:read("*n")
+			if x == nil then
+				break
+			end
+			local y = input:read("*n")
+			local z = input:read("*n")
+			local name = input:read("*l")
+			unified_inventory.minepos[name:sub(2)] = {x = x, y = y, z = z}
+		end
+		io.close(input)
+		else
+		unified_inventory.minepos = {}
+	end
+end
+load_mine() 
+
 function unified_inventory.set_home(player, pos)
 	local player_name = player:get_player_name()
 	unified_inventory.home_pos[player_name] = pos
@@ -63,6 +85,31 @@ end
 
 function unified_inventory.go_home(player)
 	local pos = unified_inventory.home_pos[player:get_player_name()]
+	if pos ~= nil then
+		player:setpos(pos)
+	end
+end
+
+-- set_mine
+function unified_inventory.set_mine(player, pos)
+	local player_name=player:get_player_name()
+	unified_inventory.minepos[player_name] = pos
+	-- save the mine data from the table to the file
+	local output = io.open(unified_inventory.mine_filename, "w")
+	for k, v in pairs(unified_inventory.minepos) do
+		if v ~= nil then
+			output:write(math.floor(v.x).." "
+					..math.floor(v.y).." "
+					..math.floor(v.z).." "
+					..k.."\n")
+		end
+	end
+	io.close(output)
+end
+
+-- go_mine
+function unified_inventory.go_mine(player)
+	local pos = unified_inventory.minepos[player:get_player_name()]
 	if pos ~= nil then
 		player:setpos(pos)
 	end
