@@ -1,0 +1,38 @@
+# Translation by Xanthin
+
+### bags.lua ###
+Bags = Ruchsaecke
+Bag 1 = Rucksack 1
+Bag 2 = Rucksack 2
+Bag 3 = Rucksack 3
+Bag 4 = Rucksack 4
+Small Bag = Rucksack (klein)
+Medium Bag = Rucksack (mittel)
+Large Bag = Rucksack (gross)
+
+### inernal.lua ###
+Page: = Seite:
+%s of %s = %s von %s
+Filter: = Suche: 
+
+### register.lua ###
+Can use the creative inventory = Kann das Kreativinventar nutzen
+Home position set to: %s = Ausgangsposition nach: %s gesetzt
+Time of day set to 6am = Tageszeit auf 6 Uhr morgens geaendert
+You don't have the settime priviledge! = Du hast nicht das "settime" Privileg!
+Time of day set to 9pm = Tageszeit auf 9 Uhr abends geaendert
+This button has been disabled outside of creative mode to prevent accidental inventory trashing. Use the trash slot instead. = Diese Funktion ist ausserhalb des Kreativmodus deaktiviert um ein versehentliches Loeschen des ganzen Inventars zu verhindern. Nutze stattdessen das Muellfeld.
+Inventory Cleared! = Inventar geleert!
+Crafting = Werken
+Trash: = Muell:
+Refill: = Nachfuellen:
+Crafting Guide = Werkanleitung
+Method: = Methode:
+Result: %s = Ergebnis: %s
+crafting = Werken
+shapeless crafting = Formloses Werken
+cooking = Kochen
+alloy cooking = legierendes Kochen
+Copy to craft grid: = Kopiere ins Werkfeld:
+Recipe %s of %s = Rezept %s von %s
+Alternate = Alternative
