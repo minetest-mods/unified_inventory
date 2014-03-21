@@ -1,3 +1,10 @@
+-- Boilerplate to support localized strings if intllib mod is installed.
+local S
+if intllib then
+	S = intllib.Getter()
+else
+	S = function(s) return s end
+end
 
 function unified_inventory.get_formspec(player, page)
 	if not player then
@@ -73,9 +80,9 @@ function unified_inventory.get_formspec(player, page)
 		end
 	end
 	end
-	formspec = formspec.."label[8.2,0;Page:]"
-	formspec = formspec.."label[9,0;"..page.." of "..pagemax.."]"
-	formspec = formspec.."label[8.2,0.4;Filter:]"
+	formspec = formspec.."label[8.2,0;"..S("Page:").."]"
+	formspec = formspec.."label[9,0;"..S("%s of %s"):format(page,pagemax).."]"
+	formspec = formspec.."label[8.2,0.4;"..S("Filter:").."]"
 	formspec = formspec.."label[9,0.4;"..unified_inventory.activefilter[player_name].."]"
 	return formspec
 end
