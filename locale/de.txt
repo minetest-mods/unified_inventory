@@ -1,7 +1,7 @@
 # Translation by Xanthin
 
 ### bags.lua ###
-Bags = Ruchsaecke
+Bags = Rucksaecke
 Bag 1 = Rucksack 1
 Bag 2 = Rucksack 2
 Bag 3 = Rucksack 3
@@ -32,7 +32,7 @@ Result: %s = Ergebnis: %s
 crafting = Werken
 shapeless crafting = Formloses Werken
 cooking = Kochen
-alloy cooking = legierendes Kochen
+alloy cooking = Legierung Kochen
 Copy to craft grid: = Kopiere ins Werkfeld:
 Recipe %s of %s = Rezept %s von %s
 Alternate = Alternative
