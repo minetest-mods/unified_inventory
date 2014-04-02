@@ -170,7 +170,7 @@ unified_inventory.register_page("craftguide", {
 					formspec = formspec.."label[6,1.95;"..S("Copy to craft grid:").."]"
 							.."button[6,2.5;0.6,0.5;craftguide_craft_1;1]"
 							.."button[6.6,2.5;0.6,0.5;craftguide_craft_10;10]"
-							.."button[7.2,2.5;0.6,0.5;craftguide_craft_max;All]"
+							.."button[7.2,2.5;0.6,0.5;craftguide_craft_max;"..S("All").."]"
 				end
 			end
 			if alternates > 1 then
