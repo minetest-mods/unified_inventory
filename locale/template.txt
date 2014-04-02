@@ -1,4 +1,4 @@
-# Translation by Xanthin
+# Template
 ### bags.lua ###
 Bags = Ruchsaecke
 Bag 1 = 
@@ -33,5 +33,6 @@ shapeless crafting =
 cooking = 
 alloy cooking = 
 Copy to craft grid: = 
+All = 
 Recipe %s of %s = 
 Alternate = 
