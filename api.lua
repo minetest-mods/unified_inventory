@@ -1,18 +1,29 @@
 
 -- Create detached creative inventory after loading all mods
 minetest.after(0.01, function()
+	local rev_aliases = {}
+	for source, target in pairs(minetest.registered_aliases) do
+		if not rev_aliases[target] then rev_aliases[target] = {} end
+		table.insert(rev_aliases[target], source)
+	end
 	unified_inventory.items_list = {}
 	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory or
 		   def.groups.not_in_creative_inventory == 0) and
 		   def.description and def.description ~= "" then
 			table.insert(unified_inventory.items_list, name)
-			local recipes = minetest.get_all_craft_recipes(name)
-			if recipes then
-				unified_inventory.crafts_table[name] = recipes
-			else
-				unified_inventory.crafts_table[name] = {}
+			local all_names = rev_aliases[name] or {}
+			table.insert(all_names, name)
+			local all_recipes = {}
+			for _, name in ipairs(all_names) do
+				local recipes = minetest.get_all_craft_recipes(name)
+				if recipes then
+					for _, recipe in ipairs(recipes) do
+						table.insert(all_recipes, recipe)
+					end
+				end
 			end
+			unified_inventory.crafts_table[name] = all_recipes
 		end
 	end
 	table.sort(unified_inventory.items_list)
