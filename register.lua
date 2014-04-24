@@ -1,6 +1,13 @@
+-- Boilerplate to support localized strings if intllib mod is installed.
+local S
+if intllib then
+	S = intllib.Getter()
+else
+	S = function(s) return s end
+end
 
 minetest.register_privilege("creative", {
-	description = "Can use the creative inventory",
+	description = S("Can use the creative inventory"),
 	give_to_singleplayer = false,
 })
 
@@ -41,8 +48,7 @@ unified_inventory.register_button("home_gui_set", {
 			minetest.sound_play("dingdong",
 					{to_player=player_name, gain = 1.0})
 			minetest.chat_send_player(player_name,
-					"Home position set to: "
-					..minetest.pos_to_string(home))
+					S("Home position set to: %s"):format(minetest.pos_to_string(home)))
 		end
 	end,
 })
@@ -67,11 +73,10 @@ unified_inventory.register_button("misc_set_day", {
 					{to_player=player_name, gain = 1.0})
 			minetest.set_timeofday((6000 % 24000) / 24000)
 			minetest.chat_send_player(player_name,
-					"Time of day set to 6am")
+					S("Time of day set to 6am"))
 		else
 			minetest.chat_send_player(player_name,
-					"You don't have the"
-					.." settime priviledge!")
+					S("You don't have the settime priviledge!"))
 		end
 	end,
 })
@@ -86,11 +91,10 @@ unified_inventory.register_button("misc_set_night", {
 					{to_player=player_name, gain = 1.0})
 			minetest.set_timeofday((21000 % 24000) / 24000)
 			minetest.chat_send_player(player_name,
-					"Time of day set to 9pm")
+					S("Time of day set to 9pm"))
 		else
 			minetest.chat_send_player(player_name,
-					"You don't have the"
-					.." settime priviledge!")
+					S("You don't have the settime priviledge!"))
 		end
 	end,
 })
@@ -102,14 +106,11 @@ unified_inventory.register_button("clear_inv", {
 		local player_name = player:get_player_name()
 		if not unified_inventory.is_creative(player_name) then
 			minetest.chat_send_player(player_name,
-					"This button has been disabled outside"
-					.." of creative mode to prevent"
-					.." accidental inventory trashing."
-					.." Use the trash slot instead.")
+					S("This button has been disabled outside of creative mode to prevent accidental inventory trashing. Use the trash slot instead."))
 			return
 		end
 		player:get_inventory():set_list("main", {})
-		minetest.chat_send_player(player_name, 'Inventory Cleared!')
+		minetest.chat_send_player(player_name, S('Inventory Cleared!'))
 		minetest.sound_play("trash_all",
 				{to_player=player_name, gain = 1.0})
 	end,
@@ -120,14 +121,14 @@ unified_inventory.register_page("craft", {
 		local player_name = player:get_player_name()
 		local formspec = "background[0,1;8,3;ui_crafting_form.png]"
 		formspec = formspec.."background[0,4.5;8,4;ui_main_inventory.png]"
-		formspec = formspec.."label[0,0;Crafting]"
+		formspec = formspec.."label[0,0;"..S("Crafting").."]"
 		formspec = formspec.."listcolors[#00000000;#00000000]"
 		formspec = formspec.."list[current_player;craftpreview;6,1;1,1;]"
 		formspec = formspec.."list[current_player;craft;2,1;3,3;]"
-		formspec = formspec.."label[7,2.5;Trash:]"
+		formspec = formspec.."label[7,2.5;"..S("Trash:").."]"
 		formspec = formspec.."list[detached:trash;main;7,3;1,1;]"
 		if unified_inventory.is_creative(player_name) then
-			formspec = formspec.."label[0,2.5;Refill:]"
+			formspec = formspec.."label[0,2.5;"..S("Refill:").."]"
 			formspec = formspec.."list[detached:"..player_name.."refill;main;0,3;1,1;]"
 		end
 		return {formspec=formspec}
@@ -139,14 +140,14 @@ unified_inventory.register_page("craftguide", {
 		local player_name = player:get_player_name()
 		local formspec = "background[0,1;8,3;ui_craftguide_form.png]"
 		formspec = formspec.."background[0,4.5;8,4;ui_main_inventory.png]"
-		formspec = formspec.."label[0,0;Crafting Guide]"
+		formspec = formspec.."label[0,0;"..S("Crafting Guide").."]"
 		formspec = formspec.."listcolors[#00000000;#00000000]"
 		formspec = formspec.."list[detached:"..player_name.."craftrecipe;output;6,1;1,1;]"
-		formspec = formspec.."label[6,3.35;Method:]"
+		formspec = formspec.."label[6,3.35;"..S("Method:").."]"
 		local item_name = unified_inventory.current_item[player_name]
 		local craft = nil
 		if item_name then
-			formspec = formspec.."textarea[0.3,0.6;10,1;;Result: "..item_name..";]"
+			formspec = formspec.."textarea[0.3,0.6;10,1;;"..S("Result: %s"):format(item_name)..";]"
 			local alternates = 0
 			local alternate = unified_inventory.alternate[player_name]
 			local crafts = unified_inventory.crafts_table[item_name]
@@ -156,25 +157,25 @@ unified_inventory.register_page("craftguide", {
 				local method = craft.type
 				local allow_auto_craft = ((method == "normal") or (method == "shapeless"))
 				if craft.type == "normal" then
-					method = "crafting"
+					method = S("crafting")
 				elseif craft.type == "shapeless" then
-					method = "shapeless crafting"
+					method = S("shapeless crafting")
+				elseif craft.type == "cooking" then
+					method = S("cooking")
 				elseif craft.type == "alloy" then
-					method = "alloy cooking"
+					method = S("alloy cooking")
 				end
 				formspec = formspec.."label[6,3.75;"..method.."]"
 				if allow_auto_craft then
-					formspec = formspec.."label[6,1.95;Copy to craft grid:]"
+					formspec = formspec.."label[6,1.95;"..S("Copy to craft grid:").."]"
 							.."button[6,2.5;0.6,0.5;craftguide_craft_1;1]"
 							.."button[6.6,2.5;0.6,0.5;craftguide_craft_10;10]"
-							.."button[7.2,2.5;0.6,0.5;craftguide_craft_max;All]"
+							.."button[7.2,2.5;0.6,0.5;craftguide_craft_max;"..S("All").."]"
 				end
 			end
 			if alternates > 1 then
-				formspec = formspec.."label[0,2.6;Recipe "
-						..tostring(alternate).." of "
-						..tostring(alternates).."]"
-						.."button[0,3.15;2,1;alternate;Alternate]"
+				formspec = formspec.."label[0,2.6;"..S("Recipe %s of %s"):format(alternate,alternates).."]"
+						.."button[0,3.15;2,1;alternate;"..S("Alternate").."]"
 			end
 		end
 

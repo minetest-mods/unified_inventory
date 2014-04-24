@@ -1,0 +1,38 @@
+# Template
+### bags.lua ###
+Bags = Ruchsaecke
+Bag 1 = 
+Bag 2 = 
+Bag 3 = 
+Bag 4 = 
+Small Bag = 
+Medium Bag = 
+Large Bag = 
+
+### inernal.lua ###
+Page: = 
+%s of %s = 
+Filter: = 
+
+### register.lua ###
+Can use the creative inventory = 
+Home position set to: %s = 
+Time of day set to 6am = 
+You don't have the settime priviledge! = 
+Time of day set to 9pm = 
+This button has been disabled outside of creative mode to prevent accidental inventory trashing. Use the trash slot instead. = 
+Inventory Cleared! = 
+Crafting = 
+Trash: = 
+Refill: = 
+Crafting Guide = 
+Method: = 
+Result: %s = 
+crafting = 
+shapeless crafting = 
+cooking = 
+alloy cooking = 
+Copy to craft grid: = 
+All = 
+Recipe %s of %s = 
+Alternate = 
