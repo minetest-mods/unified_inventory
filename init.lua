@@ -28,6 +28,9 @@ unified_inventory.home_filename =
 -- Default inventory page
 unified_inventory.default = "craft"
 
+-- Items to hide from the craftguide; eg: {"technic:concrete", "wool:yellow"}
+unified_inventory.item_hide_list = {}
+
 -- Disable default creative inventory
 if creative_inventory then
 	function creative_inventory.set_creative_formspec(player, start_i, pagenum)
