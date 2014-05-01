@@ -138,7 +138,7 @@ unified_inventory.item_hide_list = {	"bushes:blackberry_bush",
 					"technic:mineral_zinc",
 					"vendor:signal_vendor_on",
 					"travelnet:travelnet",
-					"technic:music_player"
+					"technic:music_player",
 					"technic:template",
 					"technic:template_motor",
 					"technic:template_tool" }
