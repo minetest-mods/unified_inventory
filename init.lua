@@ -141,10 +141,7 @@ unified_inventory.item_hide_list = {	"bushes:blackberry_bush",
 					"technic:music_player"
 					"technic:template",
 					"technic:template_motor",
-					"technic:template_tool",
-
-
-									}
+					"technic:template_tool" }
 
 -- Disable default creative inventory
 if creative_inventory then
