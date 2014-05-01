@@ -29,7 +29,21 @@ unified_inventory.home_filename =
 unified_inventory.default = "craft"
 
 -- Items to hide from the craftguide; eg: {"technic:concrete", "wool:yellow"}
-unified_inventory.item_hide_list = {}
+unified_inventory.item_hide_list = {"bushes:blackberry_bush",
+									"bushes:blackberry",
+									"bushes:blueberry_bush",
+									"bushes:blueberry",
+									"bushes:fruitless_bush",
+									"bushes:gooseberry_bush",
+									"bushes:gooseberry",
+									"bushes:raspberry_bush",
+									"bushes:raspberry",
+									"bushes:strawberry_bush",
+									"bushes:strawberry",
+									"cooked_rat",
+									"rat",
+									"default:apple"
+									}
 
 -- Disable default creative inventory
 if creative_inventory then
