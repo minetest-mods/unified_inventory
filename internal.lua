@@ -1,4 +1,11 @@
-
+for name, def in pairs(minetest.registered_items) do
+	for _,v in pairs(unified_inventory.item_hide_list) do
+	  	if v == name then
+			minetest.registered_items[name].groups.not_in_creative_inventory = 1
+		end
+	end
+	
+end
 function unified_inventory.get_formspec(player, page)
 	if not player then
 		return ""
