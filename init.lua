@@ -150,6 +150,17 @@ if creative_inventory then
 	end
 end
 
+-- Added chatcommand for go home(at request of some users)
+minetest.register_chatcommand("home", {
+    params = "";
+    description = "Send player home.";
+    privs = {};
+    func = function ( name, param )
+	unified_inventory.go_home(minetest.get_player_by_name(name))
+    end;
+});
+
+
 dofile(modpath.."/api.lua")
 dofile(modpath.."/internal.lua")
 dofile(modpath.."/callbacks.lua")
