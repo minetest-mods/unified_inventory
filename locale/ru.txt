@@ -1,0 +1,76 @@
+# Translation by eternal_sorrow
+
+# Template
+### bags.lua ###
+Bags = Сумки
+Bag 1 = Сумка 1
+Bag 2 = Сумка 2
+Bag 3 = Сумка 3
+Bag 4 = Сумка 4
+Small Bag = Малая сумка
+Medium Bag = Средняя сумка
+Large Bag = Большая сумка
+
+### inernal.lua ###
+First page = Первая страница
+Back three pages = Назад на три страницы
+Back one page = Назад на одну страницу
+Forward one page = Вперед на одну страницу
+Forward three pages = Вперед на три страницы
+Last page = Последняя страница
+No matching items = Совпадений нет
+Page = Страница
+%s of %s = %s из %s
+Filter = Фильтр
+Search = Поиск
+
+### register.lua ###
+Can use the creative inventory = Можно использовать инвентарь творческого режима
+Home position set to: %s = Дом теперь расположен по коодинатам: %s
+Time of day set to 6am = Установлено время 6 утра
+You don't have the settime priviledge! = Вам не разрешено устанавливать время!
+Time of day set to 9pm = Установлено время 9 вечера
+This button has been disabled outside of creative mode to prevent accidental inventory trashing.\nUse the trash slot instead. = Эта кнопка отключена вне творческого режима, чтобы предотвратить случайное уничтожение предметов.\nИспользуйте слот корзины вместо нее.
+Inventory Cleared! = Инвентарь очищен!
+Crafting = Крафт
+Trash: = Корзина:
+Refill: = Размножить:
+Crafting Guide = Книга рецептов
+Method: = Способ:
+Result: %s = Результат: %s
+crafting = крафт
+shapeless crafting = бесформенный крафт
+cooking = жарка
+alloy cooking = приготовление сплавов
+Copy to craft grid: = В решетку крафта:
+All = Все
+Recipe %s of %s = Рецепт %s из %s
+Alternate = Следующий
+Crafting Grid =  Решетка крафта
+Go home = Отправиться домой
+Set time to day = День
+Set time to night = Ночь
+Clear inventory = Очистить инвентарь
+
+### waypoints.lua ###
+White = Белый
+Yellow = Желтый
+Red = Красный
+Green = Зелёный
+Blue = Синий
+Waypoints = Путевые точки
+Waypoint active = Путевая точка активна
+Waypoint inactive = Путевая точка неактивна
+World position = Позиция
+Name = Имя
+HUD text color = Цвет текста
+Edit waypoint name = Редактировать имя путевой точки
+Rename waypoint = Переименовать путевую точку
+Change color of waypoint display = Изменить цвет путевой точки
+Set waypoint to current location = Установить путевую точку в текущем местоположении
+Make waypoint visible = Сделать путевую точку видимой
+Make waypoint invisible = Сделать путевую точку невидимой
+Disable display of waypoint coordinates = Отключить отображение координат путевой точки
+Enable display of waypoint coordinates = Включить отображение координат путевой точки
+Finish editing = Завершить редактирование
+Select Waypoint #%d = Выбрать путевую точку №%d
