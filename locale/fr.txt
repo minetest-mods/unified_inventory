@@ -1,0 +1,72 @@
+# Translation by kilbith
+
+# Template
+### bags.lua ###
+Bags = Sacs
+Bag 1 = Sac 1
+Bag 2 = Sac 2
+Bag 3 = Sac 3
+Bag 4 = Sac 4
+Small Bag = Petit sac
+Medium Bag = Sac moyen
+Large Bag = Grand sac
+
+### inernal.lua ###
+First page = 1ère page
+Back three pages = 3 pages en arrière
+Back one page = Page précédente
+Forward one page = Page suivante
+Forward three pages = 3 pages en avant
+Last page = Dernière page
+No matching items = Aucun élément correspondant
+Page = Page
+%s of %s = %s de %s
+Filter = Filtre
+Search = Rechercher
+
+### register.lua ###
+Can use the creative inventory = Vous pouvez utiliser l'inventaire créatif
+Home position set to: %s = Position de votre base fixée à : %s
+Time of day set to 6am = Heure fixée à 6h
+You don't have the settime priviledge! = Vous n'avez pas le privilège 'settime' !
+Time of day set to 9pm = Heure fixée à 21h
+This button has been disabled outside of creative mode to prevent accidental inventory trashing.\nUse the trash slot instead. = Ce bouton a été désactivé en dehors du mode créatif pour éviter des saccages dans l'inventaire.\nUtilisez plutôt la case poubelle. 
+Inventory Cleared! = Inventaire vidé !
+Crafting = Création
+Trash: = Poubelle :
+Refill: = Remplir :
+Crafting Guide = Guide de création
+Method: = Méthode :
+Result: %s = Résultat : %s
+crafting = fabrication
+shapeless crafting = fabrication sans forme
+cooking = cuisson
+alloy cooking = cuisson des métaux
+Copy to craft grid: = Copier sur la grille de création
+All = Tout
+Recipe %s of %s = Recette %s de %d
+Alternate = Alternative
+Crafting Grid =  Grille de création
+
+### waypoints.lua ###
+White = Blanc
+Yellow = Jaune
+Red = Rouge
+Green = Vert
+Blue = Bleu
+Waypoints = Point de passage
+Waypoint active = Point de passage actif
+Waypoint inactive = Point de passage inactif
+World position = Position dans le monde
+Name = Nom
+HUD text color = Couleur de texte du HUD
+Edit waypoint name = Editer le nom du point de passage
+Rename waypoint = Renommer le point de passage
+Change color of waypoint display = Changer la couleur du point de passage
+Set waypoint to current location = Marquer un point de passage à la position actuelle
+Make waypoint visible = Rendre visible le point de passage
+Make waypoint invisible = Rendre invisible le point de passage
+Disable display of waypoint coordinates = Masquer les coordonnées des points de passages
+Enable display of waypoint coordinates = Montrer les coordonnées des points de passages
+Finish editing = Terminer l'édition
+Select Waypoint #%d = Choisir un point de passage #%d
