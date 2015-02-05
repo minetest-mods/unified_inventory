@@ -5,6 +5,7 @@ local huds = {}
 local dtimes = {}
 local dlimit = 3  -- hud will be hidden after this much seconds
 local airhudmod = minetest.get_modpath("4air")
+local hudmod = minetest.get_modpath("hud")
 
 local function get_desc(item)
     if minetest.registered_nodes[item] then return minetest.registered_nodes[item]["description"] end
@@ -18,7 +19,7 @@ minetest.register_on_joinplayer(function(player)
 	minetest.after(0.0, function()
 	local player_name = player:get_player_name() 
 	local off = {x=0, y=-70}
-	if airhudmod then 
+	if airhudmod or hudmod then 
 		off.y=off.y-20
 	end
 	huds[player_name] = player:hud_add({
