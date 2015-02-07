@@ -194,6 +194,7 @@ local other_dir = {
 unified_inventory.register_page("craftguide", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
+		local player_privs = minetest.get_player_privs(player_name)
 		local formspec = ""
 		formspec = formspec.."background[0,4.5;8,4;ui_main_inventory.png]"
 		formspec = formspec.."label[0,0;" .. S("Crafting Guide") .. "]"
@@ -202,6 +203,9 @@ unified_inventory.register_page("craftguide", {
 		if not item_name then return {formspec=formspec} end
 
 		local dir = unified_inventory.current_craft_direction[player_name]
+		local rdir
+		if dir == "recipe" then rdir = "usage" end
+		if dir == "usage" then rdir = "recipe" end
 		local crafts = unified_inventory.crafts_for[dir][item_name]
 		local alternate = unified_inventory.alternate[player_name]
 		local alternates, craft
@@ -212,6 +216,7 @@ unified_inventory.register_page("craftguide", {
 
 		formspec = formspec.."background[0,1;8,3;ui_craftguide_form.png]"
 		formspec = formspec.."textarea[0.3,0.6;10,1;;"..minetest.formspec_escape(role_text[dir]..": "..item_name)..";]"
+		formspec = formspec..stack_image_button(0, 1, 1.1, 1.1, "item_button_" .. rdir .. "_", ItemStack(item_name))
 
 		if not craft then
 			formspec = formspec.."label[6,3.35;"..minetest.formspec_escape(no_recipe_text[dir]).."]"
@@ -219,6 +224,12 @@ unified_inventory.register_page("craftguide", {
 			local item_pos = dir == "recipe" and 6 or 4
 			formspec = formspec.."image["..no_pos..",1;1.1,1.1;ui_no.png]"
 			formspec = formspec..stack_image_button(item_pos, 1, 1.1, 1.1, "item_button_"..other_dir[dir].."_", ItemStack(item_name))
+			if player_privs.give == true then
+				formspec = formspec.."label[0,3.10;" .. S("Give me:") .. "]"
+						.."button[0,  3.70;0.6,0.5;craftguide_giveme_1;1]"
+						.."button[0.6,3.70;0.7,0.5;craftguide_giveme_10;10]"
+						.."button[1.3,3.70;0.8,0.5;craftguide_giveme_99;99]"
+			end
 			return {formspec = formspec}
 		end
 
@@ -255,23 +266,50 @@ unified_inventory.register_page("craftguide", {
 		end
 
 		if craft_type.uses_crafting_grid then
-			formspec = formspec.."label[6,1.95;" .. S("Copy to craft grid:") .. "]"
-					.."button[6,2.5;0.6,0.5;craftguide_craft_1;1]"
-					.."button[6.6,2.5;0.6,0.5;craftguide_craft_10;10]"
-					.."button[7.2,2.5;0.6,0.5;craftguide_craft_max;" .. S("All") .. "]"
+			formspec = formspec.."label[0,1.90;" .. S("To craft grid:") .. "]"
+					.."button[0,  2.5;0.6,0.5;craftguide_craft_1;1]"
+					.."button[0.6,2.5;0.7,0.5;craftguide_craft_10;10]"
+					.."button[1.3,2.5;0.8,0.5;craftguide_craft_max;" .. S("All") .. "]"
+		end
+		if player_privs.give then
+			formspec = formspec.."label[0,3.10;" .. S("Give me:") .. "]"
+					.."button[0,  3.70;0.6,0.5;craftguide_giveme_1;1]"
+					.."button[0.6,3.70;0.7,0.5;craftguide_giveme_10;10]"
+					.."button[1.3,3.70;0.8,0.5;craftguide_giveme_99;99]"
 		end
 
 		if alternates and alternates > 1 then
-			formspec = formspec.."label[0,2.6;"..recipe_text[dir].." "
+			formspec = formspec.."label[6,1.95;"..recipe_text[dir].." "
 					..tostring(alternate).." of "
 					..tostring(alternates).."]"
-					.."button[0,3.15;2,1;alternate;" .. S("Alternate") .. "]"
+					.."button[6,2.3;2,1;alternate;" .. S("Alternate") .. "]"
 		end
 		return {formspec = formspec}
 	end,
 })
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+local function craftguide_giveme(player, formname, fields)
+	local amount
+	for k, v in pairs(fields) do
+		amount = k:match("craftguide_giveme_(.*)")
+		if amount then break end
+	end
+	if not amount then return end
+
+	amount = tonumber(amount)
+	if amount == 0 then return end
+
+	local player_name = player:get_player_name()
+
+	local output = unified_inventory.current_item[player_name]
+	if (not output) or (output == "") then return end
+
+	local player_inv = player:get_inventory()
+
+	player_inv:add_item("main", {name = output, count = amount})
+end
+
+local function craftguide_craft(player, formname, fields)
 	local amount
 	for k, v in pairs(fields) do
 		amount = k:match("craftguide_craft_(.*)")
@@ -338,4 +376,16 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	player_inv:set_list("craft", craft_list)
 
 	unified_inventory.set_inventory_formspec(player, "craft")
+end
+
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	for k, v in pairs(fields) do
+		if k:match("craftguide_craft_") then
+			craftguide_craft(player, formname, fields)
+			break
+		elseif k:match("craftguide_giveme_") then
+			craftguide_giveme(player, formname, fields)
+			break
+		end
+	end
 end)
