@@ -1,0 +1,72 @@
+# Translation by Mahmutelmas06@hotmail.com
+
+# Template
+### bags.lua ###
+Bags = Çantalarım
+Bag 1 = 1. Çanta
+Bag 2 = 2. Çanta
+Bag 3 = 3. Çanta
+Bag 4 = 4. Çanta 
+Small Bag = Küçük Çanta
+Medium Bag = Çanta
+Large Bag = Büyük Çanta
+
+### inernal.lua ###
+First page = İlk Sayfa
+Back three pages = 3 Sayfa Gerile
+Back one page =  Geri
+Forward one page = İleri
+Forward three pages = 3 Sayfa İlerile
+Last page = Son Sayfa
+No matching items = Eşleşme yok
+Page = Sayfa
+%s of %s = %s dan %s
+Filter = Süzgeç
+Search = Ara
+
+### register.lua ###
+Can use the creative inventory = Yaratıcı envanteri kullanabilir
+Home position set to: %s = Yeni eviniz: %s
+Time of day set to 6am = Saat 06:00 olarak ayarlandı 
+You don't have the settime priviledge = Saati düzenleme yetkiniz yok! 
+Time of day set to 9pm = Saat 19:00 olarak ayarlandı 
+This button has been disabled outside of creative mode to prevent accidental inventory trashing.\nUse the trash slot instead. = Yaratıcı modu dışında iken bu tuş kullanılamaz. 
+Inventory Cleared! = Envanter temizlendi! 
+Crafting = Üretim
+Trash: = Çöp
+Refill: = Doldur
+Crafting Guide = Kılavuz
+Method: = Yöntem
+Result: %s = Çıktı: %s
+crafting = üretim 
+shapeless crafting = şekilsiz üretim
+cooking = pişirme
+alloy cooking = karıştırma
+Copy to craft grid: = Üretim tablosuna kopyala 
+All = Tümü
+Recipe %s of %s = %s dan %s tarifi
+Alternate = Altarnatif
+Crafting Grid = Üretim tablosu 
+
+### waypoints.lua ###
+White = Beyaz
+Yellow = Sarı
+Red = Kırmızı
+Green = Yeşil
+Blue = Mavi
+Waypoints = Konum Noktaları
+Waypoint active = Konum Etkin
+Waypoint inactive = Konum Devredışı
+World position = Dünya konumu
+Name = İsim
+HUD text color = Metin rengi
+Edit waypoint name = Konum Noktasını Düzenle
+Rename waypoint = Konum Noktasını Adlandır
+Change color of waypoint display = Konum Gösterge Rengi
+Set waypoint to current location = Bulunduğun noktayı işaretle
+Make waypoint visible = Konumlar görünür
+Make waypoint invisible = Konumlar gözükmez
+Disable display of waypoint coordinates = Koordinatları gizle
+Enable display of waypoint coordinates = Koordinatları göster
+Finish editing = Düzenleme bitti
+Select Waypoint #%d = #%d konum noktası seç 
