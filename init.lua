@@ -36,6 +36,9 @@ unified_inventory = {
 	-- Trash enabled
 	trash_enabled = (minetest.settings:get_bool("unified_inventory_trash") ~= false),
 
+	trash_use_listring = minetest.settings:get_bool(
+		"unified_inventory_trash_listring"),
+
 	pagecols = 8,
 	pagerows = 10,
 	page_y = 0,
