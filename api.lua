@@ -7,6 +7,28 @@ minetest.after(0.01, function()
 		if not rev_aliases[target] then rev_aliases[target] = {} end
 		table.insert(rev_aliases[target], source)
 	end
+
+	local circular_saw_patterns = {}
+	if minetest.setting_getbool("unified_inventory.exclude_saw_recipes")
+	   and rawget(_G, "circular_saw") then
+		-- Make a list of different patterns that when found in a node
+		-- name, it's assumed to mean that they are registered by the
+		-- circular saw. At the time of writing, that list is:
+		-- ":stair_", ":panel_", ":micro_", ":slab_", ":slope_"
+		-- Unfortunately, "" is included as a suffix, which prevents
+		-- refining the search by matching by suffix too.
+
+		local circular_saw_words = {}
+		-- Find unique prefix words in circular_saw.names
+		for _, v in ipairs(circular_saw.names) do
+			circular_saw_words[v[1]] = true
+		end
+
+		-- Make a sequence with the unique names
+		for k, _ in pairs(circular_saw_words) do
+			circular_saw_patterns[#circular_saw_patterns + 1] = ":" .. k .. "_"
+		end
+	end
 	unified_inventory.items_list = {}
 	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory or
@@ -21,16 +43,31 @@ minetest.after(0.01, function()
 					for _, recipe in ipairs(recipes) do
 
 						local unknowns
+						local has_non_saw_element
 
 						for _,chk in pairs(recipe.items) do
 							local groupchk = string.find(chk, "group:")
 							if (not groupchk and not minetest.registered_items[chk])
 							  or (groupchk and not unified_inventory.get_group_item(string.gsub(chk, "group:", "")).item) then
 								unknowns = true
+								break -- no point checking further
+							end
+
+							local found
+							-- check if node name matches any of the patterns
+							for _,v in ipairs(circular_saw_patterns) do
+								if chk:find(v, 1, true) then
+									found = true
+									break
+								end
+							end
+							if not found then
+								has_non_saw_element = true
+								break
 							end
 						end
 
-						if not unknowns then
+						if not unknowns and has_non_saw_element then
 							unified_inventory.register_craft(recipe)
 						end
 					end
