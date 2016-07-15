@@ -156,11 +156,13 @@ unified_inventory.register_page("craft", {
 		formspec = formspec.."list[current_player;craft;2,"..formspecy..";3,3;]"
 		formspec = formspec.."label[7,"..(formspecy + 1.5)..";" .. S("Trash:") .. "]"
 		formspec = formspec.."list[detached:trash;main;7,"..(formspecy + 2)..";1,1;]"
-		formspec = formspec.."listring[current_name;craft]"
 		formspec = formspec.."listring[current_player;main]"
 		if unified_inventory.is_creative(player_name) then
+			formspec = formspec.."listring[detached:trash;main]"
 			formspec = formspec.."label[0,"..(formspecy + 1.5)..";" .. S("Refill:") .. "]"
 			formspec = formspec.."list[detached:"..minetest.formspec_escape(player_name).."refill;main;0,"..(formspecy +2)..";1,1;]"
+		else
+			formspec = formspec.."listring[current_name;craft]"
 		end
 		return {formspec=formspec}
 	end,
