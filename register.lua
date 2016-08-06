@@ -227,6 +227,8 @@ unified_inventory.register_page("craftguide", {
 		formspec = formspec.."listcolors[#00000000;#00000000]"
 		local item_name = unified_inventory.current_item[player_name]
 		if not item_name then return {formspec=formspec} end
+		local displayed_name = minetest.registered_items[item_name].description
+		if not displayed_name then displayed_name = item_name end
 
 		local dir = unified_inventory.current_craft_direction[player_name]
 		local rdir
@@ -242,7 +244,7 @@ unified_inventory.register_page("craftguide", {
 
 		formspec = formspec.."background[0.5,"..(formspecy + 0.2)..";8,3;ui_craftguide_form.png]"
 		formspec = formspec.."textarea["..craftresultx..","..craftresulty
-                           ..";10,1;;"..minetest.formspec_escape(role_text[dir]..": "..item_name)..";]"
+                           ..";10,1;;"..minetest.formspec_escape(role_text[dir]..": "..displayed_name)..";]"
 		formspec = formspec..stack_image_button(0, formspecy, 1.1, 1.1, "item_button_"
 		                   .. rdir .. "_", ItemStack(item_name))
 
