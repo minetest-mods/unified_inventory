@@ -321,7 +321,7 @@ unified_inventory.register_page("craftguide", {
 				..";"..minetest.formspec_escape(S("This recipe is too\nlarge to be displayed.")).."]"
 		end
 
-		if craft_type.uses_crafting_grid then
+		if craft_type.uses_crafting_grid and display_size.width <= 3 then
 			formspec = formspec.."label[0,"..(formspecy + 0.9)..";" .. S("To craft grid:") .. "]"
 					.."button[0,  "..(formspecy + 1.5)..";0.6,0.5;craftguide_craft_1;1]"
 					.."button[0.6,"..(formspecy + 1.5)..";0.7,0.5;craftguide_craft_10;10]"
