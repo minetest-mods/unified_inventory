@@ -287,6 +287,7 @@ unified_inventory.register_page("craftguide", {
 		end
 		-- Size modifier factor
 		local sf = math.min(1, of * (1.05 + 0.05*od))
+		-- Button size
 		local bsize_h = 1.1 * sf
 		local bsize_w = bsize_h
 		if display_size.width >= mini_craft_size then
@@ -294,12 +295,15 @@ unified_inventory.register_page("craftguide", {
 		end
 		if (bsize_h > 0.35 and display_size.width) then
 		for y = 1, display_size.height do
-		for x = display_size.width,1,-1 do
+		for x = 1, display_size.width do
 			local item
 			if craft and x <= craft_width then
 				item = craft.items[(y-1) * craft_width + x]
 			end
-			local xof = (x-1) * of + of
+			-- Flipped x, used to build formspec buttons from right to left
+			local fx = display_size.width - (x-1)
+			-- x offset, y offset
+			local xof = (fx-1) * of + of
 			local yof = (y-1) * of + 1
 			if item then
 				formspec = formspec..stack_image_button(
