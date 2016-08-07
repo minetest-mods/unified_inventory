@@ -278,9 +278,21 @@ unified_inventory.register_page("craftguide", {
 		local xoffset = 5.5
 		-- Offset factor for crafting grids with side length > 4
 		local of = (3/math.max(3, math.max(display_size.width, display_size.height)))
+		local od = 0
+		-- Minimum grid size at which size optimazation measures kick in
+		local mini_craft_size = 6
+		if display_size.width >= mini_craft_size then
+			od = math.max(1, display_size.width - 2)
+			xoffset = xoffset - 0.1
+		end
 		-- Size modifier factor
-		local sf = math.min(1, of * 1.05)
-		local bsize = 1.1 * sf
+		local sf = math.min(1, of * (1.05 + 0.05*od))
+		local bsize_h = 1.1 * sf
+		local bsize_w = bsize_h
+		if display_size.width >= mini_craft_size then
+			bsize_w = 1.175 * sf
+		end
+		if (bsize_h > 0.35 and display_size.width) then
 		for y = 1, display_size.height do
 		for x = display_size.width,1,-1 do
 			local item
@@ -291,16 +303,22 @@ unified_inventory.register_page("craftguide", {
 			local yof = (y-1) * of + 1
 			if item then
 				formspec = formspec..stack_image_button(
-						xoffset - xof, formspecy - 1 + yof, bsize, bsize,
+						xoffset - xof, formspecy - 1 + yof, bsize_w, bsize_h,
 						"item_button_recipe_",
 						ItemStack(item))
 			else
 				-- Fake buttons just to make grid
 				formspec = formspec.."image_button["
 					..tostring(xoffset - xof)..","..tostring(formspecy - 1 + yof)
-					..";"..bsize..","..bsize..";ui_blank_image.png;;]"
+					..";"..bsize_w..","..bsize_h..";ui_blank_image.png;;]"
 			end
 		end
+		end
+		else
+			-- Error
+			formspec = formspec.."label["
+				..tostring(2)..","..tostring(formspecy)
+				..";"..minetest.formspec_escape(S("This recipe is too\nlarge to be displayed.")).."]"
 		end
 
 		if craft_type.uses_crafting_grid then
