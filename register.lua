@@ -187,7 +187,7 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		selectitem = group_item.sole and displayitem or name
 	end
 	local label = show_is_group and "G" or ""
-	return string.format("item_image_button[%f,%f;%u,%u;%s;%s;%s]",
+	return string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",
 			x, y, w, h,
 			minetest.formspec_escape(displayitem),
 			minetest.formspec_escape(buttonname_prefix..unified_inventory.mangle_for_formspec(selectitem)),
@@ -279,10 +279,8 @@ unified_inventory.register_page("craftguide", {
 		-- Offset factor for crafting grids with side length > 4
 		local of = (3/math.max(3, math.max(display_size.width, display_size.height)))
 		-- Size modifier factor
-		local sf = math.min(1, of * 1.5)
+		local sf = math.min(1, of * 1.05)
 		local bsize = 1.1 * sf
-		-- Ugly hack because for some reason image_buttons don't have the same size as item_image_buttons ...
-		local fakesize = bsize - 0.1
 		for y = 1, display_size.height do
 		for x = display_size.width,1,-1 do
 			local item
@@ -300,7 +298,7 @@ unified_inventory.register_page("craftguide", {
 				-- Fake buttons just to make grid
 				formspec = formspec.."image_button["
 					..tostring(xoffset - xof)..","..tostring(formspecy - 1 + yof)
-					..";"..fakesize..","..fakesize..";ui_blank_image.png;;]"
+					..";"..bsize..","..bsize..";ui_blank_image.png;;]"
 			end
 		end
 		end
