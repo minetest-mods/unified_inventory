@@ -46,6 +46,7 @@ All = Alles
 Recipe %s of %s = Rezept %s von %s
 Alternate = Alternative
 Crafting Grid =
+This recipe is too\nlarge to be displayed. = Dieses Rezept ist zu\ngroß, um angezeigt\nzu werden.
 
 ### waypoints.lua ###
 White = Weiß

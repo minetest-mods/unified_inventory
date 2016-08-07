@@ -47,6 +47,8 @@ All =
 Recipe %s of %s = 
 Alternate = 
 Crafting Grid =  
+# Shown for huge crafting recipes; try to keep the line length short and use multiple line breaks as needed
+This recipe is too\nlarge to be displayed. = 
 
 ### waypoints.lua ###
 White = 
