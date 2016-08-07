@@ -287,7 +287,7 @@ unified_inventory.register_page("craftguide", {
 			if craft and x <= craft_width then
 				item = craft.items[(y-1) * craft_width + x]
 			end
-			local xof = (x-1) * of + 1
+			local xof = (x-1) * of + of
 			local yof = (y-1) * of + 1
 			if item then
 				formspec = formspec..stack_image_button(
