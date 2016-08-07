@@ -275,23 +275,32 @@ unified_inventory.register_page("craftguide", {
 
 		-- This keeps recipes aligned to the right,
 		-- so that they're close to the arrow.
-		local xoffset = 1.5 + (3 - display_size.width)
+		local xoffset = 5.5
+		-- Offset factor for crafting grids with side length > 4
+		local of = (3/math.max(3, math.max(display_size.width, display_size.height)))
+		-- Size modifier factor
+		local sf = math.min(1, of * 1.5)
+		local bsize = 1.1 * sf
+		-- Ugly hack because for some reason image_buttons don't have the same size as item_image_buttons ...
+		local fakesize = bsize - 0.1
 		for y = 1, display_size.height do
-		for x = 1, display_size.width do
+		for x = display_size.width,1,-1 do
 			local item
 			if craft and x <= craft_width then
 				item = craft.items[(y-1) * craft_width + x]
 			end
+			local xof = (x-1) * of + 1
+			local yof = (y-1) * of + 1
 			if item then
 				formspec = formspec..stack_image_button(
-						xoffset + x, formspecy - 1 + y, 1.1, 1.1,
+						xoffset - xof, formspecy - 1 + yof, bsize, bsize,
 						"item_button_recipe_",
 						ItemStack(item))
 			else
 				-- Fake buttons just to make grid
 				formspec = formspec.."image_button["
-					..tostring(xoffset + x)..","..tostring(formspecy - 1 + y)
-					..";1,1;ui_blank_image.png;;]"
+					..tostring(xoffset - xof)..","..tostring(formspecy - 1 + yof)
+					..";"..fakesize..","..fakesize..";ui_blank_image.png;;]"
 			end
 		end
 		end
