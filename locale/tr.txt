@@ -3,10 +3,7 @@
 # Template
 ### bags.lua ###
 Bags = Çantalarım
-Bag 1 = 1. Çanta
-Bag 2 = 2. Çanta
-Bag 3 = 3. Çanta
-Bag 4 = 4. Çanta 
+Bag @1 = @1. Çanta
 Small Bag = Küçük Çanta
 Medium Bag = Çanta
 Large Bag = Büyük Çanta

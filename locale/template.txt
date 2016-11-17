@@ -6,10 +6,7 @@ Digging (by chance) =
 # Template
 ### bags.lua ###
 Bags = 
-Bag 1 = 
-Bag 2 = 
-Bag 3 = 
-Bag 4 = 
+Bag @1 = 
 Small Bag = 
 Medium Bag = 
 Large Bag = 

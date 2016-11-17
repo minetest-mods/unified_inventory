@@ -1,12 +1,12 @@
 # Translation by Diego Martínez <kaeza>
 
+### api.lua ###
+Digging (by chance) = Excavado (por azar)
+
 # Template
 ### bags.lua ###
 Bags = Bolsas
-Bag 1 = Bolsa 1
-Bag 2 = Bolsa 2
-Bag 3 = Bolsa 3
-Bag 4 = Bolsa 4
+Bag @1 = Bolsa @1
 Small Bag = Bolsa Pequeña
 Medium Bag = Bolsa Mediana
 Large Bag = Bolsa Grande

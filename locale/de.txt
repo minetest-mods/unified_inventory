@@ -5,10 +5,7 @@ Digging (by chance) = Graben (durch Zufall)
 
 ### bags.lua ###
 Bags = Taschen
-Bag 1 = Tasche 1
-Bag 2 = Tasche 2
-Bag 3 = Tasche 3
-Bag 4 = Tasche 4
+Bag @1 = Tasche @1
 Small Bag = Kleine Tasche
 Medium Bag = Mittelgroße Tasche
 Large Bag = Große Tasche

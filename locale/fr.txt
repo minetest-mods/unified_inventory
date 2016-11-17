@@ -3,10 +3,7 @@
 # Template
 ### bags.lua ###
 Bags = Sacs
-Bag 1 = Sac 1
-Bag 2 = Sac 2
-Bag 3 = Sac 3
-Bag 4 = Sac 4
+Bag @1 = Sac @1
 Small Bag = Petit sac
 Medium Bag = Sac moyen
 Large Bag = Grand sac

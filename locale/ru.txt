@@ -3,10 +3,7 @@
 # Template
 ### bags.lua ###
 Bags = Сумки
-Bag 1 = Сумка 1
-Bag 2 = Сумка 2
-Bag 3 = Сумка 3
-Bag 4 = Сумка 4
+Bag @1 = Сумка @1
 Small Bag = Малая сумка
 Medium Bag = Средняя сумка
 Large Bag = Большая сумка

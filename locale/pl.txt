@@ -2,10 +2,7 @@
 
 ### bags.lua ###
 Bags = Plecaki
-Bag 1 = Plecak 1
-Bag 2 = Plecak 2
-Bag 3 = Plecak 3
-Bag 4 = Plecak 4
+Bag @1 = Plecak @1
 Small Bag = Maly plecak
 Medium Bag = Sredni plecak
 Large Bag = Duzy plecak
