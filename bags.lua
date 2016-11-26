@@ -76,7 +76,8 @@ end)
 
 minetest.register_on_joinplayer(function(player)
 	local player_inv = player:get_inventory()
-	local bags_inv = minetest.create_detached_inventory(player:get_player_name().."_bags",{
+	local player_name = player:get_player_name()
+	local bags_inv = minetest.create_detached_inventory(player_name.."_bags",{
 		on_put = function(inv, listname, index, stack, player)
 			player:get_inventory():set_stack(listname, index, stack)
 			player:get_inventory():set_size(listname.."contents",
@@ -127,7 +128,7 @@ minetest.register_on_joinplayer(function(player)
 		allow_move = function(inv, from_list, from_index, to_list, to_index, count, player)
 			return 0
 		end,
-	})
+	}, player_name)
 	for i=1,4 do
 		local bag = "bag"..i
 		player_inv:set_size(bag, 1)

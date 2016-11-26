@@ -43,7 +43,7 @@ minetest.register_on_joinplayer(function(player)
 			minetest.sound_play("electricity",
 					{to_player=player_name, gain = 1.0})
 		end,
-	})
+	}, player_name)
 	refill:set_size("main", 1)
 end)
 
