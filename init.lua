@@ -65,6 +65,12 @@ if creative then
 	end
 end
 
+-- Disable sfinv inventory
+local sfinv = rawget(_G, "sfinv")
+if sfinv then
+	sfinv.enabled = false
+end
+
 dofile(modpath.."/group.lua")
 dofile(modpath.."/api.lua")
 dofile(modpath.."/internal.lua")
@@ -77,4 +83,3 @@ dofile(modpath.."/item_names.lua")
 if minetest.get_modpath("datastorage") then
 	dofile(modpath.."/waypoints.lua")
 end
-
