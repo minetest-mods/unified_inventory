@@ -182,6 +182,8 @@ function unified_inventory.get_formspec(player, page)
 	n = n+1
 
 	-- Search box
+	formspec[n] = "field_close_on_enter[searchbox;false]"
+	n = n+1
 
 	if not draw_lite_mode then
 		formspec[n] = "field[9.5,8.325;3,1;searchbox;;"
