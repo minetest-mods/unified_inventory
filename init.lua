@@ -81,6 +81,7 @@ dofile(modpath.."/callbacks.lua")
 dofile(modpath.."/register.lua")
 
 if minetest.setting_getbool("unified_inventory_bags") ~= false then
+	minetest.setting_set("unified_inventory_bags", "true") --<== To remind the admin that he can disable the bags button without changing the files of unified_inventory.
 	dofile(modpath.."/bags.lua")
 end
 
