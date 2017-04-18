@@ -1,31 +1,38 @@
 # Translation by Diego Martínez <kaeza>
+# Actualizado por Carlos Barraza
 
 ### api.lua ###
 Digging (by chance) = Excavado (por azar)
 
 # Template
 ### bags.lua ###
-Bags = Bolsas
-Bag @1 = Bolsa @1
-Small Bag = Bolsa Pequeña
-Medium Bag = Bolsa Mediana
-Large Bag = Bolsa Grande
+Bags = Bolsos
+Bag @1 = Bolso @1
+Bag 1 = Bolso 1
+Bag 2 = Bolso 2
+Bag 3 = Bolso 3
+Bag 4 = Bolso 4
+Small Bag = Bolso Pequeña
+Medium Bag = Bolso Mediana
+Large Bag = Bolso Grande
 
 ### inernal.lua ###
-First page =
-Back three pages = 
-Back one page = 
-Forward one page = 
-Forward three pages = 
-Last page = 
-No matching items = 
+First page = Primera página
+Back three pages = Volver tres páginas
+Back one page = Volvar una página
+Forward one page = Avanzar una páginas
+Forward three pages = Avanzar tres páginas
+Last page = Ultima página
+No matching items = No se encontraron artículos
 Page = Página
 %s of %s = %s de %s
 Filter = Filtro
-Search = 
+Search = Buscar
+Reset search and display everything = Limpiar la busqueda y mostrar todo
 
 ### register.lua ###
 Can use the creative inventory = Puede usar el inventario creativo
+Forces Unified Inventory to be displayed in Full mode if Lite mode is configured globally = 
 Home position set to: %s = Posición de hogar cambiada a: %s
 Time of day set to 6am = Hora del día cambiada a 6AM
 You don't have the settime priviledge! = ¡No tienes el privilegio `settime'!
@@ -33,6 +40,9 @@ Time of day set to 9pm = Hora del día cambiada a 9PM
 This button has been disabled outside of creative mode to prevent accidental inventory trashing. Use the trash slot instead. = Éste botón ha sido deshabilitado para prevenir la destrucción accidental del inventario.\nUsa la ranura para basura en su lugar.
 Inventory cleared! = ¡Inventario limpio!
 Crafting = Elaboración
+Digging = Excavado
+Cooking = Cocina
+Mixing = Mezcla
 Trash: = Basura:
 Refill: = Rellenar:
 Crafting Guide = Guía de Elaboración
@@ -44,9 +54,31 @@ cooking = hornear
 alloy cooking = horneado de aleación
 Copy to craft grid: = Copiar al cuadro de elaboración
 All = Todos
-Recipe %s of %s = Receta %s de %s
 Alternate = Alternar
-Crafting Grid =  
+Crafting Grid =  Construir objetos
+Show next recipe = Mostrar la siguiente receta
+Show next usage = Mostrar el siguiente uso
+Show previous recipe = Mostrar la resera anterior
+Show previous usage = Mostrar el uso anterior
+# Shown for huge crafting recipes; try to keep the line length short and use multiple line breaks as needed
+This recipe is too\nlarge to be displayed. = Esta reseta es\ndemaciado grande\npara que se muestre
+# %s = group name (e.g. wool)
+Any item belonging to the %s group = Cualquier elemento perteneciente al grupo de %
+# %s = List of “and”-concatenated group names
+Any item belonging to the groups %s = Cualquier elemento que pertenezca a los grupos %s
+Recipe %d of %d = Receta %d de %d
+Usage %d of %d = Uso %d de %d
+No recipes = No hay resetas
+No usages = Sin uso
+Result: %s = Resultado: %s
+Ingredient = Ingredientes
+Set time to day = Establecer la hora a día
+Set time to night = Establecer la hora a noche
+Set home position = Establecer la posición de la casa
+Go home = Ir a la casa
+Clear inventory = Limpiar el inventario
+Give me: = Dame:
+To craft grid: = Elaborar la receta:
 
 ### waypoints.lua ###
 White = Blanco
@@ -54,19 +86,19 @@ Yellow = Amarillo
 Red = Rojo
 Green = Verde
 Blue = Azul
-Waypoints = Puntos de paso
-Waypoint active = Punto de paso activo
-Waypoint inactive = Punto de paso inactivo
+Waypoints = Puntos de referencia
+Waypoint active = Punto de referencia activo
+Waypoint inactive = Punto de referencia inactivo
 World position = Posición en el mundo
 Name = Nombre
 HUD text color = Color del HUD
-Edit waypoint name = 
-Rename waypoint = 
-Change color of waypoint display = 
-Set waypoint to current location = 
-Make waypoint visible = 
-Make waypoint invisible = 
-Disable display of waypoint coordinates = 
-Enable display of waypoint coordinates = 
-Finish editing = 
-Select Waypoint #%d = 
+Edit waypoint name = Editar el nombre del punto de referencia
+Rename waypoint = Cambiar el nombre del punto de referencia
+Change color of waypoint display = Cambiar el color del punto de referencia
+Set waypoint to current location = Establecer un punto de referencia en la posición actual
+Make waypoint visible = Mostrar el punto de referencia
+Make waypoint invisible = Ocultar el punto de referencia
+Disable display of waypoint coordinates = No mostrar las coordenadas del punto de referencia
+Enable display of waypoint coordinates =  Mostrar las coordenadas del punto de referencia
+Finish editing = Terminar la edicion
+Select Waypoint #%d = Seleccionar el punto de referencia #%d
