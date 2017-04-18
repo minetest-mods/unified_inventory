@@ -63,14 +63,14 @@ Show previous usage = Mostrar el uso anterior
 # Shown for huge crafting recipes; try to keep the line length short and use multiple line breaks as needed
 This recipe is too\nlarge to be displayed. = Esta reseta es\ndemaciado grande\npara que se muestre
 # %s = group name (e.g. wool)
-Any item belonging to the %s group = Cualquier elemento perteneciente al grupo de %
+Any item belonging to the %s group = Cualquier elemento perteneciente al grupo de %s
 # %s = List of “and”-concatenated group names
 Any item belonging to the groups %s = Cualquier elemento que pertenezca a los grupos %s
 Recipe %d of %d = Receta %d de %d
 Usage %d of %d = Uso %d de %d
 No recipes = No hay resetas
 No usages = Sin uso
-Result: %s = Resultado: %s
+Result = Resultado
 Ingredient = Ingredientes
 Set time to day = Establecer la hora a día
 Set time to night = Establecer la hora a noche
