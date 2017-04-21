@@ -167,6 +167,7 @@ unified_inventory.register_page("craft", {
 
 		local formspecy = perplayer_formspec.formspec_y
 		local formheadery =  perplayer_formspec.form_header_y
+		local ring_dst = perplayer_formspec.ring_dst
 
 		local player_name = player:get_player_name()
 		local formspec = "background[2,"..formspecy..";6,3;ui_crafting_form.png]"
@@ -183,8 +184,10 @@ unified_inventory.register_page("craft", {
 		formspec = formspec.."listring[current_name;craft]"
 		formspec = formspec.."listring[current_player;main]"
 		if unified_inventory.is_creative(player_name) then
+			formspec = formspec.."label[0,"..(formspecy)..";Shift-click to:]"
+			formspec = formspec.."dropdown[0,"..(formspecy + 0.5)..";1;ui_ring_dst;craft,trash,refill;"..ring_dst.."]"
 			formspec = formspec.."label[0,"..(formspecy + 1.5)..";" .. F("Refill:") .. "]"
-			formspec = formspec.."list[detached:"..minetest.formspec_escape(player_name).."refill;main;0,"..(formspecy +2)..";1,1;]"
+			formspec = formspec.."list[detached:"..minetest.formspec_escape(player_name).."refill;main;0,"..(formspecy + 2)..";1,1;]"
 		end
 		return {formspec=formspec}
 	end,

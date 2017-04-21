@@ -168,6 +168,17 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				unified_inventory.current_page[player_name])
 		minetest.sound_play("click",
 				{to_player=player_name, gain = 0.1})
+	elseif fields.ui_ring_dst then
+		local possible = {craft = 1, trash = 2, refill = 3}
+		local invs = {"current_name;craft", "detached:trash;main", "detached:"..minetest.formspec_escape(player_name).."refill;main"}
+		local ring_dest = possible[fields.ui_ring_dst] or 1
+		unified_inventory.ring_dst[player:get_player_name()] = ring_dest
+		local f = player:get_inventory_formspec()
+		local bla = f:find("listring[", 1, true)
+		f = f:sub(1, bla+8)..invs[ring_dest]..f:sub(f:find("]", bla), -1)
+		bla = f:find(";ui_ring_dst;") + 32
+		f = f:sub(1, bla-1)..ring_dest..f:sub(bla+1)
+		player:set_inventory_formspec(f)
 	end
 
 	-- alternate buttons
