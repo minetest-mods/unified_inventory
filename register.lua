@@ -1,8 +1,6 @@
 local S = unified_inventory.gettext
 local F = unified_inventory.fgettext
 
-local ring_dst = {}
-
 minetest.register_privilege("creative", {
 	description = S("Can use the creative inventory"),
 	give_to_singleplayer = false,
