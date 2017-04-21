@@ -178,7 +178,6 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		f = f:sub(1, bla+8)..invs[ring_dest]..f:sub(f:find("]", bla), -1)
 		bla = f:find(";ui_ring_dst;") + 32
 		f = f:sub(1, bla-1)..ring_dest..f:sub(bla+1)
-		print(f)
 		player:set_inventory_formspec(f)
 	end
 
