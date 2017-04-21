@@ -29,6 +29,7 @@ function unified_inventory.get_per_player_formspec(player_name)
 	ui.craft_result_x = unified_inventory.craft_result_x
 	ui.craft_result_y = unified_inventory.craft_result_y
 	ui.form_header_y = unified_inventory.form_header_y
+	ui.ring_dst = unified_inventory.ring_dst[player_name] or 1
 
 	if lite then
 		ui.pagecols = 4
@@ -94,7 +95,7 @@ function unified_inventory.get_formspec(player, page)
 	local filtered_inv_buttons = {}
 
 	for i, def in pairs(unified_inventory.buttons) do
-		if not (draw_lite_mode and def.hide_lite) then 
+		if not (draw_lite_mode and def.hide_lite) then
 			table.insert(filtered_inv_buttons, def)
 		end
 	end

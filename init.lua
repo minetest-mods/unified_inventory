@@ -32,6 +32,8 @@ unified_inventory = {
 	pages = {},
 	buttons = {},
 
+	ring_dst = {},
+
 	-- Homepos stuff
 	home_pos = {},
 	home_filename =	worldpath.."/unified_inventory_home.home",
@@ -45,7 +47,7 @@ unified_inventory = {
 
 	-- "Lite" mode
 	lite_mode = minetest.setting_getbool("unified_inventory_lite"),
-	
+
 	-- Trash enabled
 	trash_enabled = (minetest.setting_getbool("unified_inventory_trash") ~= false),
 
