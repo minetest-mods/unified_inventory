@@ -180,7 +180,7 @@ unified_inventory.register_page("craft", {
 			formspec = formspec.."background[7,"..(formspecy + 2)..";1,1;ui_single_slot.png]"
 			formspec = formspec.."list[detached:trash;main;7,"..(formspecy + 2)..";1,1;]"
 		end
-			formspec = formspec.."listring[current_player;main]"
+		formspec = formspec.."listring[current_player;main]"
 		if unified_inventory.is_creative(player_name) then
 			formspec = formspec.."listring[detached:trash;main]"
 			formspec = formspec.."label[0,"..(formspecy + 1.5)..";" .. F("Refill:") .. "]"
