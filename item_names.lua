@@ -33,6 +33,10 @@ minetest.register_on_joinplayer(function(player)
 	minetest.after(0, set_hud, player)
 end)
 
+minetest.register_on_leaveplayer(function(player)
+	item_names[player:get_player_name()] = nil
+end)
+
 minetest.register_globalstep(function(dtime)
 	for _, player in pairs(minetest.get_connected_players()) do
 		local data = item_names[player:get_player_name()]
