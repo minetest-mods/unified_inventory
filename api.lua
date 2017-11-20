@@ -27,7 +27,7 @@ minetest.after(0.01, function()
 							local groupchk = string.find(chk, "group:")
 							if (not groupchk and not minetest.registered_items[chk])
 							  or (groupchk and not unified_inventory.get_group_item(string.gsub(chk, "group:", "")).item)
-							  or minetest.get_item_group(chk, "exclude_from_craft_guide") ~= 0 then
+							  or minetest.get_item_group(chk, "not_in_craft_guide") ~= 0 then
 								unknowns = true
 							end
 						end

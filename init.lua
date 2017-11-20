@@ -45,6 +45,9 @@ unified_inventory = {
 
 	-- "Lite" mode
 	lite_mode = minetest.setting_getbool("unified_inventory_lite"),
+	
+	-- Trash enabled
+	trash_enabled = (minetest.setting_getbool("unified_inventory_trash") ~= false),
 
 	pagecols = 8,
 	pagerows = 10,

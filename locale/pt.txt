@@ -1,0 +1,107 @@
+# Translation by Lunovox <lunovox@openmailbox.org>
+
+### api.lua ###
+Digging (by chance) = Cavando (por acaso)
+
+# Template
+### bags.lua ###
+Bags = Bolsas
+Bag @1 = Bolsa @1
+Small Bag = Bolsa Pequena
+Medium Bag = Bolsa Média
+Large Bag = Bolsa Grande
+
+### inernal.lua ###
+First page = Primeira Página
+Back three pages =  Voltar 3 Páginas
+Back one page = Voltar 1 Página
+Forward one page = Avançar 1 Página
+Forward three pages = Avançar 3 Páginas
+Last page = Ultima Página
+No matching items = Nenhum item correspondente
+Page = Página
+%s of %s = %s de %s
+Filter = Filtro
+Search = Pesquisar
+Reset search and display everything = Redefinir pesquisa e exibir tudo
+
+### register.lua ###
+Can use the creative inventory = Pode usar o inventário do criativo
+Forces Unified Inventory to be displayed in Full mode if Lite mode is configured globally = Força o Unified Inventory a ser exibido no modo Full se o modo Lite estiver configurado globalmente
+Home position set to: %s = Posição inicial definida para: %s
+Time of day set to 6am = Hora do dia definida para 06h
+You don't have the settime priviledge! = Você não tem o privilégio de 'settime'!
+Time of day set to 9pm = Hora do dia ajustada para 21h
+This button has been disabled outside of creative mode to prevent accidental inventory trashing.\nUse the trash slot instead. = Este botão foi desativado fora do modo de criativo para evitar o descarte acidental de inventário. \nUse o slot de lixo em vez disso.
+Inventory cleared! = Inventário Apagado!
+Crafting = Artesanato
+Digging = Escavação
+Cooking = Cozimento
+Mixing = Muistura
+Trash: = Lixo:
+Refill: = Recarga:
+Crafting Guide = Guia de Artesanato
+Method: = Método:
+Result: %s = Resultado: %s
+crafting = artesanato
+shapeless crafting = artesanato sem formato
+cooking = cozinhar
+alloy cooking = Cozinhar em liga
+Copy to craft grid: = Copiar para grade de artesanato:
+All = MAX
+Alternate = Alternar
+Crafting Grid = Grade de Artesanato
+Show next recipe = Exibir Próxima Receita
+Show next usage = Mostrar Próxima Utilização
+Show previous recipe = Exibir Receita Anterior
+Show previous usage = Exibir Utilização Anterior
+
+# Shown for huge crafting recipes; try to keep the line length short and use multiple line breaks as needed
+This recipe is too\nlarge to be displayed. = Esta receita é grande \ndemais para ser apresentada.
+
+# %s = group name (e.g. wool)
+Any item belonging to the %s group = Qualquer item pertencente ao grupo '%s'.
+
+# %s = List of “and”-concatenated group names
+Any item belonging to the groups %s = Qualquer item pertencente aos grupos '%s'.
+Recipe %d of %d = Receita %s de %s
+Usage %d of %d = Utilização %s de %s
+No recipes = Sem Receita
+No usages = Sem Utilização
+Result = Resultado
+Ingredient = Ingrediente
+Set time to day = Definir turno para dia
+Set time to night = Definir turno para noite
+Set home position = Definir posição de casa
+Go home = Transportar para Casa
+Clear inventory = Limpar Inventário
+Give me: = Gerado: 
+To craft grid: = Para Grade de Artesanato
+
+### group.lua ###
+# Logical connective, example: “Any item belonging to the groups foo and bar”
+\sand\s = 
+
+### waypoints.lua ###
+White = Branco
+Yellow = Amarelo
+Red = Vermelho
+Green = Verde
+Blue = Azul
+Waypoints = Apontador de Direção
+Waypoint %d = Apontador de Direção %002
+Waypoint active = Apontador de Direção Ativo
+Waypoint inactive = Apontador de Direção Inativo
+World position = Posição Mundial
+Name = Nome
+HUD text color = Cor de HUD
+Edit waypoint name = Editar Nome de Apontador de Direção
+Rename waypoint = Renomear Apontador de Direção
+Change color of waypoint display = Mudar cor exibida do Apontador de Direção
+Set waypoint to current location = Configurar localização atual do Apontador de Direção
+Make waypoint visible = Fazer Apontador de Direção Visível
+Make waypoint invisible = Fazer Apontador de Direção Invisível
+Disable display of waypoint coordinates = Desativar exibição de coordenadas de Fazer Apontador de Direção
+Enable display of waypoint coordinates = Ativar exibição de coordenadas de Fazer Apontador de Direção
+Finish editing = Edição Finalizada
+Select Waypoint #%d = Seleção de Apontador de Direção #%02d

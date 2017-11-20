@@ -51,8 +51,33 @@ for i = 1, 4 do
 			elseif slots == 24 then
 				formspec = formspec.."background[0.06,0.99;7.92,7.52;ui_bags_lg_form.png]"
 			end
-			formspec = (formspec.."background[6.06,0;0.92,0.92;ui_bags_trash.png]"
-					.."list[detached:trash;main;6,0.1;1,1;]")
+			local player_name = player:get_player_name() -- For if statement.
+			if unified_inventory.trash_enabled or unified_inventory.is_creative(player_name) or minetest.get_player_privs(player_name).give then
+				formspec = (formspec.."background[6.06,0;0.92,0.92;ui_bags_trash.png]"
+						.."list[detached:trash;main;6,0.1;1,1;]")
+			end
+			local inv = player:get_inventory()
+			for i = 1, 4 do
+				local def = inv:get_stack("bag"..i, 1):get_definition()
+				local button
+				if def.groups.bagslots then
+					local list_name = "bag"..i.."contents"
+					local size = inv:get_size(list_name)
+					local used = 0
+					for si = 1, size do
+						local stk = inv:get_stack(list_name, si)
+						if not stk:is_empty() then
+							used = used + 1
+						end
+					end
+					local img = def.inventory_image
+					local label = F("Bag @1", i).."\n"..used.."/"..size
+					button = "image_button["..(i+1)..",0;1,1;"..img..";bag"..i..";"..label.."]"
+				else
+					button = ""
+				end
+				formspec = formspec..button
+			end
 			return {formspec=formspec}
 		end,
 	})

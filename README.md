@@ -20,4 +20,4 @@ RealBadAngel: (WTFPL)
   * Everything else.
 
 Tango Project: (WTFPL)
-  * `ui_reset_icon.png
+  * `ui_reset_icon.png`

@@ -5,3 +5,7 @@ unified_inventory_lite (Lite mode) bool false
 #If enabled, bags will be made available which can be used to extend
 #inventory storage size.
 unified_inventory_bags (Enable bags) bool true
+
+#If enabled, the trash slot can be used by those without both creative
+#and the give privilege.
+unified_inventory_trash (Enable trash) bool true

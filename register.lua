@@ -175,8 +175,11 @@ unified_inventory.register_page("craft", {
 		formspec = formspec.."listcolors[#00000000;#00000000]"
 		formspec = formspec.."list[current_player;craftpreview;6,"..formspecy..";1,1;]"
 		formspec = formspec.."list[current_player;craft;2,"..formspecy..";3,3;]"
-		formspec = formspec.."label[7,"..(formspecy + 1.5)..";" .. F("Trash:") .. "]"
-		formspec = formspec.."list[detached:trash;main;7,"..(formspecy + 2)..";1,1;]"
+		if unified_inventory.trash_enabled or unified_inventory.is_creative(player_name) or minetest.get_player_privs(player_name).give then
+			formspec = formspec.."label[7,"..(formspecy + 1.5)..";" .. F("Trash:") .. "]"
+			formspec = formspec.."background[7,"..(formspecy + 2)..";1,1;ui_single_slot.png]"
+			formspec = formspec.."list[detached:trash;main;7,"..(formspecy + 2)..";1,1;]"
+		end
 		formspec = formspec.."listring[current_name;craft]"
 		formspec = formspec.."listring[current_player;main]"
 		if unified_inventory.is_creative(player_name) then
