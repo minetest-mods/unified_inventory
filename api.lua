@@ -303,6 +303,6 @@ end
 
 function unified_inventory.is_creative(playername)
 	return minetest.check_player_privs(playername, {creative=true})
-	or minetest.setting_getbool("creative_mode")
+	or minetest.settings.get_bool("creative_mode")
 end
 
