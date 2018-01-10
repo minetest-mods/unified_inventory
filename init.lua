@@ -47,7 +47,7 @@ unified_inventory = {
 	lite_mode = minetest.settings.get_bool("unified_inventory_lite"),
 	
 	-- Trash enabled
-	trash_enabled = minetest.settings.get_bool("unified_inventory_trash", false),
+	trash_enabled = (minetest.settings.get_bool("unified_inventory_trash") ~= false),
 
 	pagecols = 8,
 	pagerows = 10,
@@ -80,7 +80,7 @@ dofile(modpath.."/internal.lua")
 dofile(modpath.."/callbacks.lua")
 dofile(modpath.."/register.lua")
 
-if minetest.settings.get_bool("unified_inventory_bags", false) then
+if minetest.settings.get_bool("unified_inventory_bags") ~= false then
 	dofile(modpath.."/bags.lua")
 end
 
