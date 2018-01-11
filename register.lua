@@ -305,7 +305,7 @@ unified_inventory.register_page("craftguide", {
 			formspec = formspec.."image["..no_pos..","..formspecy..";1.1,1.1;ui_no.png]"
 			formspec = formspec..stack_image_button(item_pos, formspecy, 1.1, 1.1, "item_button_"
 			                   ..other_dir[dir].."_", ItemStack(item_name))
-			if player_privs.give == true or player_privs.creative == true or minetest.setting_getbool("creative_mode") == true then
+			if player_privs.give == true or player_privs.creative == true or minetest.settings:get_bool("creative_mode") == true then
 				formspec = formspec.."label[0,"..(formspecy + 2.10)..";" .. F("Give me:") .. "]"
 						.."button[0,  "..(formspecy + 2.7)..";0.6,0.5;craftguide_giveme_1;1]"
 						.."button[0.6,"..(formspecy + 2.7)..";0.7,0.5;craftguide_giveme_10;10]"
@@ -382,7 +382,7 @@ unified_inventory.register_page("craftguide", {
 					.."button[0.6,"..(formspecy + 1.5)..";0.7,0.5;craftguide_craft_10;10]"
 					.."button[1.3,"..(formspecy + 1.5)..";0.8,0.5;craftguide_craft_max;" .. F("All") .. "]"
 		end
-		if player_privs.give == true or player_privs.creative == true or minetest.setting_getbool("creative_mode") == true then
+		if player_privs.give == true or player_privs.creative == true or minetest.settings:get_bool("creative_mode") == true then
 			formspec = formspec.."label[0,"..(formspecy + 2.1)..";" .. F("Give me:") .. "]"
 					.."button[0,  "..(formspecy + 2.7)..";0.6,0.5;craftguide_giveme_1;1]"
 					.."button[0.6,"..(formspecy + 2.7)..";0.7,0.5;craftguide_giveme_10;10]"
