@@ -279,7 +279,7 @@ unified_inventory.register_craft_type("digging", {
 })
 
 unified_inventory.register_craft_type("digging_chance", {
-	description = "Digging (by chance)",
+	description = F("Digging (by chance)"),
 	icon = "default_tool_steelpick.png^[transformFY.png",
 	width = 1,
 	height = 1,
