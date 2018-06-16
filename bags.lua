@@ -106,6 +106,25 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 end)
 
+local function save_bags_metadata(player, bags_inv)
+	local is_empty = true
+	local bags = {}
+	for i = 1, 4 do
+		local bag = "bag"..i
+		if not bags_inv:is_empty(bag) then
+			-- Stack limit is 1, otherwise use stack:to_string()
+			bags[i] = bags_inv:get_stack(bag, 1):get_name()
+			is_empty = false
+		end
+	end
+	if is_empty then
+		player:set_attribute("unified_inventory:bags", nil)
+	else
+		player:set_attribute("unified_inventory:bags",
+			minetest.serialize(bags))
+	end
+end
+
 local function load_bags_metadata(player, bags_inv)
 	local player_inv = player:get_inventory()
 	local bags_meta = player:get_attribute("unified_inventory:bags")
@@ -134,25 +153,6 @@ local function load_bags_metadata(player, bags_inv)
 	if dirty_meta then
 		-- Requires detached inventory to be set up
 		save_bags_metadata(player, bags_inv)
-	end
-end
-
-local function save_bags_metadata(player, bags_inv)
-	local is_empty = true
-	local bags = {}
-	for i = 1, 4 do
-		local bag = "bag"..i
-		if not bags_inv:is_empty(bag) then
-			-- Stack limit is 1, otherwise use stack:to_string()
-			bags[i] = bags_inv:get_stack(bag, 1):get_name()
-			is_empty = false
-		end
-	end
-	if is_empty then
-		player:set_attribute("unified_inventory:bags", nil)
-	else
-		player:set_attribute("unified_inventory:bags",
-			minetest.serialize(bags))
 	end
 end
 
