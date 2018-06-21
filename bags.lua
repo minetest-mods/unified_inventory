@@ -146,13 +146,17 @@ local function load_bags_metadata(player, bags_inv)
 		local bag = "bag"..i
 		bags_inv:set_size(bag, 1)
 		bags_inv:set_stack(bag, 1, bags[i] or "")
-		-- Deprecated, clean up garbage
-		player_inv:set_size(bag, 0)
 	end
 
 	if dirty_meta then
 		-- Requires detached inventory to be set up
 		save_bags_metadata(player, bags_inv)
+	end
+
+	-- Clean up deprecated garbage after saving
+	for i = 1, 4 do
+		local bag = "bag"..i
+		player_inv:set_size(bag, 0)
 	end
 end
 
