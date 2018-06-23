@@ -2,15 +2,9 @@
 
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 local worldpath = minetest.get_worldpath()
-local mygettext
-if rawget(_G, "intllib") then
-	mygettext = intllib.Getter()
-else
-	function mygettext(s, ...)
-		local t = { ... }
-		return (s:gsub("@(%d+)", function(n) return t[tonumber(n)] end))
-	end
-end
+
+-- Intllib
+local S, NS = dofile(modpath .. "/intllib.lua")
 
 -- Data tables definitions
 unified_inventory = {
@@ -40,12 +34,11 @@ unified_inventory = {
 	default = "craft",
 
 	-- intllib
-	gettext = mygettext,
-	fgettext = function(...) return minetest.formspec_escape(mygettext(...)) end,
+	gettext = S,
 
 	-- "Lite" mode
 	lite_mode = minetest.settings:get_bool("unified_inventory_lite"),
-	
+
 	-- Trash enabled
 	trash_enabled = (minetest.settings:get_bool("unified_inventory_trash") ~= false),
 

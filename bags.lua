@@ -4,22 +4,22 @@
 -- License: GPLv3
 
 local S = unified_inventory.gettext
-local F = unified_inventory.fgettext
+local F = minetest.formspec_escape
 
 unified_inventory.register_page("bags", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
 		local formspec = "background[0.06,0.99;7.92,7.52;ui_bags_main_form.png]"
-		formspec = formspec.."label[0,0;"..F("Bags").."]"
-		formspec = formspec.."button[0,2;2,0.5;bag1;"..F("Bag 1").."]"
-		formspec = formspec.."button[2,2;2,0.5;bag2;"..F("Bag 2").."]"
-		formspec = formspec.."button[4,2;2,0.5;bag3;"..F("Bag 3").."]"
-		formspec = formspec.."button[6,2;2,0.5;bag4;"..F("Bag 4").."]"
+		formspec = formspec.."label[0,0;"..F(S("Bags")).."]"
+		formspec = formspec.."button[0,2;2,0.5;bag1;"..F(S("Bag @1", 1)).."]"
+		formspec = formspec.."button[2,2;2,0.5;bag2;"..F(S("Bag @1", 2)).."]"
+		formspec = formspec.."button[4,2;2,0.5;bag3;"..F(S("Bag @1", 3)).."]"
+		formspec = formspec.."button[6,2;2,0.5;bag4;"..F(S("Bag @1", 4)).."]"
 		formspec = formspec.."listcolors[#00000000;#00000000]"
-		formspec = formspec.."list[detached:"..minetest.formspec_escape(player_name).."_bags;bag1;0.5,1;1,1;]"
-		formspec = formspec.."list[detached:"..minetest.formspec_escape(player_name).."_bags;bag2;2.5,1;1,1;]"
-		formspec = formspec.."list[detached:"..minetest.formspec_escape(player_name).."_bags;bag3;4.5,1;1,1;]"
-		formspec = formspec.."list[detached:"..minetest.formspec_escape(player_name).."_bags;bag4;6.5,1;1,1;]"
+		formspec = formspec.."list[detached:"..F(player_name).."_bags;bag1;0.5,1;1,1;]"
+		formspec = formspec.."list[detached:"..F(player_name).."_bags;bag2;2.5,1;1,1;]"
+		formspec = formspec.."list[detached:"..F(player_name).."_bags;bag3;4.5,1;1,1;]"
+		formspec = formspec.."list[detached:"..F(player_name).."_bags;bag4;6.5,1;1,1;]"
 		return {formspec=formspec}
 	end,
 })
@@ -45,7 +45,7 @@ for i = 1, 4 do
 			local stack = get_player_bag_stack(player, bi)
 			local image = stack:get_definition().inventory_image
 			local formspec = ("image[7,0;1,1;"..image.."]"
-					.."label[0,0;"..F("Bag @1", bi).."]"
+					.."label[0,0;"..F(S("Bag @1", bi)).."]"
 					.."listcolors[#00000000;#00000000]"
 					.."list[current_player;bag"..bi.."contents;0,1;8,3;]"
 					.."listring[current_name;bag"..bi.."contents]"
@@ -78,7 +78,7 @@ for i = 1, 4 do
 						end
 					end
 					local img = def.inventory_image
-					local label = F("Bag @1", i).."\n"..used.."/"..size
+					local label = F(S("Bag @1", i)).."\n"..used.."/"..size
 					button = "image_button["..(i+1)..",0;1,1;"..img..";bag"..i..";"..label.."]"
 				else
 					button = ""

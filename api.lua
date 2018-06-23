@@ -1,5 +1,5 @@
 local S = unified_inventory.gettext
-local F = unified_inventory.fgettext
+local F = minetest.formspec_escape
 
 -- Create detached creative inventory after loading all mods
 minetest.after(0.01, function()
@@ -233,7 +233,7 @@ end
 
 
 unified_inventory.register_craft_type("normal", {
-	description = F("Crafting"),
+	description = F(S("Crafting")),
 	icon = "ui_craftgrid_icon.png",
 	width = 3,
 	height = 3,
@@ -249,7 +249,7 @@ unified_inventory.register_craft_type("normal", {
 
 
 unified_inventory.register_craft_type("shapeless", {
-	description = F("Mixing"),
+	description = F(S("Mixing")),
 	icon = "ui_craftgrid_icon.png",
 	width = 3,
 	height = 3,
@@ -264,7 +264,7 @@ unified_inventory.register_craft_type("shapeless", {
 
 
 unified_inventory.register_craft_type("cooking", {
-	description = F("Cooking"),
+	description = F(S("Cooking")),
 	icon = "default_furnace_front.png",
 	width = 1,
 	height = 1,
@@ -272,7 +272,7 @@ unified_inventory.register_craft_type("cooking", {
 
 
 unified_inventory.register_craft_type("digging", {
-	description = F("Digging"),
+	description = F(S("Digging")),
 	icon = "default_tool_steelpick.png",
 	width = 1,
 	height = 1,

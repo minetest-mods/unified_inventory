@@ -1,0 +1,366 @@
+# Russian translation for the unified_inventory mod.
+# Copyright (C) 2018 Maciej Kasatkin (RealBadAngel)
+# This file is distributed under the same license as the unified_inventory package.
+# eternal_sorrow
+# CodeXP <codexp@gmx.net>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: unified_inventory\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-02 03:34+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: CodeXP <codexp@gmx.net>\n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: api.lua register.lua
+#, fuzzy
+msgid "Crafting"
+msgstr "Крафт"
+
+#: api.lua
+msgid "Mixing"
+msgstr "Мешать"
+
+#: api.lua
+msgid "Cooking"
+msgstr "Варить"
+
+#: api.lua
+msgid "Digging"
+msgstr "Копать"
+
+#: bags.lua
+msgid "Bags"
+msgstr "Сумки"
+
+#: bags.lua
+msgid "Bag @1"
+msgstr "Сумка @1"
+
+#: bags.lua
+msgid "Small Bag"
+msgstr "Малая сумка"
+
+#: bags.lua
+msgid "Medium Bag"
+msgstr "Средняя сумка"
+
+#: bags.lua
+msgid "Large Bag"
+msgstr "Большая сумка"
+
+#: group.lua
+msgid " and "
+msgstr " и "
+
+#: internal.lua
+msgid "First page"
+msgstr "Первая страница"
+
+#: internal.lua
+msgid "Back three pages"
+msgstr "3 страницы назад"
+
+#: internal.lua
+msgid "Back one page"
+msgstr "1 страницу назад"
+
+#: internal.lua
+msgid "Forward one page"
+msgstr "1 страницу вперёд"
+
+#: internal.lua
+msgid "Forward three pages"
+msgstr "3 страницы вперёд"
+
+#: internal.lua
+msgid "Last page"
+msgstr "Последняя страница"
+
+#: internal.lua
+msgid "Search"
+msgstr "Поиск"
+
+#: internal.lua
+msgid "Reset search and display everything"
+msgstr "Сброс поиска, показать всё"
+
+#: internal.lua
+msgid "No matching items"
+msgstr "Нет подходящих элементов"
+
+#: internal.lua
+msgid "No matches."
+msgstr "Ничего не найдено"
+
+#: internal.lua
+msgid "Page"
+msgstr "Страница"
+
+#: internal.lua
+#, lua-format
+msgid "%s of %s"
+msgstr "%s из %s"
+
+#: internal.lua
+msgid "Filter"
+msgstr "Фильтр"
+
+#: register.lua
+msgid "Can use the creative inventory"
+msgstr "Можно использовать инвентарь творческого режима"
+
+#: register.lua
+msgid ""
+"Forces Unified Inventory to be displayed in Full mode if Lite mode is "
+"configured globally"
+msgstr ""
+
+#: register.lua
+msgid "Crafting Grid"
+msgstr "Решетка крафта"
+
+#: register.lua
+msgid "Crafting Guide"
+msgstr "Книга рецептов"
+
+#: register.lua
+msgid "Set home position"
+msgstr "Установить позицию дома"
+
+#: register.lua
+#, lua-format
+msgid "Home position set to: %s"
+msgstr "Дом теперь расположен по коодинатам: %s"
+
+#: register.lua
+msgid "You don't have the \"home\" privilege!"
+msgstr "У вас нет привилегии \"home\"!"
+
+#: register.lua
+msgid "Go home"
+msgstr "Отправиться домой"
+
+#: register.lua
+msgid "Set time to day"
+msgstr "День"
+
+#: register.lua
+msgid "Time of day set to 6am"
+msgstr "Установлено время 6 утра"
+
+#: register.lua
+#, fuzzy
+msgid "You don't have the settime privilege!"
+msgstr "Вам не разрешено устанавливать время! (нет привилегии \"settime\")"
+
+#: register.lua
+msgid "Set time to night"
+msgstr "Ночь"
+
+#: register.lua
+msgid "Time of day set to 9pm"
+msgstr "Установлено время 9 вечера"
+
+#: register.lua
+msgid "Clear inventory"
+msgstr "Очистить инвентарь"
+
+#: register.lua
+msgid ""
+"This button has been disabled outside of creative mode to prevent accidental "
+"inventory trashing.\n"
+"Use the trash slot instead."
+msgstr ""
+"Эта кнопка отключена вне творческого режима, чтобы предотвратить случайное "
+"уничтожение предметов.\n"
+"Используйте слот корзины вместо нее."
+
+#: register.lua
+msgid "Inventory cleared!"
+msgstr "Инвентарь очищен!"
+
+#: register.lua
+msgid "Trash:"
+msgstr "Мусор:"
+
+#: register.lua
+msgid "Refill:"
+msgstr "Наполнить:"
+
+#: register.lua
+#, lua-format
+msgid "Any item belonging to the %s group"
+msgstr "Любой элемент из группы: %s"
+
+#: register.lua
+#, lua-format
+msgid "Any item belonging to the groups %s"
+msgstr "Любой элемент из группы: %s"
+
+#: register.lua
+#, lua-format
+msgid "Recipe %d of %d"
+msgstr "Рецепт %s из %s"
+
+#: register.lua
+#, lua-format
+msgid "Usage %d of %d"
+msgstr "Вариант %d of %d"
+
+#: register.lua
+msgid "No recipes"
+msgstr "Рецептов нет"
+
+#: register.lua
+msgid "No usages"
+msgstr "Не используется"
+
+#: register.lua
+msgid "Result"
+msgstr "Результат"
+
+#: register.lua
+msgid "Ingredient"
+msgstr "Состав"
+
+#: register.lua
+msgid "Show next recipe"
+msgstr "Следующий рецепт"
+
+#: register.lua
+msgid "Show next usage"
+msgstr "Следующее использование"
+
+#: register.lua
+msgid "Show previous recipe"
+msgstr "Прошлый рецепт"
+
+#: register.lua
+msgid "Show previous usage"
+msgstr "Прошлая страница"
+
+#: register.lua
+#, lua-format
+msgid "%s (%s)"
+msgstr ""
+
+#: register.lua
+msgid "Give me:"
+msgstr "Дай мне:"
+
+#: register.lua
+msgid ""
+"This recipe is too\n"
+"large to be displayed."
+msgstr ""
+"Этот рецепт не\n"
+"помещается в решетку."
+
+#: register.lua
+msgid "To craft grid:"
+msgstr "На решeтку крафта:"
+
+#: register.lua
+msgid "All"
+msgstr "Все"
+
+#: waypoints.lua
+msgid "White"
+msgstr "Белый"
+
+#: waypoints.lua
+msgid "Yellow"
+msgstr "Желтый"
+
+#: waypoints.lua
+msgid "Red"
+msgstr "Красный"
+
+#: waypoints.lua
+msgid "Green"
+msgstr "Зелёный"
+
+#: waypoints.lua
+msgid "Blue"
+msgstr "Синий"
+
+#: waypoints.lua
+msgid "Waypoints"
+msgstr "Путевые точки"
+
+#: waypoints.lua
+#, lua-format
+msgid "Select Waypoint #%d"
+msgstr "Выбрать путевую точку №%d"
+
+#: waypoints.lua
+#, lua-format
+msgid "Waypoint %d"
+msgstr "Путевая точка %d"
+
+#: waypoints.lua
+msgid "Set waypoint to current location"
+msgstr "Установить путевую точку по текущей позиции"
+
+#: waypoints.lua
+msgid "invisible"
+msgstr "невидимой"
+
+#: waypoints.lua
+msgid "visible"
+msgstr "видимой"
+
+#: waypoints.lua
+msgid "Make waypoint @1"
+msgstr "Сделать путевую точку @1"
+
+#: waypoints.lua
+msgid "Disable"
+msgstr "Выключить"
+
+#: waypoints.lua
+msgid "Enable"
+msgstr "Включить"
+
+#: waypoints.lua
+msgid "@1 display of waypoint coordinates"
+msgstr "@1 показ координат путевых точек"
+
+#: waypoints.lua
+msgid "Change color of waypoint display"
+msgstr "Поменять цвет путевой точки"
+
+#: waypoints.lua
+msgid "Edit waypoint name"
+msgstr "Переименовать путевую точку"
+
+#: waypoints.lua
+msgid "Waypoint active"
+msgstr "Путевая точка включена"
+
+#: waypoints.lua
+msgid "Waypoint inactive"
+msgstr "Путевая точка выключена"
+
+#: waypoints.lua
+msgid "Finish editing"
+msgstr "Закончить редакцию"
+
+#: waypoints.lua
+msgid "World position"
+msgstr "Позиция мира"
+
+#: waypoints.lua
+msgid "Name"
+msgstr "Имя"
+
+#: waypoints.lua
+msgid "HUD text color"
+msgstr "Цвет текста HUDа"

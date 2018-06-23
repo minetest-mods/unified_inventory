@@ -1,5 +1,5 @@
 local S = unified_inventory.gettext
-local F = unified_inventory.fgettext
+local F = minetest.formspec_escape
 
 -- This pair of encoding functions is used where variable text must go in
 -- button names, where the text might contain formspec metacharacters.
@@ -94,7 +94,7 @@ function unified_inventory.get_formspec(player, page)
 	local filtered_inv_buttons = {}
 
 	for i, def in pairs(unified_inventory.buttons) do
-		if not (draw_lite_mode and def.hide_lite) then 
+		if not (draw_lite_mode and def.hide_lite) then
 			table.insert(filtered_inv_buttons, def)
 		end
 	end
@@ -111,16 +111,16 @@ function unified_inventory.get_formspec(player, page)
 				formspec[n] = "image_button["
 				formspec[n+1] = ( ui_peruser.main_button_x + 0.65 * (i - 1) - button_col * 0.65 * 4)
 				formspec[n+2] = ","..(ui_peruser.main_button_y + button_row * 0.7)..";0.8,0.8;"
-				formspec[n+3] = minetest.formspec_escape(def.image)..";"
-				formspec[n+4] = minetest.formspec_escape(def.name)..";]"
-				formspec[n+5] = "tooltip["..minetest.formspec_escape(def.name)
+				formspec[n+3] = F(def.image)..";"
+				formspec[n+4] = F(def.name)..";]"
+				formspec[n+5] = "tooltip["..F(def.name)
 				formspec[n+6] = ";"..(def.tooltip or "").."]"
 				n = n+7
 			else
 				formspec[n] = "image["
 				formspec[n+1] = ( ui_peruser.main_button_x + 0.65 * (i - 1) - button_col * 0.65 * 4)
 				formspec[n+2] = ","..(ui_peruser.main_button_y + button_row * 0.7)..";0.8,0.8;"
-				formspec[n+3] = minetest.formspec_escape(def.image).."^[colorize:#808080:alpha]"
+				formspec[n+3] = F(def.image).."^[colorize:#808080:alpha]"
 				n = n+4
 
 			end
@@ -145,39 +145,39 @@ function unified_inventory.get_formspec(player, page)
 		formspec[n] =
 			"image_button[" .. (start_x + 0.6 * 0)
 				.. ",9;.8,.8;ui_skip_backward_icon.png;start_list;]"
-			.. "tooltip[start_list;" .. F("First page") .. "]"
+			.. "tooltip[start_list;" .. F(S("First page")) .. "]"
 
 			.. "image_button[" .. (start_x + 0.6 * 1)
 				.. ",9;.8,.8;ui_doubleleft_icon.png;rewind3;]"
-			.. "tooltip[rewind3;" .. F("Back three pages") .. "]"
+			.. "tooltip[rewind3;" .. F(S("Back three pages")) .. "]"
 			.. "image_button[" .. (start_x + 0.6 * 2)
 				.. ",9;.8,.8;ui_left_icon.png;rewind1;]"
-			.. "tooltip[rewind1;" .. F("Back one page") .. "]"
+			.. "tooltip[rewind1;" .. F(S("Back one page")) .. "]"
 
 			.. "image_button[" .. (start_x + 0.6 * 3)
 				.. ",9;.8,.8;ui_right_icon.png;forward1;]"
-			.. "tooltip[forward1;" .. F("Forward one page") .. "]"
+			.. "tooltip[forward1;" .. F(S("Forward one page")) .. "]"
 			.. "image_button[" .. (start_x + 0.6 * 4)
 				.. ",9;.8,.8;ui_doubleright_icon.png;forward3;]"
-			.. "tooltip[forward3;" .. F("Forward three pages") .. "]"
+			.. "tooltip[forward3;" .. F(S("Forward three pages")) .. "]"
 
 			.. "image_button[" .. (start_x + 0.6 * 5)
 				.. ",9;.8,.8;ui_skip_forward_icon.png;end_list;]"
-			.. "tooltip[end_list;" .. F("Last page") .. "]"
+			.. "tooltip[end_list;" .. F(S("Last page")) .. "]"
 	else
 		formspec[n] =
 			"image_button[" .. (8.2 + 0.65 * 0)
 				.. ",5.8;.8,.8;ui_skip_backward_icon.png;start_list;]"
-			.. "tooltip[start_list;" .. F("First page") .. "]"
+			.. "tooltip[start_list;" .. F(S("First page")) .. "]"
 			.. "image_button[" .. (8.2 + 0.65 * 1)
 				.. ",5.8;.8,.8;ui_left_icon.png;rewind1;]"
-			.. "tooltip[rewind1;" .. F("Back one page") .. "]"
+			.. "tooltip[rewind1;" .. F(S("Back one page")) .. "]"
 			.. "image_button[" .. (8.2 + 0.65 * 2)
 				.. ",5.8;.8,.8;ui_right_icon.png;forward1;]"
-			.. "tooltip[forward1;" .. F("Forward one page") .. "]"
+			.. "tooltip[forward1;" .. F(S("Forward one page")) .. "]"
 			.. "image_button[" .. (8.2 + 0.65 * 3)
 				.. ",5.8;.8,.8;ui_skip_forward_icon.png;end_list;]"
-			.. "tooltip[end_list;" .. F("Last page") .. "]"
+			.. "tooltip[end_list;" .. F(S("Last page")) .. "]"
 	end
 	n = n+1
 
@@ -187,26 +187,26 @@ function unified_inventory.get_formspec(player, page)
 
 	if not draw_lite_mode then
 		formspec[n] = "field[9.5,8.325;3,1;searchbox;;"
-			.. minetest.formspec_escape(unified_inventory.current_searchbox[player_name]) .. "]"
+			.. F(unified_inventory.current_searchbox[player_name]) .. "]"
 		formspec[n+1] = "image_button[12.2,8.1;.8,.8;ui_search_icon.png;searchbutton;]"
-			.. "tooltip[searchbutton;" ..F("Search") .. "]"
+			.. "tooltip[searchbutton;" ..F(S("Search")) .. "]"
 		formspec[n+2] = "image_button[12.9,8.1;.8,.8;ui_reset_icon.png;searchresetbutton;]"
-			.. "tooltip[searchbutton;" ..F("Search") .. "]"
-			.. "tooltip[searchresetbutton;" ..F("Reset search and display everything") .. "]"
+			.. "tooltip[searchbutton;" ..F(S("Search")) .. "]"
+			.. "tooltip[searchresetbutton;" ..F(S("Reset search and display everything")) .. "]"
 	else
 		formspec[n] = "field[8.5,5.225;2.2,1;searchbox;;"
-			.. minetest.formspec_escape(unified_inventory.current_searchbox[player_name]) .. "]"
+			.. F(unified_inventory.current_searchbox[player_name]) .. "]"
 		formspec[n+1] = "image_button[10.3,5;.8,.8;ui_search_icon.png;searchbutton;]"
-			.. "tooltip[searchbutton;" ..F("Search") .. "]"
+			.. "tooltip[searchbutton;" ..F(S("Search")) .. "]"
 		formspec[n+2] = "image_button[11,5;.8,.8;ui_reset_icon.png;searchresetbutton;]"
-			.. "tooltip[searchbutton;" ..F("Search") .. "]"
-			.. "tooltip[searchresetbutton;" ..F("Reset search and display everything") .. "]"
+			.. "tooltip[searchbutton;" ..F(S("Search")) .. "]"
+			.. "tooltip[searchresetbutton;" ..F(S("Reset search and display everything")) .. "]"
 	end
 	n = n+3
 
-	local no_matches = "No matching items"
+	local no_matches = S("No matching items")
 	if draw_lite_mode then
-		no_matches = "No matches."
+		no_matches = S("No matches.")
 	end
 
 	-- Items list
@@ -246,14 +246,14 @@ function unified_inventory.get_formspec(player, page)
 				end
 			end
 		end
-		formspec[n] = "label[8.2,"..ui_peruser.form_header_y..";"..F("Page") .. ": "
+		formspec[n] = "label[8.2,"..ui_peruser.form_header_y..";"..F(S("Page")) .. ": "
 			.. S("%s of %s"):format(page,pagemax).."]"
 	end
 	n= n+1
 
 	if unified_inventory.activefilter[player_name] ~= "" then
-		formspec[n] = "label[8.2,"..(ui_peruser.form_header_y + 0.4)..";" .. F("Filter") .. ":]"
-		formspec[n+1] = "label[9.1,"..(ui_peruser.form_header_y + 0.4)..";"..minetest.formspec_escape(unified_inventory.activefilter[player_name]).."]"
+		formspec[n] = "label[8.2,"..(ui_peruser.form_header_y + 0.4)..";" .. F(S("Filter")) .. ":]"
+		formspec[n+1] = "label[9.1,"..(ui_peruser.form_header_y + 0.4)..";"..F(unified_inventory.activefilter[player_name]).."]"
 	end
 	return table.concat(formspec, "")
 end

@@ -1,0 +1,359 @@
+# Polish translation for the unified_inventory mod.
+# Copyright (C) 2018 Maciej Kasatkin (RealBadAngel)
+# This file is distributed under the same license as the unified_inventory package.
+# RealBadAngel
+# CodeXP <codexp@gmx.net>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: unified_inventory\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-02 16:30+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: CodeXP <codexp@gmx.net>\n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: api.lua register.lua
+msgid "Crafting"
+msgstr ""
+
+#: api.lua
+msgid "Mixing"
+msgstr ""
+
+#: api.lua
+msgid "Cooking"
+msgstr ""
+
+#: api.lua
+msgid "Digging"
+msgstr ""
+
+#: bags.lua
+msgid "Bags"
+msgstr "Plecaki"
+
+#: bags.lua
+msgid "Bag @1"
+msgstr "Plecak @1"
+
+#: bags.lua
+msgid "Small Bag"
+msgstr "Maly plecak"
+
+#: bags.lua
+msgid "Medium Bag"
+msgstr "Sredni plecak"
+
+#: bags.lua
+msgid "Large Bag"
+msgstr "Duzy plecak"
+
+#: group.lua
+msgid " and "
+msgstr " i "
+
+#: internal.lua
+msgid "First page"
+msgstr "Pierwsza strona"
+
+#: internal.lua
+msgid "Back three pages"
+msgstr "3 strony w tyl"
+
+#: internal.lua
+msgid "Back one page"
+msgstr "1 strona w tyl"
+
+#: internal.lua
+msgid "Forward one page"
+msgstr "1 strona do przodu"
+
+#: internal.lua
+msgid "Forward three pages"
+msgstr "3 strony do przodu"
+
+#: internal.lua
+msgid "Last page"
+msgstr "Ostatnia strona"
+
+#: internal.lua
+msgid "Search"
+msgstr "Szukaj"
+
+#: internal.lua
+msgid "Reset search and display everything"
+msgstr ""
+
+#: internal.lua
+msgid "No matching items"
+msgstr "Brak pasujacych przedmiotow"
+
+#: internal.lua
+msgid "No matches."
+msgstr "Brak wyników"
+
+#: internal.lua
+msgid "Page"
+msgstr "Strona"
+
+#: internal.lua
+#, lua-format
+msgid "%s of %s"
+msgstr "%s z %s"
+
+#: internal.lua
+msgid "Filter"
+msgstr "Filtr"
+
+#: register.lua
+msgid "Can use the creative inventory"
+msgstr ""
+
+#: register.lua
+msgid ""
+"Forces Unified Inventory to be displayed in Full mode if Lite mode is "
+"configured globally"
+msgstr ""
+
+#: register.lua
+msgid "Crafting Grid"
+msgstr ""
+
+#: register.lua
+msgid "Crafting Guide"
+msgstr ""
+
+#: register.lua
+msgid "Set home position"
+msgstr "Ustaw pozycję wyjściową"
+
+#: register.lua
+#, lua-format
+msgid "Home position set to: %s"
+msgstr "Pozycja domowa ustawiona na: %s"
+
+#: register.lua
+msgid "You don't have the \"home\" privilege!"
+msgstr "Nie masz uprawnien do zmiany czasu \"home\"!"
+
+#: register.lua
+msgid "Go home"
+msgstr "Idź do domu"
+
+#: register.lua
+msgid "Set time to day"
+msgstr "Ustaw czas na dzień"
+
+#: register.lua
+msgid "Time of day set to 6am"
+msgstr "Czas ustawiony na 6:00"
+
+#: register.lua
+msgid "You don't have the settime privilege!"
+msgstr "Nie masz uprawnien do zmiany czasu \"settime\"!"
+
+#: register.lua
+msgid "Set time to night"
+msgstr "Ustaw czas na noc"
+
+#: register.lua
+msgid "Time of day set to 9pm"
+msgstr "Czas ustawiony na 21:00"
+
+#: register.lua
+msgid "Clear inventory"
+msgstr "Wyczyść zapasy"
+
+#: register.lua
+msgid ""
+"This button has been disabled outside of creative mode to prevent accidental "
+"inventory trashing.\n"
+"Use the trash slot instead."
+msgstr ""
+
+#: register.lua
+msgid "Inventory cleared!"
+msgstr "Zapasy zostały wyczyszczone!"
+
+#: register.lua
+msgid "Trash:"
+msgstr "Smietnik:"
+
+#: register.lua
+msgid "Refill:"
+msgstr "Uzupelnianie:"
+
+#: register.lua
+#, lua-format
+msgid "Any item belonging to the %s group"
+msgstr ""
+
+#: register.lua
+#, lua-format
+msgid "Any item belonging to the groups %s"
+msgstr ""
+
+#: register.lua
+#, lua-format
+msgid "Recipe %d of %d"
+msgstr "Recepta %d z %d"
+
+#: register.lua
+#, lua-format
+msgid "Usage %d of %d"
+msgstr "Użycie %d z %d"
+
+#: register.lua
+msgid "No recipes"
+msgstr "Brak recepty"
+
+#: register.lua
+msgid "No usages"
+msgstr "Bez użycia"
+
+#: register.lua
+msgid "Result"
+msgstr "Wynik"
+
+#: register.lua
+msgid "Ingredient"
+msgstr "Składnik"
+
+#: register.lua
+msgid "Show next recipe"
+msgstr ""
+
+#: register.lua
+msgid "Show next usage"
+msgstr ""
+
+#: register.lua
+msgid "Show previous recipe"
+msgstr ""
+
+#: register.lua
+msgid "Show previous usage"
+msgstr ""
+
+#: register.lua
+#, lua-format
+msgid "%s (%s)"
+msgstr ""
+
+#: register.lua
+msgid "Give me:"
+msgstr "Daj mi:"
+
+#: register.lua
+msgid ""
+"This recipe is too\n"
+"large to be displayed."
+msgstr ""
+
+#: register.lua
+msgid "To craft grid:"
+msgstr ""
+
+#: register.lua
+msgid "All"
+msgstr "Wszystko"
+
+#: waypoints.lua
+msgid "White"
+msgstr "Bialy"
+
+#: waypoints.lua
+msgid "Yellow"
+msgstr "Zolty"
+
+#: waypoints.lua
+msgid "Red"
+msgstr "Czerwony"
+
+#: waypoints.lua
+msgid "Green"
+msgstr "Zielony"
+
+#: waypoints.lua
+msgid "Blue"
+msgstr "Niebieski"
+
+#: waypoints.lua
+msgid "Waypoints"
+msgstr "Punkty orientacyjne"
+
+#: waypoints.lua
+#, lua-format
+msgid "Select Waypoint #%d"
+msgstr "Wybierz punkt #%d"
+
+#: waypoints.lua
+#, lua-format
+msgid "Waypoint %d"
+msgstr "Punkty orientacyjne %d"
+
+#: waypoints.lua
+msgid "Set waypoint to current location"
+msgstr "Ustaw punkt orientacyjny na biezacej pozycji"
+
+#: waypoints.lua
+msgid "invisible"
+msgstr "niewidzialny"
+
+#: waypoints.lua
+msgid "visible"
+msgstr "widomy"
+
+#: waypoints.lua
+msgid "Make waypoint @1"
+msgstr "Robić punkt @1"
+
+#: waypoints.lua
+msgid "Disable"
+msgstr ""
+
+#: waypoints.lua
+msgid "Enable"
+msgstr ""
+
+#: waypoints.lua
+msgid "@1 display of waypoint coordinates"
+msgstr "@1 koordynatow punktu"
+
+#: waypoints.lua
+msgid "Change color of waypoint display"
+msgstr "Zmien kolor punktu"
+
+#: waypoints.lua
+msgid "Edit waypoint name"
+msgstr "Edytuj nazwe punktu"
+
+#: waypoints.lua
+msgid "Waypoint active"
+msgstr "Punkt wlaczony"
+
+#: waypoints.lua
+msgid "Waypoint inactive"
+msgstr "Punkt wylaczony"
+
+#: waypoints.lua
+msgid "Finish editing"
+msgstr "Zakoncz edycje"
+
+#: waypoints.lua
+msgid "World position"
+msgstr "Pozycja"
+
+#: waypoints.lua
+msgid "Name"
+msgstr "Nazwa"
+
+#: waypoints.lua
+msgid "HUD text color"
+msgstr "Kolor tekstu HUD"

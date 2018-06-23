@@ -1,0 +1,366 @@
+# Spanish translation for the unified_inventory mod.
+# Copyright (C) 2018 Maciej Kasatkin (RealBadAngel)
+# This file is distributed under the same license as the unified_inventory package.
+# Diego Martínez <kaeza>
+# CodeXP <codexp@gmx.net>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: unified_inventory\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-02 16:15+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: CodeXP <codexp@gmx.net>\n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: api.lua register.lua
+msgid "Crafting"
+msgstr "Elaboración"
+
+#: api.lua
+msgid "Mixing"
+msgstr ""
+
+#: api.lua
+#, fuzzy
+msgid "Cooking"
+msgstr "hornear"
+
+#: api.lua
+msgid "Digging"
+msgstr ""
+
+#: bags.lua
+msgid "Bags"
+msgstr "Bolsas"
+
+#: bags.lua
+msgid "Bag @1"
+msgstr "Bolsa @1"
+
+#: bags.lua
+msgid "Small Bag"
+msgstr "Bolsa Pequeña"
+
+#: bags.lua
+msgid "Medium Bag"
+msgstr "Bolsa Mediana"
+
+#: bags.lua
+msgid "Large Bag"
+msgstr "Bolsa Grande"
+
+#: group.lua
+msgid " and "
+msgstr ""
+
+#: internal.lua
+msgid "First page"
+msgstr ""
+
+#: internal.lua
+msgid "Back three pages"
+msgstr ""
+
+#: internal.lua
+msgid "Back one page"
+msgstr ""
+
+#: internal.lua
+msgid "Forward one page"
+msgstr ""
+
+#: internal.lua
+msgid "Forward three pages"
+msgstr ""
+
+#: internal.lua
+msgid "Last page"
+msgstr ""
+
+#: internal.lua
+msgid "Search"
+msgstr ""
+
+#: internal.lua
+msgid "Reset search and display everything"
+msgstr ""
+
+#: internal.lua
+msgid "No matching items"
+msgstr ""
+
+#: internal.lua
+msgid "No matches."
+msgstr ""
+
+#: internal.lua
+msgid "Page"
+msgstr "Página"
+
+#: internal.lua
+#, lua-format
+msgid "%s of %s"
+msgstr "%s de %s"
+
+#: internal.lua
+msgid "Filter"
+msgstr "Filtro"
+
+#: register.lua
+msgid "Can use the creative inventory"
+msgstr "Puede usar el inventario creativo"
+
+#: register.lua
+msgid ""
+"Forces Unified Inventory to be displayed in Full mode if Lite mode is "
+"configured globally"
+msgstr ""
+
+#: register.lua
+msgid "Crafting Grid"
+msgstr ""
+
+#: register.lua
+msgid "Crafting Guide"
+msgstr "Guía de Elaboración"
+
+#: register.lua
+#, fuzzy
+msgid "Set home position"
+msgstr "Posición en el mundo"
+
+#: register.lua
+#, lua-format
+msgid "Home position set to: %s"
+msgstr "Posición de hogar cambiada a: %s"
+
+#: register.lua
+msgid "You don't have the \"home\" privilege!"
+msgstr "¡No tienes el privilegio \"home\"!"
+
+#: register.lua
+msgid "Go home"
+msgstr ""
+
+#: register.lua
+msgid "Set time to day"
+msgstr ""
+
+#: register.lua
+msgid "Time of day set to 6am"
+msgstr "Hora del día cambiada a 6AM"
+
+#: register.lua
+msgid "You don't have the settime privilege!"
+msgstr "¡No tienes el privilegio \"settime\"!"
+
+#: register.lua
+msgid "Set time to night"
+msgstr ""
+
+#: register.lua
+msgid "Time of day set to 9pm"
+msgstr "Hora del día cambiada a 9PM"
+
+#: register.lua
+msgid "Clear inventory"
+msgstr ""
+
+#: register.lua
+#, fuzzy
+msgid ""
+"This button has been disabled outside of creative mode to prevent accidental "
+"inventory trashing.\n"
+"Use the trash slot instead."
+msgstr ""
+"Éste botón ha sido deshabilitado para prevenir la destrucción accidental del "
+"inventario.\n"
+"Usa la ranura para basura en su lugar."
+
+#: register.lua
+msgid "Inventory cleared!"
+msgstr "¡Inventario limpio!"
+
+#: register.lua
+msgid "Trash:"
+msgstr "Basura:"
+
+#: register.lua
+msgid "Refill:"
+msgstr "Rellenar:"
+
+#: register.lua
+#, lua-format
+msgid "Any item belonging to the %s group"
+msgstr ""
+
+#: register.lua
+#, lua-format
+msgid "Any item belonging to the groups %s"
+msgstr ""
+
+#: register.lua
+#, lua-format
+msgid "Recipe %d of %d"
+msgstr "Receta %d de %d"
+
+#: register.lua
+#, lua-format
+msgid "Usage %d of %d"
+msgstr ""
+
+#: register.lua
+msgid "No recipes"
+msgstr ""
+
+#: register.lua
+msgid "No usages"
+msgstr ""
+
+#: register.lua
+msgid "Result"
+msgstr "Resultado"
+
+#: register.lua
+msgid "Ingredient"
+msgstr ""
+
+#: register.lua
+msgid "Show next recipe"
+msgstr ""
+
+#: register.lua
+msgid "Show next usage"
+msgstr ""
+
+#: register.lua
+msgid "Show previous recipe"
+msgstr ""
+
+#: register.lua
+msgid "Show previous usage"
+msgstr ""
+
+#: register.lua
+#, lua-format
+msgid "%s (%s)"
+msgstr ""
+
+#: register.lua
+msgid "Give me:"
+msgstr ""
+
+#: register.lua
+msgid ""
+"This recipe is too\n"
+"large to be displayed."
+msgstr ""
+
+#: register.lua
+#, fuzzy
+msgid "To craft grid:"
+msgstr "Copiar al cuadro de elaboración"
+
+#: register.lua
+msgid "All"
+msgstr "Todos"
+
+#: waypoints.lua
+msgid "White"
+msgstr "Blanco"
+
+#: waypoints.lua
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: waypoints.lua
+msgid "Red"
+msgstr "Rojo"
+
+#: waypoints.lua
+msgid "Green"
+msgstr "Verde"
+
+#: waypoints.lua
+msgid "Blue"
+msgstr "Azul"
+
+#: waypoints.lua
+msgid "Waypoints"
+msgstr "Puntos de paso"
+
+#: waypoints.lua
+#, lua-format
+msgid "Select Waypoint #%d"
+msgstr ""
+
+#: waypoints.lua
+#, lua-format
+msgid "Waypoint %d"
+msgstr "Puntos de paso %d"
+
+#: waypoints.lua
+msgid "Set waypoint to current location"
+msgstr ""
+
+#: waypoints.lua
+msgid "invisible"
+msgstr ""
+
+#: waypoints.lua
+msgid "visible"
+msgstr ""
+
+#: waypoints.lua
+msgid "Make waypoint @1"
+msgstr ""
+
+#: waypoints.lua
+msgid "Disable"
+msgstr ""
+
+#: waypoints.lua
+msgid "Enable"
+msgstr ""
+
+#: waypoints.lua
+msgid "@1 display of waypoint coordinates"
+msgstr ""
+
+#: waypoints.lua
+msgid "Change color of waypoint display"
+msgstr ""
+
+#: waypoints.lua
+msgid "Edit waypoint name"
+msgstr ""
+
+#: waypoints.lua
+msgid "Waypoint active"
+msgstr "Punto de paso activo"
+
+#: waypoints.lua
+msgid "Waypoint inactive"
+msgstr "Punto de paso inactivo"
+
+#: waypoints.lua
+msgid "Finish editing"
+msgstr ""
+
+#: waypoints.lua
+msgid "World position"
+msgstr "Posición en el mundo"
+
+#: waypoints.lua
+msgid "Name"
+msgstr "Nombre"
+
+#: waypoints.lua
+msgid "HUD text color"
+msgstr "Color del HUD"

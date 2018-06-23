@@ -1,5 +1,5 @@
 local S = unified_inventory.gettext
-local F = unified_inventory.fgettext
+local F = minetest.formspec_escape
 
 minetest.register_privilege("creative", {
 	description = S("Can use the creative inventory"),
@@ -171,20 +171,20 @@ unified_inventory.register_page("craft", {
 		local player_name = player:get_player_name()
 		local formspec = "background[2,"..formspecy..";6,3;ui_crafting_form.png]"
 		formspec = formspec.."background[0,"..(formspecy + 3.5)..";8,4;ui_main_inventory.png]"
-		formspec = formspec.."label[0,"..formheadery..";" ..F("Crafting").."]"
+		formspec = formspec.."label[0,"..formheadery..";" ..F(S("Crafting")).."]"
 		formspec = formspec.."listcolors[#00000000;#00000000]"
 		formspec = formspec.."list[current_player;craftpreview;6,"..formspecy..";1,1;]"
 		formspec = formspec.."list[current_player;craft;2,"..formspecy..";3,3;]"
 		if unified_inventory.trash_enabled or unified_inventory.is_creative(player_name) or minetest.get_player_privs(player_name).give then
-			formspec = formspec.."label[7,"..(formspecy + 1.5)..";" .. F("Trash:") .. "]"
+			formspec = formspec.."label[7,"..(formspecy + 1.5)..";" .. F(S("Trash:")) .. "]"
 			formspec = formspec.."background[7,"..(formspecy + 2)..";1,1;ui_single_slot.png]"
 			formspec = formspec.."list[detached:trash;main;7,"..(formspecy + 2)..";1,1;]"
 		end
 		formspec = formspec.."listring[current_name;craft]"
 		formspec = formspec.."listring[current_player;main]"
 		if unified_inventory.is_creative(player_name) then
-			formspec = formspec.."label[0,"..(formspecy + 1.5)..";" .. F("Refill:") .. "]"
-			formspec = formspec.."list[detached:"..minetest.formspec_escape(player_name).."refill;main;0,"..(formspecy +2)..";1,1;]"
+			formspec = formspec.."label[0,"..(formspecy + 1.5)..";" .. F(S("Refill:")) .. "]"
+			formspec = formspec.."list[detached:"..F(player_name).."refill;main;0,"..(formspecy +2)..";1,1;]"
 		end
 		return {formspec=formspec}
 	end,
@@ -211,10 +211,10 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		selectitem = group_item.sole and displayitem or name
 	end
 	local label = show_is_group and "G" or ""
-	local buttonname = minetest.formspec_escape(buttonname_prefix..unified_inventory.mangle_for_formspec(selectitem))
+	local buttonname = F(buttonname_prefix..unified_inventory.mangle_for_formspec(selectitem))
 	local button = string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",
 			x, y, w, h,
-			minetest.formspec_escape(displayitem), buttonname, label)
+			F(displayitem), buttonname, label)
 	if show_is_group then
 		local groupstring, andcount = unified_inventory.extract_groupnames(name)
 		local grouptip
@@ -223,7 +223,7 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		elseif andcount > 1 then
 			grouptip = string.format(S("Any item belonging to the groups %s"), groupstring)
 		end
-		grouptip = minetest.formspec_escape(grouptip)
+		grouptip = F(grouptip)
 		if andcount >= 1 then
 			button = button  .. string.format("tooltip[%s;%s]", buttonname, grouptip)
 		end
@@ -232,24 +232,24 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 end
 
 local recipe_text = {
-	recipe = "Recipe %d of %d",
-	usage = "Usage %d of %d",
+	recipe = S("Recipe %d of %d"),
+	usage = S("Usage %d of %d"),
 }
 local no_recipe_text = {
-	recipe = "No recipes",
-	usage = "No usages",
+	recipe = S("No recipes"),
+	usage = S("No usages"),
 }
 local role_text = {
-	recipe = "Result",
-	usage = "Ingredient",
+	recipe = S("Result"),
+	usage = S("Ingredient"),
 }
 local next_alt_text = {
-	recipe = "Show next recipe",
-	usage = "Show next usage",
+	recipe = S("Show next recipe"),
+	usage = S("Show next usage"),
 }
 local prev_alt_text = {
-	recipe = "Show previous recipe",
-	usage = "Show previous usage",
+	recipe = S("Show previous recipe"),
+	usage = S("Show previous usage"),
 }
 local other_dir = {
 	recipe = "usage",
@@ -268,7 +268,7 @@ unified_inventory.register_page("craftguide", {
 		local player_privs = minetest.get_player_privs(player_name)
 		local formspec = ""
 		formspec = formspec.."background[0,"..(formspecy + 3.5)..";8,4;ui_main_inventory.png]"
-		formspec = formspec.."label[0,"..formheadery..";" .. F("Crafting Guide") .. "]"
+		formspec = formspec.."label[0,"..formheadery..";" .. F(S("Crafting Guide")) .. "]"
 		formspec = formspec.."listcolors[#00000000;#00000000]"
 		local item_name = unified_inventory.current_item[player_name]
 		if not item_name then return {formspec=formspec} end
@@ -295,20 +295,20 @@ unified_inventory.register_page("craftguide", {
 
 		formspec = formspec.."background[0.5,"..(formspecy + 0.2)..";8,3;ui_craftguide_form.png]"
 		formspec = formspec.."textarea["..craftresultx..","..craftresulty
-                           ..";10,1;;"..minetest.formspec_escape(F(role_text[dir])..": "..item_name_shown)..";]"
+                           ..";10,1;;"..F(role_text[dir])..": "..item_name_shown..";]"
 		formspec = formspec..stack_image_button(0, formspecy, 1.1, 1.1, "item_button_"
 		                   .. rdir .. "_", ItemStack(item_name))
 
 		if not craft then
 			formspec = formspec.."label[5.5,"..(formspecy + 2.35)..";"
-			                   ..minetest.formspec_escape(F(no_recipe_text[dir])).."]"
+			                   ..F(no_recipe_text[dir]).."]"
 			local no_pos = dir == "recipe" and 4.5 or 6.5
 			local item_pos = dir == "recipe" and 6.5 or 4.5
 			formspec = formspec.."image["..no_pos..","..formspecy..";1.1,1.1;ui_no.png]"
 			formspec = formspec..stack_image_button(item_pos, formspecy, 1.1, 1.1, "item_button_"
 			                   ..other_dir[dir].."_", ItemStack(item_name))
 			if has_creative then
-				formspec = formspec.."label[0,"..(formspecy + 2.10)..";" .. F("Give me:") .. "]"
+				formspec = formspec.."label[0,"..(formspecy + 2.10)..";" .. F(S("Give me:")) .. "]"
 						.."button[0,  "..(formspecy + 2.7)..";0.6,0.5;craftguide_giveme_1;1]"
 						.."button[0.6,"..(formspecy + 2.7)..";0.7,0.5;craftguide_giveme_10;10]"
 						.."button[1.3,"..(formspecy + 2.7)..";0.8,0.5;craftguide_giveme_99;99]"
@@ -321,7 +321,7 @@ unified_inventory.register_page("craftguide", {
 		if craft_type.icon then
 			formspec = formspec..string.format(" image[%f,%f;%f,%f;%s]",5.7,(formspecy + 0.05),0.5,0.5,craft_type.icon)
 		end
-		formspec = formspec.."label[5.5,"..(formspecy + 1)..";" .. minetest.formspec_escape(craft_type.description).."]"
+		formspec = formspec.."label[5.5,"..(formspecy + 1)..";" .. F(craft_type.description).."]"
 		formspec = formspec..stack_image_button(6.5, formspecy, 1.1, 1.1, "item_button_usage_", ItemStack(craft.output))
 		local display_size = craft_type.dynamic_display_size and craft_type.dynamic_display_size(craft) or { width = craft_type.width, height = craft_type.height }
 		local craft_width = craft_type.get_shaped_craft_width and craft_type.get_shaped_craft_width(craft) or display_size.width
@@ -375,17 +375,17 @@ unified_inventory.register_page("craftguide", {
 			-- Error
 			formspec = formspec.."label["
 				..tostring(2)..","..tostring(formspecy)
-				..";"..minetest.formspec_escape(S("This recipe is too\nlarge to be displayed.")).."]"
+				..";"..F(S("This recipe is too\nlarge to be displayed.")).."]"
 		end
 
 		if craft_type.uses_crafting_grid and display_size.width <= 3 then
-			formspec = formspec.."label[0,"..(formspecy + 0.9)..";" .. F("To craft grid:") .. "]"
+			formspec = formspec.."label[0,"..(formspecy + 0.9)..";" .. F(S("To craft grid:")) .. "]"
 					.."button[0,  "..(formspecy + 1.5)..";0.6,0.5;craftguide_craft_1;1]"
 					.."button[0.6,"..(formspecy + 1.5)..";0.7,0.5;craftguide_craft_10;10]"
-					.."button[1.3,"..(formspecy + 1.5)..";0.8,0.5;craftguide_craft_max;" .. F("All") .. "]"
+					.."button[1.3,"..(formspecy + 1.5)..";0.8,0.5;craftguide_craft_max;" .. F(S("All")) .. "]"
 		end
 		if has_creative then
-			formspec = formspec.."label[0,"..(formspecy + 2.1)..";" .. F("Give me:") .. "]"
+			formspec = formspec.."label[0,"..(formspecy + 2.1)..";" .. F(S("Give me:")) .. "]"
 					.."button[0,  "..(formspecy + 2.7)..";0.6,0.5;craftguide_giveme_1;1]"
 					.."button[0.6,"..(formspecy + 2.7)..";0.7,0.5;craftguide_giveme_10;10]"
 					.."button[1.3,"..(formspecy + 2.7)..";0.8,0.5;craftguide_giveme_99;99]"
