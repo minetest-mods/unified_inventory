@@ -1,0 +1,108 @@
+# Malay Translation by MuhdNurHidayat
+
+### api.lua ###
+Digging (by chance) = Gali (ikut nasib)
+
+# Template
+### bags.lua ###
+Bags = Beg
+Bag @1 = Beg @1
+Small Bag = Beg Kecil
+Medium Bag = Beg Sederhana
+Large Bag = Beg Besar
+Bag 1 = Beg 1
+Bag 2 = Beg 2
+Bag 3 = Beg 3
+Bag 4 = Beg 4
+
+### inernal.lua ###
+First page = Halaman pertama
+Back three pages = Tiga halaman sebelumnya
+Back one page = Halaman sebelumnya
+Forward one page = Halaman seterusnya
+Forward three pages = Tiga halaman seterusnya
+Last page = Halaman terakhir
+No matching items = Tiada item sepadan
+Page = Halaman
+%s of %s = %s drpd %s
+Filter = Tapis
+Search = Cari
+Reset search and display everything = Set semula carian dan tunjukkan semua benda
+
+### register.lua ###
+Can use the creative inventory = Boleh guna inventori kreatif
+Forces Unified Inventory to be displayed in Full mode if Lite mode is configured globally = Memaksa Unified Inventory untuk dipaparkan dalam mod Full jika mod Lite ditetapkan secara global
+Home position set to: %s = Kedudukan rumah ditetapkan ke: %s
+Time of day set to 6am = Masa dunia ditetapkan kepada 6 pagi
+You don't have the settime priviledge! = Anda tidak ada keistimewaan settime
+Time of day set to 9pm = Masa dunia ditetapkan kepada 9 malam
+This button has been disabled outside of creative mode to prevent accidental inventory trashing.\nUse the trash slot instead. = Butang ini telah dilumpuhkan di luar mod kreatif untuk mengelakkan pengosongan inventori secara tidak sengaja.\nSebaliknya, anda boleh gunakan slot tong sampah.
+Inventory cleared! = Inventori dokosongkan!
+Crafting = Pertukangan
+Digging = Penggalian
+Cooking = Pemasakan
+Mixing = Pencampuran
+Trash: = Buang:
+Refill: = Isi balik:
+Crafting Guide = Panduan Pertukangan
+Method: = Kaedah:
+Result: %s = Hasil: %s
+crafting = pertukangan
+shapeless crafting = pertukangan tanpa bentuk
+cooking = pemasakan
+alloy cooking = pemasakan aloi
+Copy to craft grid: = Salin ke grid pertukangan
+All = SE\nMUA
+Alternate = Tunjuk Lain
+Crafting Grid =  Grid Pertukangan
+Show next recipe = Tunjuk resipi seterusnya
+Show next usage = Tunjuk kegunaan seterusnya
+Show previous recipe = Tunjuk resipi sebelumnya
+Show previous usage = Tunjuk kegunaan sebelumnya
+# Shown for huge crafting recipes; try to keep the line length short and use multiple line breaks as needed
+This recipe is too\nlarge to be displayed. = Resipi ini terlalu\nbesar untuk dipaparkan.
+# %s = group name (e.g. wool)
+Any item belonging to the %s group = Sebarang item dari kumpulan %s
+# %s = List of “and”-concatenated group names
+Any item belonging to the groups %s = Sebarang item dari kumpulan %s
+Recipe %d of %d = Resipi %d drpd %d
+Usage %d of %d = Kegunaan %d drpd %d
+No recipes = Tiada resipi
+No usages = Tiada kegunaan
+Result = Hasil
+Ingredient = Bahan
+Set time to day = Tetapkan masa jadi siang
+Set time to night = Tetapkan masa jadi malam
+Set home position = Tetapkan kedudukan rumah
+Go home = Balik rumah
+Clear inventory = Kosongkan inventori
+Give me: = Beri saya:
+To craft grid: = Ke grid pertukangan:
+
+### group.lua ###
+# Logical connective, example: “Any item belonging to the groups foo and bar”
+\sand\s = \sdan\s
+
+### waypoints.lua ###
+White = Putih
+Yellow = Kuning
+Red = Merah
+Green = Hijau
+Blue = Biru
+Waypoints = Titik arah
+Waypoint %d = Titik arah %d
+Waypoint active = Titik arah aktif
+Waypoint inactive = Titik arah tidak aktif
+World position = Kedudukan dunia
+Name = Nama
+HUD text color = Warna tulisan HUD
+Edit waypoint name = Edit nama titik arah
+Rename waypoint = Namakan semula titik arah
+Change color of waypoint display = Ubah warna paparan titik arah
+Set waypoint to current location = Tetapkan titik arah ke lokasi semasa
+Make waypoint visible = Paparkan titik arah
+Make waypoint invisible = Sembunyikan titik arah
+Disable display of waypoint coordinates = Sembunyikan koordinat untuk titik arah
+Enable display of waypoint coordinates = Paparkan koordinat untuk titik arah
+Finish editing = Selesai edit
+Select Waypoint #%d = Pilih Titik Arah #%d
