@@ -200,6 +200,8 @@ minetest.register_on_joinplayer(function(player)
 				end
 				return 1
 			end
+			-- New bag is smaller: Disallow inserting
+			return 0
 		end,
 		allow_take = function(inv, listname, index, stack, player)
 			if player:get_inventory():is_empty(listname.."contents") then
