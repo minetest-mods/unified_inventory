@@ -223,7 +223,8 @@ function unified_inventory.get_formspec(player, page)
 		for y = 0, ui_peruser.pagerows - 1 do
 			for x = 0, ui_peruser.pagecols - 1 do
 				local name = unified_inventory.filtered_items_list[player_name][list_index]
-				if minetest.registered_items[name] then
+				local item = minetest.registered_items[name]
+				if item then
 					-- Clicked on current item: Flip crafting direction
 					if name == unified_inventory.current_item[player_name] then
 						local cdir = unified_inventory.current_craft_direction[player_name]
@@ -241,6 +242,9 @@ function unified_inventory.get_formspec(player, page)
 						..(ui_peruser.formspec_y + ui_peruser.page_y + y * 0.7)..";.81,.81;"
 						..name..";item_button_"..dir.."_"
 						..unified_inventory.mangle_for_formspec(name)..";]"
+						.."tooltip[item_button_"..dir.."_"
+						..unified_inventory.mangle_for_formspec(name)..";"..item.description.."\n"
+						..minetest.get_color_escape_sequence("#90C9E4")..item.mod_origin.."]"
 					n = n+1
 					list_index = list_index + 1
 				end
