@@ -297,15 +297,13 @@ function unified_inventory.apply_filter(player, filter, search_dir)
 			return string.find(lname, lfilter, 1, true) or string.find(ldesc, lfilter, 1, true)
 		end
 	end
-	local is_creative = unified_inventory.is_creative(player_name)
 	unified_inventory.filtered_items_list[player_name]={}
 	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory
 			or def.groups.not_in_creative_inventory == 0)
 		and def.description
 		and def.description ~= ""
-		and ffilter(name, def)
-		and (is_creative or unified_inventory.crafts_for.recipe[def.name]) then
+		and ffilter(name, def) then
 			table.insert(unified_inventory.filtered_items_list[player_name], name)
 		end
 	end
