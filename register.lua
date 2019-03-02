@@ -432,6 +432,10 @@ end
 -- Takes any stack from "main" where the `amount` of `needed_item` may fit
 -- into the given crafting stack (`craft_item`)
 local function craftguide_move_stacks(inv, craft_item, needed_item, amount)
+	if craft_item:get_count() >= amount then
+		return
+	end
+
 	local get_item_group = minetest.get_item_group
 	local group = needed_item:match("^group:(.+)")
 	if group then
@@ -453,7 +457,9 @@ local function craftguide_move_stacks(inv, craft_item, needed_item, amount)
 						get_item_group(stack:get_name(), group) ~= 0 then
 					needed_item = stack:get_name()
 					max_found = stack:get_count()
-					break
+					if max_found >= amount then
+						break
+					end
 				end
 			end
 		end
@@ -476,8 +482,8 @@ local function craftguide_move_stacks(inv, craft_item, needed_item, amount)
 	local leftover = taken:add_item(craft_item)
 	if not leftover:is_empty() then
 		-- Somehow failed to add the existing "craft" item. Undo the action.
-		inv:add_item("main", taken)
-		return -- No change
+		inv:add_item("main", leftover)
+		return taken
 	end
 	return taken
 end
@@ -517,21 +523,29 @@ local function craftguide_craft(player, formname, fields)
 		width = 3
 	end
 
-	local index = 1
-	for y = 1, 3 do
-		for x = 1, width do
-			local needed_item = needed[index]
-			if needed_item then
-				local craft_index = ((y - 1) * 3) + x
-				local craft_item = craft_list[craft_index]
-				local newitem = craftguide_move_stacks(player_inv, craft_item, needed_item, amount)
-				if newitem then
-					craft_list[craft_index] = newitem
+	-- To spread the items evenly
+	local STEPSIZE = math.ceil(math.sqrt(amount) / 5) * 5
+	local current_count = 0
+	repeat
+		current_count = math.min(current_count + STEPSIZE, amount)
+		local index = 1
+		for y = 1, 3 do
+			for x = 1, width do
+				local needed_item = needed[index]
+				if needed_item then
+					local craft_index = ((y - 1) * 3) + x
+					local craft_item = craft_list[craft_index]
+					local newitem = craftguide_move_stacks(player_inv,
+							craft_item, needed_item, current_count)
+
+					if newitem then
+						craft_list[craft_index] = newitem
+					end
 				end
+				index = index + 1
 			end
-			index = index + 1
 		end
-	end
+	until current_count == amount
 
 	player_inv:set_list("craft", craft_list)
 
