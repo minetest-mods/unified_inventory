@@ -144,6 +144,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			unified_inventory.current_item[player_name] = clicked_item
 			unified_inventory.alternate[player_name] = 1
 			unified_inventory.set_inventory_formspec(player, "craftguide")
+		elseif unified_inventory.page_click_tracking[page] then
+			unified_inventory.current_item[player_name] = clicked_item
+			unified_inventory.set_inventory_formspec(player, page)
 		elseif player_creative then
 			local inv = player:get_inventory()
 			local stack = ItemStack(clicked_item)
