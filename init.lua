@@ -24,6 +24,7 @@ unified_inventory = {
 	filtered_items_list_size = {},
 	filtered_items_list = {},
 	pages = {},
+	page_click_tracking = {},
 	buttons = {},
 
 	-- Homepos stuff
