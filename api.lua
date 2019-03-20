@@ -289,6 +289,9 @@ function unified_inventory.register_page(name, def)
 	unified_inventory.pages[name] = def
 end
 
+function unified_inventory.register_click_tracking(name)
+	unified_inventory.page_click_tracking[name] = true
+end
 
 function unified_inventory.register_button(name, def)
 	if not def.action then
