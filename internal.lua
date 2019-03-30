@@ -59,13 +59,13 @@ function unified_inventory.get_formspec(player, page)
 	local pagedef = unified_inventory.pages[page]
 
 	local formspec = {
-		"size[14,10]",
+		"size[14,10]no_prepend[]",
 		"background[-0.19,-0.25;14.4,10.75;ui_form_bg.png]" -- Background
 	}
 	local n = 3
 
 	if draw_lite_mode then
-		formspec[1] = "size[11,7.7]"
+		formspec[1] = "size[11,7.7]no_prepend[]"
 		formspec[2] = "background[-0.19,-0.2;11.4,8.4;ui_form_bg.png]"
 	end
 

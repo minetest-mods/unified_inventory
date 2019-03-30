@@ -9,7 +9,7 @@ local F = minetest.formspec_escape
 unified_inventory.register_page("bags", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
-		local formspec = "background[0.06,0.99;7.92,7.52;ui_bags_main_form.png]"
+		local formspec = "no_prepend[]background[0.06,0.99;7.92,7.52;ui_bags_main_form.png]"
 		formspec = formspec.."label[0,0;"..F(S("Bags")).."]"
 		formspec = formspec.."button[0,2;2,0.5;bag1;"..F(S("Bag @1", 1)).."]"
 		formspec = formspec.."button[2,2;2,0.5;bag2;"..F(S("Bag @1", 2)).."]"
@@ -44,7 +44,7 @@ for i = 1, 4 do
 		get_formspec = function(player)
 			local stack = get_player_bag_stack(player, bi)
 			local image = stack:get_definition().inventory_image
-			local formspec = ("image[7,0;1,1;"..image.."]"
+			local formspec = ("no_prepend[]image[7,0;1,1;"..image.."]"
 					.."label[0,0;"..F(S("Bag @1", bi)).."]"
 					.."listcolors[#00000000;#00000000]"
 					.."list[current_player;bag"..bi.."contents;0,1;8,3;]"
