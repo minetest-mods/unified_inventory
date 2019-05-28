@@ -26,10 +26,6 @@ unified_inventory = {
 	pages = {},
 	buttons = {},
 
-	-- Homepos stuff
-	home_pos = {},
-	home_filename =	worldpath.."/unified_inventory_home.home",
-
 	-- Default inventory page
 	default = "craft",
 

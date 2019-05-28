@@ -48,9 +48,12 @@ unified_inventory.register_button("home_gui_set", {
 	action = function(player)
 		local player_name = player:get_player_name()
 		if minetest.check_player_privs(player_name, {home=true}) then
-			unified_inventory.set_home(player, player:getpos())
-			local home = unified_inventory.home_pos[player_name]
-			if home ~= nil then
+			local home = player:get_pos()
+
+			-- use mtg sethome mod function
+			local success = sethome.set(player_name, home)
+
+			if success then
 				minetest.sound_play("dingdong",
 						{to_player=player_name, gain = 1.0})
 				minetest.chat_send_player(player_name,
@@ -77,7 +80,9 @@ unified_inventory.register_button("home_gui_go", {
 		if minetest.check_player_privs(player_name, {home=true}) then
 			minetest.sound_play("teleport",
 				{to_player=player:get_player_name(), gain = 1.0})
-			unified_inventory.go_home(player)
+
+			-- use mtg sethome mod function
+			sethome.go(player_name)
 		else
 			minetest.chat_send_player(player_name,
 				S("You don't have the \"home\" privilege!"))
