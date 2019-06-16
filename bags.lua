@@ -1,7 +1,9 @@
--- Bags for Minetest
+--[[ 
+Bags for Minetest
 
--- Copyright (c) 2012 cornernote, Brett O'Donnell <cornernote@gmail.com>
--- License: GPLv3
+Copyright (c) 2012 cornernote, Brett O'Donnell <cornernote@gmail.com>
+License: GPLv3
+--]]
 
 local S = unified_inventory.gettext
 local F = minetest.formspec_escape
@@ -119,16 +121,18 @@ local function save_bags_metadata(player, bags_inv)
 		end
 	end
 	if is_empty then
-		player:set_attribute("unified_inventory:bags", nil)
+		local meta = player:get_meta()
+		meta:set_string("unified_inventory:bags", nil)
 	else
-		player:set_attribute("unified_inventory:bags",
+		meta:set_string("unified_inventory:bags",
 			minetest.serialize(bags))
 	end
 end
 
 local function load_bags_metadata(player, bags_inv)
 	local player_inv = player:get_inventory()
-	local bags_meta = player:get_attribute("unified_inventory:bags")
+	local meta = player:get_meta()
+	local bags_meta = meta:get_string("unified_inventory:bags")
 	local bags = bags_meta and minetest.deserialize(bags_meta) or {}
 	local dirty_meta = false
 	if not bags_meta then

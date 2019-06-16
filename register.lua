@@ -48,7 +48,7 @@ unified_inventory.register_button("home_gui_set", {
 	action = function(player)
 		local player_name = player:get_player_name()
 		if minetest.check_player_privs(player_name, {home=true}) then
-			unified_inventory.set_home(player, player:getpos())
+			unified_inventory.set_home(player, player:get_pos())
 			local home = unified_inventory.home_pos[player_name]
 			if home ~= nil then
 				minetest.sound_play("dingdong",
