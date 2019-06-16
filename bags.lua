@@ -120,8 +120,8 @@ local function save_bags_metadata(player, bags_inv)
 			is_empty = false
 		end
 	end
+	local meta = player:get_meta()
 	if is_empty then
-		local meta = player:get_meta()
 		meta:set_string("unified_inventory:bags", nil)
 	else
 		meta:set_string("unified_inventory:bags",
