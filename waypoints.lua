@@ -174,7 +174,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 		if fields["set_waypoint"..i] then
 			hit = true
-			local pos = player:getpos()
+			local pos = player:get_pos()
 			pos.x = math.floor(pos.x)
 			pos.y = math.floor(pos.y)
 			pos.z = math.floor(pos.z)
