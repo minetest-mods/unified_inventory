@@ -440,65 +440,6 @@ local function craftguide_giveme(player, formname, fields)
 	player_inv:add_item("main", {name = output, count = amount})
 end
 
--- Takes any stack from "main" where the `amount` of `needed_item` may fit
--- into the given crafting stack (`craft_item`)
-local function craftguide_move_stacks(inv, craft_item, needed_item, amount)
-	if craft_item:get_count() >= amount then
-		return
-	end
-
-	local get_item_group = minetest.get_item_group
-	local group = needed_item:match("^group:(.+)")
-	if group then
-		if not craft_item:is_empty() then
-			-- Source item must be the same to fill
-			if get_item_group(craft_item:get_name(), group) ~= 0 then
-				needed_item = craft_item:get_name()
-			else
-				-- TODO: Maybe swap unmatching "craft" items
-				-- !! Would conflict with recursive function call
-				return
-			end
-		else
-			-- Take matching group from the inventory (biggest stack)
-			local main = inv:get_list("main")
-			local max_found = 0
-			for i, stack in ipairs(main) do
-				if stack:get_count() > max_found and
-						get_item_group(stack:get_name(), group) ~= 0 then
-					needed_item = stack:get_name()
-					max_found = stack:get_count()
-					if max_found >= amount then
-						break
-					end
-				end
-			end
-		end
-	else
-		if not craft_item:is_empty() and
-				craft_item:get_name() ~= needed_item then
-			return -- Item must be identical
-		end
-	end
-
-	needed_item = ItemStack(needed_item)
-	local to_take = math.min(amount, needed_item:get_stack_max())
-	to_take = to_take - craft_item:get_count()
-	if to_take <= 0 then
-		return -- Nothing to do
-	end
-	needed_item:set_count(to_take)
-
-	local taken = inv:remove_item("main", needed_item)
-	local leftover = taken:add_item(craft_item)
-	if not leftover:is_empty() then
-		-- Somehow failed to add the existing "craft" item. Undo the action.
-		inv:add_item("main", leftover)
-		return taken
-	end
-	return taken
-end
-
 local function craftguide_craft(player, formname, fields)
 	local amount
 	for k, v in pairs(fields) do
@@ -507,8 +448,8 @@ local function craftguide_craft(player, formname, fields)
 	end
 	if not amount then return end
 
-	amount = tonumber(amount) or 99 -- fallback for "all"
-	if amount <= 0 or amount > 99 then return end
+	amount = tonumber(amount) or -1 -- fallback for "all"
+	if amount == 0 or amount < -1 or amount > 99 then return end
 
 	local player_name = player:get_player_name()
 
@@ -516,7 +457,6 @@ local function craftguide_craft(player, formname, fields)
 	if output == "" then return end
 
 	local player_inv = player:get_inventory()
-	local craft_list = player_inv:get_list("craft")
 
 	local crafts = unified_inventory.crafts_for[
 		unified_inventory.current_craft_direction[player_name]][output] or {}
@@ -527,38 +467,7 @@ local function craftguide_craft(player, formname, fields)
 	local craft = crafts[alternate]
 	if craft.width > 3 then return end
 
-	local needed = craft.items
-	local width = craft.width
-	if width == 0 then
-		-- Shapeless recipe
-		width = 3
-	end
-
-	-- To spread the items evenly
-	local STEPSIZE = math.ceil(math.sqrt(amount) / 5) * 5
-	local current_count = 0
-	repeat
-		current_count = math.min(current_count + STEPSIZE, amount)
-		local index = 1
-		for y = 1, 3 do
-			for x = 1, width do
-				local needed_item = needed[index]
-				if needed_item then
-					local craft_index = ((y - 1) * 3) + x
-					local craft_item = craft_list[craft_index]
-					local newitem = craftguide_move_stacks(player_inv,
-							craft_item, needed_item, current_count)
-
-					if newitem then
-						craft_list[craft_index] = newitem
-					end
-				end
-				index = index + 1
-			end
-		end
-	until current_count == amount
-
-	player_inv:set_list("craft", craft_list)
+	craftguide_match_craft(player_inv, "main", "craft", craft, amount)
 
 	unified_inventory.set_inventory_formspec(player, "craft")
 end

@@ -71,6 +71,7 @@ dofile(modpath.."/group.lua")
 dofile(modpath.."/api.lua")
 dofile(modpath.."/internal.lua")
 dofile(modpath.."/callbacks.lua")
+dofile(modpath.."/match_craft.lua")
 dofile(modpath.."/register.lua")
 
 if minetest.settings:get_bool("unified_inventory_bags") ~= false then
