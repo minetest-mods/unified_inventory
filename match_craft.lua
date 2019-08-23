@@ -31,19 +31,40 @@ local function add_craft_group(t, group_name, craft_pos)
 	end
 end
 
-local function create_craft_index(craft_items)
+local function create_craft_index(craft)
 	local craft_index = {
 		items = {},
 		groups = {}
 	}
 
-	for craft_pos, name in pairs(craft_items) do
-		local group_name = extract_group_name(name)
+	local MAX_HEIGHT = 3
+	local MAX_WIDTH = 3
 
-		if group_name == nil then
-			add_craft_item(craft_index.items, name, craft_pos)
-		else
-			add_craft_group(craft_index.groups, group_name, craft_pos)
+	local craft_items = craft.items
+	local craft_width = craft.width
+
+	if craft_width == 0 then
+		craft_width = MAX_WIDTH
+	end
+
+	local pos = 1
+
+	for y = 1, MAX_HEIGHT do
+		for x = 1, craft_width do
+			local craft_pos = (y - 1) * MAX_WIDTH + x
+			local item = craft_items[pos]
+
+			if item ~= nil then
+				local group = extract_group_name(item)
+
+				if group == nil then
+					add_craft_item(craft_index.items, item, craft_pos)
+				else
+					add_craft_group(craft_index.groups, group, craft_pos)
+				end
+			end
+
+			pos = pos + 1
 		end
 	end
 
@@ -244,8 +265,8 @@ local function get_match_table(craft_index, item_index)
 	return match_table
 end
 
-local function find_best_match(inv_list, craft_items)
-	local craft_index = create_craft_index(craft_items)
+local function find_best_match(inv_list, craft)
+	local craft_index = create_craft_index(craft)
 	local item_index = create_item_index(inv_list, craft_index)
 
 	if not all_items_found(craft_index) then
@@ -272,8 +293,7 @@ function craftguide_match_craft(inv, src_list_name, dst_list_name, craft, amount
 	local src_list = inv:get_list(src_list_name)
 	local dst_list = inv:get_list(dst_list_name)
 
-	local craft_items = craft.items
-	local craft_match = find_best_match(src_list, craft_items)
+	local craft_match = find_best_match(src_list, craft)
 
 	if craft_match == nil then
 		return
