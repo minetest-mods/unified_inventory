@@ -4,7 +4,31 @@ local function extract_group_name(name)
 	return name:match("^group:(.+)")
 end
 
-local function add_craft_item(t, item_name, craft_pos)
+local function count_compare(item1, item2)
+	return item1.index.total_count > item2.index.total_count
+end
+
+local function lex_compare(group1, group2)
+	local items1 = group1.items
+	local items2 = group2.items
+
+	local len1 = #items1
+	local len2 = #items2
+	local min_len = math.min(len1, len2)
+
+	for i = 1, min_len do
+		local count1 = items1[i].index.total_count
+		local count2 = items2[i].index.total_count
+
+		if count1 ~= count2 then
+			return count1 < count2
+		end
+	end
+
+	return len1 < len2
+end
+
+function unified_inventory.add_craft_item(t, item_name, craft_pos)
 	local item = t[item_name]
 
 	if item == nil then
@@ -17,7 +41,7 @@ local function add_craft_item(t, item_name, craft_pos)
 	end
 end
 
-local function add_craft_group(t, group_name, craft_pos)
+function unified_inventory.add_craft_group(t, group_name, craft_pos)
 	local group = t[group_name]
 
 	if group == nil then
@@ -31,7 +55,7 @@ local function add_craft_group(t, group_name, craft_pos)
 	end
 end
 
-local function create_craft_index(craft)
+function unified_inventory.create_craft_index(craft)
 	local craft_index = {
 		items = {},
 		groups = {}
@@ -58,9 +82,9 @@ local function create_craft_index(craft)
 				local group = extract_group_name(item)
 
 				if group == nil then
-					add_craft_item(craft_index.items, item, craft_pos)
+					unified_inventory.add_craft_item(craft_index.items, item, craft_pos)
 				else
-					add_craft_group(craft_index.groups, group, craft_pos)
+					unified_inventory.add_craft_group(craft_index.groups, group, craft_pos)
 				end
 			end
 
@@ -71,7 +95,7 @@ local function create_craft_index(craft)
 	return craft_index
 end
 
-local function find_craft_item(item_name, craft_index)
+function unified_inventory.find_craft_item(item_name, craft_index)
 	local found = false
 	local item = craft_index.items[item_name]
 	local get_item_group = minetest.get_item_group
@@ -93,7 +117,7 @@ local function find_craft_item(item_name, craft_index)
 	return found
 end
 
-local function all_items_found(craft_index)
+function unified_inventory.all_items_found(craft_index)
 	for _, item in pairs(craft_index.items) do
 		if not item.found then
 			return false
@@ -109,7 +133,7 @@ local function all_items_found(craft_index)
 	return true
 end
 
-local function create_item_index(inv_list, craft_index)
+function unified_inventory.create_item_index(inv_list, craft_index)
 	local item_index = {}
 	local not_found = {}
 
@@ -122,7 +146,7 @@ local function create_item_index(inv_list, craft_index)
 
 			if item == nil then
 				if not_found[item_name] == nil then
-					local item_found = find_craft_item(item_name, craft_index)
+					local item_found = unified_inventory.find_craft_item(item_name, craft_index)
 
 					if item_found then
 						item_index[item_name] = {
@@ -142,31 +166,7 @@ local function create_item_index(inv_list, craft_index)
 	return item_index
 end
 
-local function count_compare(item1, item2)
-	return item1.index.total_count > item2.index.total_count
-end
-
-local function lex_compare(group1, group2)
-	local items1 = group1.items
-	local items2 = group2.items
-
-	local len1 = #items1
-	local len2 = #items2
-	local min_len = math.min(len1, len2)
-
-	for i = 1, min_len do
-		local count1 = items1[i].index.total_count
-		local count2 = items2[i].index.total_count
-
-		if count1 ~= count2 then
-			return count1 < count2
-		end
-	end
-
-	return len1 < len2
-end
-
-local function get_group_items(group_name, craft_index, item_index)
+function unified_inventory.get_group_items(group_name, craft_index, item_index)
 	local items = {}
 	local group = craft_index.groups[group_name]
 
@@ -182,11 +182,11 @@ local function get_group_items(group_name, craft_index, item_index)
 	return items
 end
 
-local function ordered_groups(craft_index, item_index)
+function unified_inventory.ordered_groups(craft_index, item_index)
 	local groups = {}
 
 	for group_name in pairs(craft_index.groups) do
-		local group_items = get_group_items(group_name, craft_index, item_index)
+		local group_items = unified_inventory.get_group_items(group_name, craft_index, item_index)
 		table.sort(group_items, count_compare)
 
 		table.insert(groups, {
@@ -210,7 +210,7 @@ local function ordered_groups(craft_index, item_index)
 	end
 end
 
-local function match_items(m, craft_index, item_index)
+function unified_inventory.match_items(m, craft_index, item_index)
 	for item_name, item in pairs(craft_index.items) do
 		local index = item_index[item_name]
 		local times_used = #item.craft_positions
@@ -225,8 +225,8 @@ local function match_items(m, craft_index, item_index)
 	end
 end
 
-local function match_groups(m, craft_index, item_index)
-	for group, group_items in ordered_groups(craft_index, item_index) do
+function unified_inventory.match_groups(m, craft_index, item_index)
+	for group, group_items in unified_inventory.ordered_groups(craft_index, item_index) do
 		for _, craft_pos in ipairs(group.craft_positions) do
 			local cell_count = 0
 			local matched_item = nil
@@ -253,30 +253,30 @@ local function match_groups(m, craft_index, item_index)
 	end
 end
 
-local function get_match_table(craft_index, item_index)
+function unified_inventory.get_match_table(craft_index, item_index)
 	local match_table = {
 		count = MAX_COUNT,
 		items = {}
 	}
 
-	match_items(match_table, craft_index, item_index)
-	match_groups(match_table, craft_index, item_index)
+	unified_inventory.match_items(match_table, craft_index, item_index)
+	unified_inventory.match_groups(match_table, craft_index, item_index)
 
 	return match_table
 end
 
-local function find_best_match(inv_list, craft)
-	local craft_index = create_craft_index(craft)
-	local item_index = create_item_index(inv_list, craft_index)
+function unified_inventory.find_best_match(inv_list, craft)
+	local craft_index = unified_inventory.create_craft_index(craft)
+	local item_index = unified_inventory.create_item_index(inv_list, craft_index)
 
-	if not all_items_found(craft_index) then
+	if not unified_inventory.all_items_found(craft_index) then
 		return
 	end
 
-	return get_match_table(craft_index, item_index)
+	return unified_inventory.get_match_table(craft_index, item_index)
 end
 
-local function can_move(match_items, inv_list)
+function unified_inventory.can_move(match_items, inv_list)
 	for match_pos, match_name in pairs(match_items) do
 		local inv_item = inv_list[match_pos]
 		local inv_item_name = inv_item:get_name()
@@ -293,7 +293,7 @@ function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_n
 	local src_list = inv:get_list(src_list_name)
 	local dst_list = inv:get_list(dst_list_name)
 
-	local craft_match = find_best_match(src_list, craft)
+	local craft_match = unified_inventory.find_best_match(src_list, craft)
 
 	if craft_match == nil then
 		return
@@ -302,7 +302,7 @@ function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_n
 	local matched_items = craft_match.items
 	local matched_count = craft_match.count
 
-	if not can_move(matched_items, dst_list) then
+	if not unified_inventory.can_move(matched_items, dst_list) then
 		return
 	end
 
