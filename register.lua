@@ -467,7 +467,7 @@ local function craftguide_craft(player, formname, fields)
 	local craft = crafts[alternate]
 	if craft.width > 3 then return end
 
-	craftguide_match_craft(player_inv, "main", "craft", craft, amount)
+	unified_inventory.craftguide_match_craft(player_inv, "main", "craft", craft, amount)
 
 	unified_inventory.set_inventory_formspec(player, "craft")
 end

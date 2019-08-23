@@ -289,7 +289,7 @@ local function can_move(match_items, inv_list)
 	return true
 end
 
-function craftguide_match_craft(inv, src_list_name, dst_list_name, craft, amount)
+function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_name, craft, amount)
 	local src_list = inv:get_list(src_list_name)
 	local dst_list = inv:get_list(dst_list_name)
 
