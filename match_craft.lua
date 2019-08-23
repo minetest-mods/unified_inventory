@@ -1,5 +1,3 @@
-local MAX_COUNT = 99
-
 local function extract_group_name(name)
 	return name:match("^group:(.+)")
 end
@@ -137,10 +135,9 @@ function unified_inventory.create_item_index(inv_list, craft_index)
 	local item_index = {}
 	local not_found = {}
 
-	for inv_list_pos, stack in ipairs(inv_list) do
-		local item_name = stack:get_name()
-
-		if item_name ~= "" then
+	for _, stack in ipairs(inv_list) do
+		if not stack:is_empty() then
+			local item_name = stack:get_name()
 			local item_count = stack:get_count()
 			local item = item_index[item_name]
 
@@ -254,6 +251,8 @@ function unified_inventory.match_groups(m, craft_index, item_index)
 end
 
 function unified_inventory.get_match_table(craft_index, item_index)
+	local MAX_COUNT = 99
+
 	local match_table = {
 		count = MAX_COUNT,
 		items = {}
@@ -279,10 +278,13 @@ end
 function unified_inventory.can_move(match_items, inv_list)
 	for match_pos, match_name in pairs(match_items) do
 		local inv_item = inv_list[match_pos]
-		local inv_item_name = inv_item:get_name()
 
-		if inv_item_name ~= "" and match_name ~= inv_item_name then
-			return false
+		if not inv_item:is_empty() then
+			local inv_item_name = inv_item:get_name()
+
+			if match_name ~= inv_item_name then
+				return false
+			end
 		end
 	end
 
@@ -317,15 +319,22 @@ function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_n
 		local dst_count = dst_stack:get_count()
 
 		local matched_stack = ItemStack(item_name)
-		local take_count = math.min(MAX_COUNT - dst_count, amount)
-		matched_stack:set_count(take_count)
+		local match_max = matched_stack:get_stack_max()
 
-		local removed_stack = inv:remove_item(src_list_name, matched_stack)
-		local removed_count = removed_stack:get_count()
-		local sum_count = dst_count + removed_count
-		matched_stack:set_count(sum_count)
+		local take_count = math.min(match_max - dst_count, amount)
 
-		dst_list[match_pos] = matched_stack
+		if take_count > 0 then
+			matched_stack:set_count(take_count)
+
+			local taken_stack = inv:remove_item(src_list_name, matched_stack)
+			local leftover = taken_stack:add_item(dst_stack)
+
+			if not leftover:is_empty() then
+				inv:add_item(src_list_name, leftover)
+			end
+
+			dst_list[match_pos] = taken_stack
+		end
 	end
 
 	inv:set_list(dst_list_name, dst_list)
