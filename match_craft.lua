@@ -10,8 +10,8 @@ local function lex_compare(group1, group2)
 	local items1 = group1.items
 	local items2 = group2.items
 
-	local len1 = #items1
-	local len2 = #items2
+	local len1 = group1.items_count
+	local len2 = group2.items_count
 	local min_len = math.min(len1, len2)
 
 	for i = 1, min_len do
@@ -31,11 +31,15 @@ function unified_inventory.add_craft_item(t, item_name, craft_pos)
 
 	if item == nil then
 		t[item_name] = {
+			times_used = 1,
 			craft_positions = {craft_pos},
 			found = false
 		}
 	else
-		table.insert(item.craft_positions, craft_pos)
+		local times_used = item.times_used + 1
+
+		item.craft_positions[times_used] = craft_pos
+		item.times_used = times_used
 	end
 end
 
@@ -44,12 +48,17 @@ function unified_inventory.add_craft_group(t, group_name, craft_pos)
 
 	if group == nil then
 		t[group_name] = {
+			times_used = 1,
 			craft_positions = {craft_pos},
 			found = false,
+			items_count = 0,
 			found_items = {}
 		}
 	else
-		table.insert(group.craft_positions, craft_pos)
+		local times_used = group.times_used + 1
+
+		group.craft_positions[times_used] = craft_pos
+		group.times_used = times_used
 	end
 end
 
@@ -108,7 +117,10 @@ function unified_inventory.find_craft_item(item_name, craft_index)
 			group.found = true
 			found = true
 
-			table.insert(group.found_items, item_name)
+			local items_count = group.items_count + 1
+
+			group.found_items[items_count] = item_name
+			group.items_count = items_count
 		end
 	end
 
@@ -135,7 +147,11 @@ function unified_inventory.create_item_index(inv_list, craft_index)
 	local item_index = {}
 	local not_found = {}
 
-	for _, stack in ipairs(inv_list) do
+	local list_count = #inv_list
+
+	for i = 1, list_count do
+		local stack = inv_list[i]
+
 		if not stack:is_empty() then
 			local item_name = stack:get_name()
 			local item_count = stack:get_count()
@@ -178,17 +194,19 @@ function unified_inventory.get_total_stack_max(item_index)
 	return total_max
 end
 
-function unified_inventory.get_group_items(group_name, craft_index, item_index)
+function unified_inventory.get_group_items(group, item_index)
 	local items = {}
-	local group = craft_index.groups[group_name]
+	local items_names = group.found_items
+	local items_count = group.items_count
 
-	for _, item_name in ipairs(group.found_items) do
+	for i = 1, items_count do
+		local item_name = items_names[i]
 		local item = item_index[item_name]
 
-		table.insert(items, {
+		items[i] = {
 			name = item_name,
 			index = item
-		})
+		}
 	end
 
 	return items
@@ -196,26 +214,29 @@ end
 
 function unified_inventory.ordered_groups(craft_index, item_index)
 	local groups = {}
+	local groups_count = 0
 
-	for group_name in pairs(craft_index.groups) do
-		local group_items = unified_inventory.get_group_items(group_name, craft_index, item_index)
+	for group_name, group in pairs(craft_index.groups) do
+		local group_items = unified_inventory.get_group_items(group, item_index)
 		table.sort(group_items, count_compare)
 
-		table.insert(groups, {
+		groups_count = groups_count + 1
+
+		groups[groups_count] = {
 			name = group_name,
+			items_count = group.items_count,
 			items = group_items
-		})
+		}
 	end
 
 	table.sort(groups, lex_compare)
 
 	local i = 0
-	local n = #groups
 
 	return function()
 		i = i + 1
 
-		if i <= n then
+		if i <= groups_count then
 			local group = groups[i]
 			return craft_index.groups[group.name], group.items
 		end
@@ -225,7 +246,7 @@ end
 function unified_inventory.match_items(m, craft_index, item_index)
 	for item_name, item in pairs(craft_index.items) do
 		local index = item_index[item_name]
-		local times_used = #item.craft_positions
+		local times_used = item.times_used
 		local cell_count = math.floor(index.total_count / times_used)
 
 		if cell_count == 0 then
@@ -236,7 +257,10 @@ function unified_inventory.match_items(m, craft_index, item_index)
 		index.times_matched = times_used
 		m.count = math.min(m.count, cell_count)
 
-		for _, craft_pos in ipairs(item.craft_positions) do
+		local positions = item.craft_positions
+
+		for i = 1, times_used do
+			local craft_pos = positions[i]
 			m.items[craft_pos] = item_name
 		end
 	end
@@ -244,11 +268,18 @@ end
 
 function unified_inventory.match_groups(m, craft_index, item_index)
 	for group, group_items in unified_inventory.ordered_groups(craft_index, item_index) do
-		for _, craft_pos in ipairs(group.craft_positions) do
+		local times_used = group.times_used
+		local positions = group.craft_positions
+		local items_count = group.items_count
+
+		for i = 1, times_used do
+			local craft_pos = positions[i]
+
 			local cell_count = 0
 			local matched_item = nil
 
-			for _, item in ipairs(group_items) do
+			for j = 1, items_count do
+				local item = group_items[j]
 				local index = item.index
 
 				local item_count = index.total_count
