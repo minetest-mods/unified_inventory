@@ -163,6 +163,21 @@ function unified_inventory.create_item_index(inv_list, craft_index)
 	return item_index
 end
 
+function unified_inventory.get_total_stack_max(item_index)
+	local total_max = nil
+
+	for item_name in pairs(item_index) do
+		local stack = ItemStack(item_name)
+		local stack_max = stack:get_stack_max()
+
+		if total_max == nil or stack_max < total_max then
+			total_max = stack_max
+		end
+	end
+
+	return total_max
+end
+
 function unified_inventory.get_group_items(group_name, craft_index, item_index)
 	local items = {}
 	local group = craft_index.groups[group_name]
@@ -261,10 +276,8 @@ function unified_inventory.match_groups(m, craft_index, item_index)
 end
 
 function unified_inventory.get_match_table(craft_index, item_index)
-	local MAX_COUNT = 99
-
 	local match_table = {
-		count = MAX_COUNT,
+		count = unified_inventory.get_total_stack_max(item_index),
 		items = {}
 	}
 
@@ -333,9 +346,7 @@ function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_n
 		local dst_count = dst_stack:get_count()
 
 		local matched_stack = ItemStack(item_name)
-		local match_max = matched_stack:get_stack_max()
-
-		local take_count = math.min(match_max - dst_count, amount)
+		local take_count = amount - dst_count
 
 		if take_count > 0 then
 			matched_stack:set_count(take_count)
