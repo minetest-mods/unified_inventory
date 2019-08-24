@@ -213,6 +213,11 @@ function unified_inventory.match_items(m, craft_index, item_index)
 		local times_used = #item.craft_positions
 		local cell_count = math.floor(index.total_count / times_used)
 
+		if cell_count == 0 then
+			m.count = 0
+			return
+		end
+
 		index.times_matched = times_used
 		m.count = math.min(m.count, cell_count)
 
@@ -241,6 +246,11 @@ function unified_inventory.match_groups(m, craft_index, item_index)
 				end
 			end
 
+			if cell_count == 0 then
+				m.count = 0
+				return
+			end
+
 			m.count = math.min(m.count, cell_count)
 			m.items[craft_pos] = matched_item.name
 
@@ -260,6 +270,10 @@ function unified_inventory.get_match_table(craft_index, item_index)
 
 	unified_inventory.match_items(match_table, craft_index, item_index)
 	unified_inventory.match_groups(match_table, craft_index, item_index)
+
+	if match_table.count == 0 then
+		return
+	end
 
 	return match_table
 end
