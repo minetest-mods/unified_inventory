@@ -143,9 +143,21 @@ function unified_inventory.all_items_found(craft_index)
 	return true
 end
 
-function unified_inventory.create_item_index(inv_list, craft_index)
-	local item_index = {}
-	local not_found = {}
+function unified_inventory.create_item_index(craft_index)
+	local item_index = {
+		craft_index = craft_index,
+		stack_max = nil,
+		used_items = {},
+		unused_items = {}
+	}
+
+	return item_index
+end
+
+function unified_inventory.add_list_items(item_index, inv_list)
+	local craft_index = item_index.craft_index
+	local index_used = item_index.used_items
+	local index_unused = item_index.unused_items
 
 	local list_count = #inv_list
 
@@ -155,19 +167,26 @@ function unified_inventory.create_item_index(inv_list, craft_index)
 		if not stack:is_empty() then
 			local item_name = stack:get_name()
 			local item_count = stack:get_count()
-			local item = item_index[item_name]
+			local item = index_used[item_name]
 
 			if item == nil then
-				if not_found[item_name] == nil then
+				if index_unused[item_name] == nil then
 					local item_found = unified_inventory.find_craft_item(item_name, craft_index)
 
 					if item_found then
-						item_index[item_name] = {
+						index_used[item_name] = {
 							total_count = item_count,
 							times_matched = 0
 						}
+
+						local stack_max = stack:get_stack_max()
+						local index_stack_max = item_index.stack_max
+
+						if index_stack_max == nil or stack_max < index_stack_max then
+							item_index.stack_max = stack_max
+						end
 					else
-						not_found[item_name] = true
+						index_unused[item_name] = true
 					end
 				end
 			else
@@ -175,23 +194,6 @@ function unified_inventory.create_item_index(inv_list, craft_index)
 			end
 		end
 	end
-
-	return item_index
-end
-
-function unified_inventory.get_total_stack_max(item_index)
-	local total_max = nil
-
-	for item_name in pairs(item_index) do
-		local stack = ItemStack(item_name)
-		local stack_max = stack:get_stack_max()
-
-		if total_max == nil or stack_max < total_max then
-			total_max = stack_max
-		end
-	end
-
-	return total_max
 end
 
 function unified_inventory.get_group_items(group, item_index)
@@ -199,9 +201,11 @@ function unified_inventory.get_group_items(group, item_index)
 	local items_names = group.found_items
 	local items_count = group.items_count
 
+	local index_used = item_index.used_items
+
 	for i = 1, items_count do
 		local item_name = items_names[i]
-		local item = item_index[item_name]
+		local item = index_used[item_name]
 
 		items[i] = {
 			name = item_name,
@@ -244,8 +248,10 @@ function unified_inventory.ordered_groups(craft_index, item_index)
 end
 
 function unified_inventory.match_items(m, craft_index, item_index)
+	local index_used = item_index.used_items
+
 	for item_name, item in pairs(craft_index.items) do
-		local index = item_index[item_name]
+		local index = index_used[item_name]
 		local times_used = item.times_used
 		local cell_count = math.floor(index.total_count / times_used)
 
@@ -308,7 +314,7 @@ end
 
 function unified_inventory.get_match_table(craft_index, item_index)
 	local match_table = {
-		count = unified_inventory.get_total_stack_max(item_index),
+		count = item_index.stack_max,
 		items = {}
 	}
 
@@ -322,9 +328,12 @@ function unified_inventory.get_match_table(craft_index, item_index)
 	return match_table
 end
 
-function unified_inventory.find_best_match(inv_list, craft)
+function unified_inventory.find_best_match(src_list, dst_list, craft)
 	local craft_index = unified_inventory.create_craft_index(craft)
-	local item_index = unified_inventory.create_item_index(inv_list, craft_index)
+
+	local item_index = unified_inventory.create_item_index(craft_index)
+	unified_inventory.add_list_items(item_index, src_list)
+	unified_inventory.add_list_items(item_index, dst_list)
 
 	if not unified_inventory.all_items_found(craft_index) then
 		return
@@ -333,27 +342,11 @@ function unified_inventory.find_best_match(inv_list, craft)
 	return unified_inventory.get_match_table(craft_index, item_index)
 end
 
-function unified_inventory.can_move(match_items, inv_list)
-	for match_pos, match_name in pairs(match_items) do
-		local inv_item = inv_list[match_pos]
-
-		if not inv_item:is_empty() then
-			local inv_item_name = inv_item:get_name()
-
-			if match_name ~= inv_item_name then
-				return false
-			end
-		end
-	end
-
-	return true
-end
-
 function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_name, craft, amount)
 	local src_list = inv:get_list(src_list_name)
 	local dst_list = inv:get_list(dst_list_name)
 
-	local craft_match = unified_inventory.find_best_match(src_list, craft)
+	local craft_match = unified_inventory.find_best_match(src_list, dst_list, craft)
 
 	if craft_match == nil then
 		return
@@ -362,36 +355,77 @@ function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_n
 	local matched_items = craft_match.items
 	local matched_count = craft_match.count
 
-	if not unified_inventory.can_move(matched_items, dst_list) then
-		return
-	end
-
 	if amount == -1 then
 		amount = matched_count
 	elseif amount > matched_count then
 		return
 	end
 
-	for match_pos, item_name in pairs(matched_items) do
-		local dst_stack = dst_list[match_pos]
-		local dst_count = dst_stack:get_count()
+	-- Clear crafting grid (if possible)
+	for i = 1, 9 do
+		local dst_stack = inv:get_stack(dst_list_name, i)
+		local leftover = inv:add_item(src_list_name, dst_stack)
 
-		local matched_stack = ItemStack(item_name)
-		local take_count = amount - dst_count
-
-		if take_count > 0 then
-			matched_stack:set_count(take_count)
-
-			local taken_stack = inv:remove_item(src_list_name, matched_stack)
-			local leftover = taken_stack:add_item(dst_stack)
-
-			if not leftover:is_empty() then
-				inv:add_item(src_list_name, leftover)
-			end
-
-			dst_list[match_pos] = taken_stack
-		end
+		inv:set_stack(dst_list_name, i, leftover)
 	end
 
-	inv:set_list(dst_list_name, dst_list)
+	local fixed = {}
+
+	for match_pos, item_name in pairs(matched_items) do
+		local matched_stack = ItemStack(item_name)
+		matched_stack:set_count(amount)
+
+		local src_take = inv:remove_item(src_list_name, matched_stack)
+		local src_take_count = src_take:get_count()
+		local diff = amount - src_take_count
+
+		if diff > 0 then
+			matched_stack:set_count(diff)
+			src_take:add_item(matched_stack)
+
+			-- Because we take from dst_list we need to exclude already matched positions
+			for i = 1, 9 do
+				if fixed[i] == nil then
+					local dst_take_stack = inv:get_stack(dst_list_name, i)
+					local dst_name = dst_take_stack:get_name()
+
+					if item_name == dst_name then
+						local dst_count = dst_take_stack:get_count()
+
+						if diff > dst_count then
+							diff = diff - dst_count
+							inv:set_stack(dst_list_name, i, nil)
+						else
+							dst_take_stack:set_count(dst_count - diff)
+							inv:set_stack(dst_list_name, i, dst_take_stack)
+							break
+						end
+					end
+				end
+			end
+		end
+
+		local dst_stack = inv:get_stack(dst_list_name, match_pos)
+		inv:set_stack(dst_list_name, match_pos, src_take)
+
+		local src_leftover = inv:add_item(src_list_name, dst_stack)
+
+		if not src_leftover:is_empty() then
+			local dst_leftover = inv:add_item(dst_list_name, src_leftover)
+
+			if not dst_leftover:is_empty() then
+				matched_stack:set_count(amount)
+
+				inv:set_stack(dst_list_name, match_pos, dst_leftover)
+
+				local src_reverse = inv:add_item(src_list_name, matched_stack)
+
+				if not src_reverse:is_empty() then
+					local dst_reserse = inv:add_item(dst_list_name, src_reverse)
+				end
+			end
+		end
+
+		fixed[match_pos] = true
+	end
 end
