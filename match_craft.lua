@@ -342,6 +342,74 @@ function unified_inventory.find_best_match(src_list, dst_list, craft)
 	return unified_inventory.get_match_table(craft_index, item_index)
 end
 
+function unified_inventory.take_item_skip(inv, list_name, item_stack, skipped)
+	local inv_list = inv:get_list(list_name)
+	local list_count = #inv_list
+
+	local item_name = item_stack:get_name()
+	local item_count = item_stack:get_count()
+
+	local removed = ItemStack(item_name)
+	local removed_count = 0
+
+	for i = list_count, 1, -1 do
+		if skipped[i] == nil then
+			local stack = inv:get_stack(list_name, i)
+			local name = stack:get_name()
+
+			if name == item_name then
+				local count = stack:get_count()
+				local left = count - item_count
+
+				if left > 0 then
+					removed_count = removed_count + item_count
+					stack:set_count(left)
+					inv:set_stack(list_name, i, stack)
+					break
+				else
+					removed_count = removed_count + count
+					item_count = item_count - count
+					inv:set_stack(list_name, i, nil)
+				end
+			end
+		end
+	end
+
+	removed:set_count(removed_count)
+	return removed
+end
+
+function unified_inventory.add_item_skip(inv, list_name, item_stack, skipped)
+	local inv_list = inv:get_list(list_name)
+	local list_count = #inv_list
+
+	local item_name = item_stack:get_name()
+	local item_count = item_stack:get_count()
+
+	local leftover = ItemStack(item_stack)
+
+	for i = 1, list_count do
+		if skipped[i] == nil then
+			local stack = inv:get_stack(list_name, i)
+
+			if stack:is_empty() then
+				leftover = stack:add_item(leftover)
+				inv:set_stack(list_name, i, stack)
+				break
+			end
+
+			local name = stack:get_name()
+
+			if name == item_name then
+				leftover = stack:add_item(leftover)
+				inv:set_stack(list_name, i, stack)
+			end
+		end
+	end
+
+	return leftover
+end
+
 function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_name, craft, amount)
 	local src_list = inv:get_list(src_list_name)
 	local dst_list = inv:get_list(dst_list_name)
@@ -362,70 +430,64 @@ function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_n
 	end
 
 	-- Clear crafting grid (if possible)
-	for i = 1, 9 do
+	local dst_count = #dst_list
+
+	for i = 1, dst_count do
 		local dst_stack = inv:get_stack(dst_list_name, i)
 		local leftover = inv:add_item(src_list_name, dst_stack)
 
 		inv:set_stack(dst_list_name, i, leftover)
 	end
 
-	local fixed = {}
+	local skipped = {}
 
-	for match_pos, item_name in pairs(matched_items) do
-		local matched_stack = ItemStack(item_name)
-		matched_stack:set_count(amount)
+	for match_pos = 1, dst_count do
+		local item_name = matched_items[match_pos]
 
-		local src_take = inv:remove_item(src_list_name, matched_stack)
-		local src_take_count = src_take:get_count()
-		local diff = amount - src_take_count
+		if item_name ~= nil then
+			local matched_stack = ItemStack(item_name)
+			matched_stack:set_count(amount)
 
-		if diff > 0 then
-			matched_stack:set_count(diff)
-			src_take:add_item(matched_stack)
+			local src_take = inv:remove_item(src_list_name, matched_stack)
+			local src_take_count = src_take:get_count()
+			local diff = amount - src_take_count
 
-			-- Because we take from dst_list we need to exclude already matched positions
-			for i = 1, 9 do
-				if fixed[i] == nil then
-					local dst_take_stack = inv:get_stack(dst_list_name, i)
-					local dst_name = dst_take_stack:get_name()
+			if diff > 0 then
+				matched_stack:set_count(diff)
 
-					if item_name == dst_name then
-						local dst_count = dst_take_stack:get_count()
+				-- Because we take from dst_list we need to exclude already matched positions
+				local dst_take = unified_inventory.take_item_skip(inv, dst_list_name, matched_stack, skipped)
+				src_take:add_item(dst_take)
+			end
 
-						if diff > dst_count then
-							diff = diff - dst_count
-							inv:set_stack(dst_list_name, i, nil)
-						else
-							dst_take_stack:set_count(dst_count - diff)
-							inv:set_stack(dst_list_name, i, dst_take_stack)
-							break
+			local dst_stack = inv:get_stack(dst_list_name, match_pos)
+			inv:set_stack(dst_list_name, match_pos, src_take)
+			skipped[match_pos] = true
+
+			local src_leftover = inv:add_item(src_list_name, dst_stack)
+
+			if not src_leftover:is_empty() then
+				-- Because we add to dst_list we need to exclude already matched positions
+				local dst_leftover = unified_inventory.add_item_skip(inv, dst_list_name, src_leftover, skipped)
+
+				if not dst_leftover:is_empty() then
+					-- Final try
+					local dst_leftover_full = inv:add_item(dst_list_name, dst_leftover)
+
+					if not dst_leftover_full:is_empty() then
+						inv:set_stack(dst_list_name, match_pos, dst_leftover_full)
+
+						local src_reverse = inv:add_item(src_list_name, src_take)
+
+						if not src_reverse:is_empty() then
+							local dst_reverse = inv:add_item(dst_list_name, src_reverse)
+							-- Can dst_reverse be not empty here?
 						end
+
+						break
 					end
 				end
 			end
 		end
-
-		local dst_stack = inv:get_stack(dst_list_name, match_pos)
-		inv:set_stack(dst_list_name, match_pos, src_take)
-
-		local src_leftover = inv:add_item(src_list_name, dst_stack)
-
-		if not src_leftover:is_empty() then
-			local dst_leftover = inv:add_item(dst_list_name, src_leftover)
-
-			if not dst_leftover:is_empty() then
-				matched_stack:set_count(amount)
-
-				inv:set_stack(dst_list_name, match_pos, dst_leftover)
-
-				local src_reverse = inv:add_item(src_list_name, matched_stack)
-
-				if not src_reverse:is_empty() then
-					local dst_reserse = inv:add_item(dst_list_name, src_reverse)
-				end
-			end
-		end
-
-		fixed[match_pos] = true
 	end
 end
