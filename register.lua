@@ -1,4 +1,4 @@
-local S = unified_inventory.gettext
+local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
 
 minetest.register_privilege("creative", {

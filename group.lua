@@ -1,4 +1,4 @@
-local S = unified_inventory.gettext
+local S = minetest.get_translator("unified_inventory")
 
 function unified_inventory.canonical_item_spec_matcher(spec)
 	local specname = ItemStack(spec):get_name()
