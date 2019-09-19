@@ -35,13 +35,13 @@ unified_inventory.register_page("waypoints", {
 				"ui_" .. i .. "_icon.png;" ..
 				"select_waypoint" .. i .. ";]" ..
 				"tooltip[select_waypoint" .. i .. ";"
-					.. (S("Select Waypoint #%d"):format(i)).."]"
+					.. S("Select Waypoint #@1", i).."]"
 		end
 
 		local i = waypoints.selected or 1
 		local waypoint = waypoints[i] or {}
 		local temp = waypoints_temp[player_name][i] or {}
-		local default_name = string.format(S("Waypoint %d"), i)
+		local default_name = S("Waypoint @1", i)
 
 		-- Main buttons:
 		formspec = formspec ..

@@ -1,4 +1,5 @@
 local S = minetest.get_translator("unified_inventory")
+local NS = function(s) return s end
 local F = minetest.formspec_escape
 
 minetest.register_privilege("creative", {
@@ -54,7 +55,7 @@ unified_inventory.register_button("home_gui_set", {
 				minetest.sound_play("dingdong",
 						{to_player=player_name, gain = 1.0})
 				minetest.chat_send_player(player_name,
-					S("Home position set to: %s"):format(minetest.pos_to_string(home)))
+					S("Home position set to: @1", minetest.pos_to_string(home)))
 			end
 		else
 			minetest.chat_send_player(player_name,
@@ -219,9 +220,9 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		local groupstring, andcount = unified_inventory.extract_groupnames(name)
 		local grouptip
 		if andcount == 1 then
-			grouptip = string.format(S("Any item belonging to the %s group"), groupstring)
+			grouptip = S("Any item belonging to the @1 group", groupstring)
 		elseif andcount > 1 then
-			grouptip = string.format(S("Any item belonging to the groups %s"), groupstring)
+			grouptip = S("Any item belonging to the groups @1", groupstring)
 		end
 		grouptip = F(grouptip)
 		if andcount >= 1 then
@@ -232,8 +233,8 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 end
 
 local recipe_text = {
-	recipe = S("Recipe %d of %d"),
-	usage = S("Usage %d of %d"),
+	recipe = NS("Recipe @1 of @2"),
+	usage = NS("Usage @1 of @2"),
 }
 local no_recipe_text = {
 	recipe = S("No recipes"),
@@ -279,7 +280,7 @@ unified_inventory.register_page("craftguide", {
 		local item_name_shown
 		if minetest.registered_items[item_name]
 				and minetest.registered_items[item_name].description then
-			item_name_shown = string.format(S("%s (%s)"),
+			item_name_shown = S("@1 (@2)",
 				minetest.registered_items[item_name].description, item_name)
 		else
 			item_name_shown = item_name
@@ -403,7 +404,7 @@ unified_inventory.register_page("craftguide", {
 
 		if alternates and alternates > 1 then
 			fs[#fs + 1] = "label[5.5," .. (formspecy + 1.6) .. ";"
-					.. string.format(F(recipe_text[dir]), alternate, alternates) .. "]"
+					.. F(S(recipe_text[dir], alternate, alternates)) .. "]"
 					.. "image_button[5.5," .. (formspecy + 2) .. ";1,1;ui_left_icon.png;alternate_prev;]"
 					.. "image_button[6.5," .. (formspecy + 2) .. ";1,1;ui_right_icon.png;alternate;]"
 					.. "tooltip[alternate_prev;" .. F(prev_alt_text[dir]) .. "]"
