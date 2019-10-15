@@ -1,493 +1,368 @@
-local function extract_group_name(name)
-	return name:match("^group:(.+)")
-end
+-- match_craft.lua
+-- Find and automatically move inventory items to the crafting grid
+-- according to the recipe.
 
-local function count_compare(item1, item2)
-	return item1.index.total_count > item2.index.total_count
-end
+--[[
+Retrieve items from inventory lists and calculate their total count.
+Return a table of "item name" - "total count" pairs.
 
-local function lex_compare(group1, group2)
-	local items1 = group1.items
-	local items2 = group2.items
+Arguments:
+	inv: minetest inventory reference
+	lists: names of inventory lists to use
 
-	local len1 = group1.items_count
-	local len2 = group2.items_count
-	local min_len = math.min(len1, len2)
+Example usage:
+	-- Count items in "main" and "craft" lists of player inventory
+	unified_inventory.count_items(player_inv_ref, {"main", "craft"})
 
-	for i = 1, min_len do
-		local count1 = items1[i].index.total_count
-		local count2 = items2[i].index.total_count
-
-		if count1 ~= count2 then
-			return count1 < count2
-		end
-	end
-
-	return len1 < len2
-end
-
-function unified_inventory.add_craft_item(t, item_name, craft_pos)
-	local item = t[item_name]
-
-	if item == nil then
-		t[item_name] = {
-			times_used = 1,
-			craft_positions = {craft_pos},
-			found = false
-		}
-	else
-		local times_used = item.times_used + 1
-
-		item.craft_positions[times_used] = craft_pos
-		item.times_used = times_used
-	end
-end
-
-function unified_inventory.add_craft_group(t, group_name, craft_pos)
-	local group = t[group_name]
-
-	if group == nil then
-		t[group_name] = {
-			times_used = 1,
-			craft_positions = {craft_pos},
-			found = false,
-			items_count = 0,
-			found_items = {}
-		}
-	else
-		local times_used = group.times_used + 1
-
-		group.craft_positions[times_used] = craft_pos
-		group.times_used = times_used
-	end
-end
-
-function unified_inventory.create_craft_index(craft)
-	local craft_index = {
-		items = {},
-		groups = {}
+Example output:
+	{
+		["default:pine_wood"] = 2,
+		["default:acacia_wood"] = 4,
+		["default:chest"] = 3,
+		["default:axe_diamond"] = 2, -- unstackable item are counted too
+		["wool:white"] = 6
 	}
+]]--
+function unified_inventory.count_items(inv, lists)
+	local counts = {}
 
-	local MAX_HEIGHT = 3
-	local MAX_WIDTH = 3
+	for i = 1, #lists do
+		local name = lists[i]
+		local size = inv:get_size(name)
+		local list = inv:get_list(name)
 
-	local craft_items = craft.items
-	local craft_width = craft.width
+		for j = 1, size do
+			local stack = list[j]
 
-	if craft_width == 0 then
-		craft_width = MAX_WIDTH
-	end
+			if not stack:is_empty() then
+				local item = stack:get_name()
+				local count = stack:get_count()
 
-	local pos = 1
-
-	for y = 1, MAX_HEIGHT do
-		for x = 1, craft_width do
-			local craft_pos = (y - 1) * MAX_WIDTH + x
-			local item = craft_items[pos]
-
-			if item ~= nil then
-				local group = extract_group_name(item)
-
-				if group == nil then
-					unified_inventory.add_craft_item(craft_index.items, item, craft_pos)
-				else
-					unified_inventory.add_craft_group(craft_index.groups, group, craft_pos)
-				end
-			end
-
-			pos = pos + 1
-		end
-	end
-
-	return craft_index
-end
-
-function unified_inventory.find_craft_item(item_name, craft_index)
-	local found = false
-	local item = craft_index.items[item_name]
-	local get_item_group = minetest.get_item_group
-
-	if item ~= nil then
-		item.found = true
-		found = true
-	end
-
-	for group_name, group in pairs(craft_index.groups) do
-		if get_item_group(item_name, group_name) > 0 then
-			group.found = true
-			found = true
-
-			local items_count = group.items_count + 1
-
-			group.found_items[items_count] = item_name
-			group.items_count = items_count
-		end
-	end
-
-	return found
-end
-
-function unified_inventory.all_items_found(craft_index)
-	for _, item in pairs(craft_index.items) do
-		if not item.found then
-			return false
-		end
-	end
-
-	for _, group in pairs(craft_index.groups) do
-		if not group.found then
-			return false
-		end
-	end
-
-	return true
-end
-
-function unified_inventory.create_item_index(craft_index)
-	local item_index = {
-		craft_index = craft_index,
-		stack_max = nil,
-		used_items = {},
-		unused_items = {}
-	}
-
-	return item_index
-end
-
-function unified_inventory.add_list_items(item_index, inv_list)
-	local craft_index = item_index.craft_index
-	local index_used = item_index.used_items
-	local index_unused = item_index.unused_items
-
-	local list_count = #inv_list
-
-	for i = 1, list_count do
-		local stack = inv_list[i]
-
-		if not stack:is_empty() then
-			local item_name = stack:get_name()
-			local item_count = stack:get_count()
-			local item = index_used[item_name]
-
-			if item == nil then
-				if index_unused[item_name] == nil then
-					local item_found = unified_inventory.find_craft_item(item_name, craft_index)
-
-					if item_found then
-						index_used[item_name] = {
-							total_count = item_count,
-							times_matched = 0
-						}
-
-						local stack_max = stack:get_stack_max()
-						local index_stack_max = item_index.stack_max
-
-						if index_stack_max == nil or stack_max < index_stack_max then
-							item_index.stack_max = stack_max
-						end
-					else
-						index_unused[item_name] = true
-					end
-				end
-			else
-				item.total_count = item.total_count + item_count
+				counts[item] = (counts[item] or 0) + count
 			end
 		end
 	end
+
+	return counts
 end
 
-function unified_inventory.get_group_items(group, item_index)
-	local items = {}
-	local items_names = group.found_items
-	local items_count = group.items_count
+--[[
+Retrieve craft recipe items and their positions in the crafting grid.
+Return a table of "craft item name" - "set of positions" pairs.
 
-	local index_used = item_index.used_items
+Note that if craft width is not 3 then positions are recalculated as
+if items were placed on a 3x3 grid. Also note that craft can contain
+groups of items with "group:" prefix.
 
-	for i = 1, items_count do
-		local item_name = items_names[i]
-		local item = index_used[item_name]
+Arguments:
+	craft: minetest craft recipe
 
-		items[i] = {
-			name = item_name,
-			index = item
-		}
-	end
-
-	return items
-end
-
-function unified_inventory.ordered_groups(craft_index, item_index)
-	local groups = {}
-	local groups_count = 0
-
-	for group_name, group in pairs(craft_index.groups) do
-		local group_items = unified_inventory.get_group_items(group, item_index)
-		table.sort(group_items, count_compare)
-
-		groups_count = groups_count + 1
-
-		groups[groups_count] = {
-			name = group_name,
-			items_count = group.items_count,
-			items = group_items
-		}
-	end
-
-	table.sort(groups, lex_compare)
-
+Example output:
+	-- Bed recipe
+	{
+		["wool:white"] = {[1] = true, [2] = true, [3] = true}
+		["group:wood"] = {[4] = true, [5] = true, [6] = true}
+	}
+--]]
+function unified_inventory.count_craft_positions(craft)
+	local positions = {}
+	local items = craft.items
+	local width = craft.width
 	local i = 0
 
-	return function()
-		i = i + 1
-
-		if i <= groups_count then
-			local group = groups[i]
-			return craft_index.groups[group.name], group.items
-		end
-	end
-end
-
-function unified_inventory.match_items(m, craft_index, item_index)
-	local index_used = item_index.used_items
-
-	for item_name, item in pairs(craft_index.items) do
-		local index = index_used[item_name]
-		local times_used = item.times_used
-		local cell_count = math.floor(index.total_count / times_used)
-
-		if cell_count == 0 then
-			m.count = 0
-			return
-		end
-
-		index.times_matched = times_used
-		m.count = math.min(m.count, cell_count)
-
-		local positions = item.craft_positions
-
-		for i = 1, times_used do
-			local craft_pos = positions[i]
-			m.items[craft_pos] = item_name
-		end
-	end
-end
-
-function unified_inventory.match_groups(m, craft_index, item_index)
-	for group, group_items in unified_inventory.ordered_groups(craft_index, item_index) do
-		local times_used = group.times_used
-		local positions = group.craft_positions
-		local items_count = group.items_count
-
-		for i = 1, times_used do
-			local craft_pos = positions[i]
-
-			local cell_count = 0
-			local matched_item = nil
-
-			for j = 1, items_count do
-				local item = group_items[j]
-				local index = item.index
-
-				local item_count = index.total_count
-				local times_matched = index.times_matched
-				local match_count = math.floor(item_count / (times_matched + 1))
-
-				if match_count > cell_count then
-					cell_count = match_count
-					matched_item = item
-				end
-			end
-
-			if cell_count == 0 then
-				m.count = 0
-				return
-			end
-
-			m.count = math.min(m.count, cell_count)
-			m.items[craft_pos] = matched_item.name
-
-			local matched_index = matched_item.index
-			matched_index.times_matched = matched_index.times_matched + 1
-		end
-	end
-end
-
-function unified_inventory.get_match_table(craft_index, item_index)
-	local match_table = {
-		count = item_index.stack_max,
-		items = {}
-	}
-
-	unified_inventory.match_items(match_table, craft_index, item_index)
-	unified_inventory.match_groups(match_table, craft_index, item_index)
-
-	if match_table.count == 0 then
-		return
+	if width == 0 then
+		width = 3
 	end
 
-	return match_table
-end
+	for y = 1, 3 do
+		for x = 1, width do
+			i = i + 1
+			local item = items[i]
 
-function unified_inventory.find_best_match(src_list, dst_list, craft)
-	local craft_index = unified_inventory.create_craft_index(craft)
+			if item ~= nil then
+				local pos = 3 * (y - 1) + x
+				local set = positions[item]
 
-	local item_index = unified_inventory.create_item_index(craft_index)
-	unified_inventory.add_list_items(item_index, src_list)
-	unified_inventory.add_list_items(item_index, dst_list)
-
-	if not unified_inventory.all_items_found(craft_index) then
-		return
-	end
-
-	return unified_inventory.get_match_table(craft_index, item_index)
-end
-
-function unified_inventory.take_item_skip(inv, list_name, item_stack, skipped)
-	local inv_list = inv:get_list(list_name)
-	local list_count = #inv_list
-
-	local item_name = item_stack:get_name()
-	local item_count = item_stack:get_count()
-
-	local removed = ItemStack(item_name)
-	local removed_count = 0
-
-	for i = list_count, 1, -1 do
-		if skipped[i] == nil then
-			local stack = inv:get_stack(list_name, i)
-			local name = stack:get_name()
-
-			if name == item_name then
-				local count = stack:get_count()
-				local left = count - item_count
-
-				if left > 0 then
-					removed_count = removed_count + item_count
-					stack:set_count(left)
-					inv:set_stack(list_name, i, stack)
-					break
+				if set ~= nil then
+					set[pos] = true
 				else
-					removed_count = removed_count + count
-					item_count = item_count - count
-					inv:set_stack(list_name, i, nil)
+					positions[item] = {[pos] = true}
 				end
 			end
 		end
 	end
 
-	removed:set_count(removed_count)
+	return positions
+end
+
+--[[
+For every craft item find all matching inventory items.
+- If craft item is a group then find all inventory items that matches
+  this group.
+- If craft item is not a group (regular item) then find only this item.
+
+If inventory doesn't contain needed item then found set is empty for
+this item.
+
+Return a table of "craft item name" - "set of matching inventory items"
+pairs.
+
+Arguments:
+	inv_items: table with items names as keys
+	craft_items: table with items names or groups as keys
+
+Example output:
+	{
+		["group:wood"] = {
+			["default:pine_wood"] = true,
+			["default:acacia_wood"] = true
+		},
+		["wool:white"] = {
+			["wool:white"] = true
+		}
+	}
+--]]
+function unified_inventory.find_usable_items(inv_items, craft_items)
+	local get_group = minetest.get_item_group
+	local result = {}
+
+	for craft_item in pairs(craft_items) do
+		local group = craft_item:match("^group:(.+)")
+		local found = {}
+
+		if group ~= nil then
+			for inv_item in pairs(inv_items) do
+				if get_group(inv_item, group) > 0 then
+					found[inv_item] = true
+				end
+			end
+		else
+			if inv_items[craft_item] ~= nil then
+				found[craft_item] = true
+			end
+		end
+
+		result[craft_item] = found
+	end
+
+	return result
+end
+
+--[[
+Match inventory items with craft grid positions.
+For every position select the matching inventory item with maximum
+(total_count / (times_matched + 1)) value.
+
+If for some position matching item cannot be found or match count is 0
+then return nil.
+
+Return a table of "matched item name" - "set of craft positions" pairs
+and overall match count.
+
+Arguments:
+	inv_counts: table of inventory items counts from "count_items"
+	craft_positions: table of craft positions from "count_craft_positions"
+
+Example output:
+	match_table = {
+		["wool:white"] = {[1] = true, [2] = true, [3] = true}
+		["default:acacia_wood"] = {[4] = true, [6] = true}
+		["default:pine_wood"] = {[5] = true}
+	}
+	match_count = 2
+--]]
+function unified_inventory.match_items(inv_counts, craft_positions)
+	local usable = unified_inventory.find_usable_items(inv_counts, craft_positions)
+	local match_table = {}
+	local match_count
+	local matches = {}
+
+	for craft_item, pos_set in pairs(craft_positions) do
+		local use_set = usable[craft_item]
+
+		for pos in pairs(pos_set) do
+			local pos_item
+			local pos_count
+
+			for use_item in pairs(use_set) do
+				local count = inv_counts[use_item]
+				local times_matched = matches[use_item] or 0
+				local new_pos_count = math.floor(count / (times_matched + 1))
+
+				if pos_count == nil or pos_count < new_pos_count then
+					pos_item = use_item
+					pos_count = new_pos_count
+				end
+			end
+
+			if pos_item == nil or pos_count == 0 then
+				return nil
+			end
+
+			local set = match_table[pos_item]
+
+			if set ~= nil then
+				set[pos] = true
+			else
+				match_table[pos_item] = {[pos] = true}
+			end
+
+			matches[pos_item] = (matches[pos_item] or 0) + 1
+		end
+	end
+
+	for match_item, times_matched in pairs(matches) do
+		local count = inv_counts[match_item]
+		local item_count = math.floor(count / times_matched)
+
+		if match_count == nil or item_count < match_count then
+			match_count = item_count
+		end
+	end
+
+	return match_table, match_count
+end
+
+--[[
+Remove item from inventory lists.
+Return stack of actually removed items.
+
+This function replicates the inv:remove_item function but can accept
+multiple lists.
+
+Arguments:
+	inv: minetest inventory reference
+	lists: names of inventory lists
+	stack: minetest item stack
+--]]
+function unified_inventory.remove_item(inv, lists, stack)
+	local removed = ItemStack(nil)
+	local leftover = ItemStack(stack)
+
+	for i = 1, #lists do
+		if leftover:is_empty() then
+			break
+		end
+
+		local cur_removed = inv:remove_item(lists[i], leftover)
+		removed:add_item(cur_removed)
+		leftover:take_item(cur_removed:get_count())
+	end
+
 	return removed
 end
 
-function unified_inventory.add_item_skip(inv, list_name, item_stack, skipped)
-	local inv_list = inv:get_list(list_name)
-	local list_count = #inv_list
+--[[
+Add item to inventory lists.
+Return leftover stack.
 
-	local item_name = item_stack:get_name()
-	local item_count = item_stack:get_count()
+This function replicates the inv:add_item function but can accept
+multiple lists.
 
-	local leftover = ItemStack(item_stack)
+Arguments:
+	inv: minetest inventory reference
+	lists: names of inventory lists
+	stack: minetest item stack
+--]]
+function unified_inventory.add_item(inv, lists, stack)
+	local leftover = ItemStack(stack)
 
-	for i = 1, list_count do
-		if skipped[i] == nil then
-			local stack = inv:get_stack(list_name, i)
-
-			if stack:is_empty() then
-				leftover = stack:add_item(leftover)
-				inv:set_stack(list_name, i, stack)
-				break
-			end
-
-			local name = stack:get_name()
-
-			if name == item_name then
-				leftover = stack:add_item(leftover)
-				inv:set_stack(list_name, i, stack)
-			end
+	for i = 1, #lists do
+		if leftover:is_empty() then
+			break
 		end
+
+		leftover = inv:add_item(lists[i], leftover)
 	end
 
 	return leftover
 end
 
-function unified_inventory.craftguide_match_craft(inv, src_list_name, dst_list_name, craft, amount)
-	local src_list = inv:get_list(src_list_name)
-	local dst_list = inv:get_list(dst_list_name)
+--[[
+Move matched items to the destination list.
 
-	local craft_match = unified_inventory.find_best_match(src_list, dst_list, craft)
+Note that function accepts multiple source lists and destination list
+can be one of the source lists.
 
-	if craft_match == nil then
-		return
-	end
+If destination list position is already occupied with some other item
+then function tries to move it to the source lists if possible.
 
-	local matched_items = craft_match.items
-	local matched_count = craft_match.count
+Arguments:
+	inv: minetest inventory reference
+	src_lists: names of source lists
+	dst_list: name of destination list
+	match_table: table of matched items
+	amount: amount of items per every position
+--]]
+function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amount)
+	for item, pos_set in pairs(match_table) do
+		local stack_max = ItemStack(item):get_stack_max()
+		local bounded_amount = math.min(stack_max, amount)
+		local pos_count = 0;
 
-	if amount == -1 then
-		amount = matched_count
-	elseif amount > matched_count then
-		return
-	end
+		for _ in pairs(pos_set) do
+			pos_count = pos_count + 1
+		end
 
-	-- Clear crafting grid (if possible)
-	local dst_count = #dst_list
+		local total = ItemStack{
+			name = item,
+			count = bounded_amount * pos_count
+		}
 
-	for i = 1, dst_count do
-		local dst_stack = inv:get_stack(dst_list_name, i)
-		local leftover = inv:add_item(src_list_name, dst_stack)
+		local removed = unified_inventory.remove_item(inv, src_lists, total)
+		local current = ItemStack(removed)
+		current:set_count(bounded_amount)
 
-		inv:set_stack(dst_list_name, i, leftover)
-	end
+		for pos in pairs(pos_set) do
+			local occupied = inv:get_stack(dst_list, pos)
+			inv:set_stack(dst_list, pos, current)
 
-	local skipped = {}
+			if not occupied:is_empty() then
+				local leftover = unified_inventory.add_item(inv, src_lists, occupied)
 
-	for match_pos = 1, dst_count do
-		local item_name = matched_items[match_pos]
-
-		if item_name ~= nil then
-			local matched_stack = ItemStack(item_name)
-			matched_stack:set_count(amount)
-
-			local src_take = inv:remove_item(src_list_name, matched_stack)
-			local src_take_count = src_take:get_count()
-			local diff = amount - src_take_count
-
-			if diff > 0 then
-				matched_stack:set_count(diff)
-
-				-- Because we take from dst_list we need to exclude already matched positions
-				local dst_take = unified_inventory.take_item_skip(inv, dst_list_name, matched_stack, skipped)
-				src_take:add_item(dst_take)
-			end
-
-			local dst_stack = inv:get_stack(dst_list_name, match_pos)
-			inv:set_stack(dst_list_name, match_pos, src_take)
-			skipped[match_pos] = true
-
-			local src_leftover = inv:add_item(src_list_name, dst_stack)
-
-			if not src_leftover:is_empty() then
-				-- Because we add to dst_list we need to exclude already matched positions
-				local dst_leftover = unified_inventory.add_item_skip(inv, dst_list_name, src_leftover, skipped)
-
-				if not dst_leftover:is_empty() then
-					-- Final try
-					local dst_leftover_full = inv:add_item(dst_list_name, dst_leftover)
-
-					if not dst_leftover_full:is_empty() then
-						inv:set_stack(dst_list_name, match_pos, dst_leftover_full)
-
-						local src_reverse = inv:add_item(src_list_name, src_take)
-
-						if not src_reverse:is_empty() then
-							local dst_reverse = inv:add_item(dst_list_name, src_reverse)
-							-- Can dst_reverse be not empty here?
-						end
-
-						break
-					end
+				if not leftover:is_empty() then
+					inv:set_stack(dst_list, pos, leftover)
+					break
 				end
 			end
+
+			removed:take_item(bounded_amount)
 		end
+
+		unified_inventory.add_item(inv, src_lists, removed)
 	end
+end
+
+--[[
+Find craft match and move matched items to the destination list.
+
+If match cannot be found or match count is smaller than the desired
+amount then do nothing.
+
+If amount passed is -1 then amount is defined by match count itself.
+This is used to indicate "craft All" case.
+
+Note that function accepts multiple source lists.
+
+Arguments:
+	inv: minetest inventory reference
+	src_lists: names of source lists
+	dst_list: name of destination list
+	craft: minetest craft recipe
+	amount: desired amount of output items
+--]]
+function unified_inventory.craftguide_match_craft(inv, src_lists, dst_list, craft, amount)
+	local counts = unified_inventory.count_items(inv, src_lists)
+	local positions = unified_inventory.count_craft_positions(craft)
+	local match_table, match_count = unified_inventory.match_items(counts, positions)
+
+	if match_table == nil or match_count < amount then
+		return
+	end
+
+	if amount == -1 then
+		amount = match_count
+	end
+
+	unified_inventory.move_match(inv, src_lists, dst_list, match_table, amount)
 end
