@@ -279,6 +279,32 @@ function unified_inventory.add_item(inv, lists, stack)
 end
 
 --[[
+Move items from source list to destination lists if possible.
+Skip positions specified in exclude set.
+
+Arguments:
+	inv: minetest inventory reference
+	src_list: name of source list
+	dst_lists: names of destination lists
+	exclude: set of positions to skip
+--]]
+function unified_inventory.swap_items(inv, src_list, dst_lists, exclude)
+	local size = inv:get_size(src_list)
+	local empty = ItemStack(nil)
+
+	for i = 1, size do
+		if exclude == nil or exclude[i] == nil then
+			local stack = inv:get_stack(src_list, i)
+
+			if not stack:is_empty() then
+				inv:set_stack(src_list, i, empty)
+				unified_inventory.add_item(inv, dst_lists, stack)
+			end
+		end
+	end
+end
+
+--[[
 Move matched items to the destination list.
 
 Note that function accepts multiple source lists and destination list
@@ -295,6 +321,8 @@ Arguments:
 	amount: amount of items per every position
 --]]
 function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amount)
+	local positions = {}
+
 	for item, pos_set in pairs(match_table) do
 		local stack_max = ItemStack(item):get_stack_max()
 		local bounded_amount = math.min(stack_max, amount)
@@ -314,6 +342,8 @@ function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amo
 		current:set_count(bounded_amount)
 
 		for pos in pairs(pos_set) do
+			positions[pos] = true
+
 			local occupied = inv:get_stack(dst_list, pos)
 			inv:set_stack(dst_list, pos, current)
 
@@ -331,6 +361,8 @@ function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amo
 
 		unified_inventory.add_item(inv, src_lists, removed)
 	end
+
+	unified_inventory.swap_items(inv, dst_list, src_lists, positions)
 end
 
 --[[
