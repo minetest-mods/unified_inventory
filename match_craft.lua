@@ -325,7 +325,7 @@ Arguments:
 	amount: amount of items per every position
 --]]
 function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amount)
-	local positions = {}
+	local moved_positions = {}
 
 	for item, pos_set in pairs(match_table) do
 		local stack_max = ItemStack(item):get_stack_max()
@@ -346,8 +346,6 @@ function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amo
 		current:set_count(bounded_amount)
 
 		for pos in pairs(pos_set) do
-			positions[pos] = true
-
 			local occupied = inv:get_stack(dst_list, pos)
 			inv:set_stack(dst_list, pos, current)
 
@@ -361,12 +359,13 @@ function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amo
 			end
 
 			removed:take_item(bounded_amount)
+			moved_positions[pos] = true
 		end
 
 		unified_inventory.add_item(inv, src_lists, removed)
 	end
 
-	unified_inventory.swap_items(inv, dst_list, src_lists, positions)
+	unified_inventory.swap_items(inv, dst_list, src_lists, moved_positions)
 end
 
 --[[
