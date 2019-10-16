@@ -298,7 +298,11 @@ function unified_inventory.swap_items(inv, src_list, dst_lists, exclude)
 
 			if not stack:is_empty() then
 				inv:set_stack(src_list, i, empty)
-				unified_inventory.add_item(inv, dst_lists, stack)
+				local leftover = unified_inventory.add_item(inv, dst_lists, stack)
+
+				if not leftover:is_empty() then
+					inv:set_stack(src_list, i, leftover)
+				end
 			end
 		end
 	end
