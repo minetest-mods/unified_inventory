@@ -336,9 +336,13 @@ function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amo
 			pos_count = pos_count + 1
 		end
 
+		local total_amount = bounded_amount * pos_count
+		-- round up to the full stack
+		total_amount = math.ceil(total_amount / stack_max) * stack_max
+
 		local total = ItemStack{
 			name = item,
-			count = bounded_amount * pos_count
+			count = total_amount
 		}
 
 		local removed = unified_inventory.remove_item(inv, src_lists, total)
