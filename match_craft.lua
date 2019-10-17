@@ -349,16 +349,19 @@ function unified_inventory.move_match(inv, src_lists, dst_list, match_table, amo
 			local occupied = inv:get_stack(dst_list, pos)
 			inv:set_stack(dst_list, pos, current)
 
-			if not occupied:is_empty() then
-				local leftover = unified_inventory.add_item(inv, src_lists, occupied)
+			repeat
+				if not occupied:is_empty() then
+					local leftover = unified_inventory.add_item(inv, src_lists, occupied)
 
-				if not leftover:is_empty() then
-					inv:set_stack(dst_list, pos, leftover)
-					break
+					if not leftover:is_empty() then
+						inv:set_stack(dst_list, pos, leftover)
+						break
+					end
 				end
-			end
 
-			removed:take_item(bounded_amount)
+				removed:take_item(bounded_amount)
+			until true
+
 			moved_positions[pos] = true
 		end
 
