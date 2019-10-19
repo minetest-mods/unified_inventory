@@ -456,8 +456,6 @@ local function craftguide_craft(player, formname, fields)
 	local output = unified_inventory.current_item[player_name] or ""
 	if output == "" then return end
 
-	local player_inv = player:get_inventory()
-
 	local crafts = unified_inventory.crafts_for[
 		unified_inventory.current_craft_direction[player_name]][output] or {}
 	if #crafts == 0 then return end
@@ -467,7 +465,7 @@ local function craftguide_craft(player, formname, fields)
 	local craft = crafts[alternate]
 	if craft.width > 3 then return end
 
-	unified_inventory.craftguide_match_craft(player_inv, {"main", "craft"}, "craft", craft, amount)
+	unified_inventory.craftguide_match_craft(player, {"main", "craft"}, "craft", craft, amount)
 
 	unified_inventory.set_inventory_formspec(player, "craft")
 end
