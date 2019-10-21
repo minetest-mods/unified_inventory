@@ -66,18 +66,21 @@ Example output:
 --]]
 function unified_inventory.count_craft_positions(craft)
 	local positions = {}
-	local items = craft.items
-	local width = craft.width
+	local craft_items = craft.items
+	local craft_type = unified_inventory.registered_craft_types[craft.type]
+	                   or unified_inventory.craft_type_defaults(craft.type, {})
+	local display_width = craft_type.dynamic_display_size
+	                      and craft_type.dynamic_display_size(craft).width
+	                      or craft_type.width
+	local craft_width = craft_type.get_shaped_craft_width
+	                    and craft_type.get_shaped_craft_width(craft)
+	                    or display_width
 	local i = 0
 
-	if width == 0 then
-		width = 3
-	end
-
 	for y = 1, 3 do
-		for x = 1, width do
+		for x = 1, craft_width do
 			i = i + 1
-			local item = items[i]
+			local item = craft_items[i]
 
 			if item ~= nil then
 				local pos = 3 * (y - 1) + x
