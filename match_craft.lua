@@ -282,16 +282,16 @@ function unified_inventory.add_item(inv, lists, stack)
 end
 
 --[[
-Move items from source list to destination lists if possible.
+Move items from source list to destination list if possible.
 Skip positions specified in exclude set.
 
 Arguments:
 	inv: minetest inventory reference
 	src_list: name of source list
-	dst_lists: names of destination lists
+	dst_list: name of destination list
 	exclude: set of positions to skip
 --]]
-function unified_inventory.swap_items(inv, src_list, dst_lists, exclude)
+function unified_inventory.swap_items(inv, src_list, dst_list, exclude)
 	local size = inv:get_size(src_list)
 	local empty = ItemStack(nil)
 
@@ -301,7 +301,7 @@ function unified_inventory.swap_items(inv, src_list, dst_lists, exclude)
 
 			if not stack:is_empty() then
 				inv:set_stack(src_list, i, empty)
-				local leftover = unified_inventory.add_item(inv, dst_lists, stack)
+				local leftover = inv:add_item(dst_list, stack)
 
 				if not leftover:is_empty() then
 					inv:set_stack(src_list, i, leftover)
@@ -314,21 +314,22 @@ end
 --[[
 Move matched items to the destination list.
 
-Note that function accepts multiple source lists and destination list
-can be one of the source lists.
-
 If destination list position is already occupied with some other item
-then function tries to move it to the source lists or drop it to the
-ground if possible.
+then function tries to (in that order):
+1. Move it to the source list
+2. Move it to some other unused position in destination list itself
+3. Drop it to the ground if nothing else is possible.
 
 Arguments:
 	player: minetest player object
-	src_lists: names of source lists
+	src_list: name of source list
 	dst_list: name of destination list
 	match_table: table of matched items
 	amount: amount of items per every position
 --]]
-function unified_inventory.move_match(player, src_lists, dst_list, match_table, amount)
+function unified_inventory.move_match(player, src_list, dst_list, match_table, amount)
+	local src_dst_list = {src_list, dst_list}
+	local dst_src_list = {dst_list, src_list}
 	local inv = player:get_inventory()
 	local item_drop = minetest.item_drop
 	local moved_positions = {}
@@ -345,14 +346,14 @@ function unified_inventory.move_match(player, src_lists, dst_list, match_table, 
 		stack:set_count(bounded_amount)
 
 		for pos in pairs(pos_set) do
-			needed[pos] = unified_inventory.remove_item(inv, src_lists, stack)
+			needed[pos] = unified_inventory.remove_item(inv, dst_src_list, stack)
 		end
 
 		-- Pass 2: Remove remainder to free up positions
 		stack:set_count(stack_max)
 
 		for pos in pairs(pos_set) do
-			remained[pos] = unified_inventory.remove_item(inv, src_lists, stack)
+			remained[pos] = inv:remove_item(dst_list, stack)
 		end
 
 		-- Pass 3: Move only needed stacks
@@ -361,11 +362,11 @@ function unified_inventory.move_match(player, src_lists, dst_list, match_table, 
 			inv:set_stack(dst_list, pos, current)
 
 			if not occupied:is_empty() then
-				local leftover = unified_inventory.add_item(inv, src_lists, occupied)
+				local leftover = unified_inventory.add_item(inv, src_dst_list, occupied)
 
 				if not leftover:is_empty() then
 					inv:set_stack(dst_list, pos, leftover)
-					local oversize = unified_inventory.add_item(inv, src_lists, current)
+					local oversize = unified_inventory.add_item(inv, src_dst_list, current)
 
 					if not oversize:is_empty() then
 						item_drop(oversize, player, player:get_pos())
@@ -378,7 +379,7 @@ function unified_inventory.move_match(player, src_lists, dst_list, match_table, 
 
 		-- Pass 4: Re-add remainder stacks
 		for _, current in pairs(remained) do
-			local oversize = unified_inventory.add_item(inv, src_lists, current)
+			local oversize = unified_inventory.add_item(inv, src_dst_list, current)
 
 			if not oversize:is_empty() then
 				item_drop(oversize, player, player:get_pos())
@@ -386,7 +387,7 @@ function unified_inventory.move_match(player, src_lists, dst_list, match_table, 
 		end
 	end
 
-	unified_inventory.swap_items(inv, dst_list, src_lists, moved_positions)
+	unified_inventory.swap_items(inv, dst_list, src_list, moved_positions)
 end
 
 --[[
@@ -398,19 +399,18 @@ amount then do nothing.
 If amount passed is -1 then amount is defined by match count itself.
 This is used to indicate "craft All" case.
 
-Note that function accepts multiple source lists.
-
 Arguments:
 	player: minetest player object
-	src_lists: names of source lists
+	src_list: name of source list
 	dst_list: name of destination list
 	craft: minetest craft recipe
 	amount: desired amount of output items
 --]]
-function unified_inventory.craftguide_match_craft(player, src_lists, dst_list, craft, amount)
+function unified_inventory.craftguide_match_craft(player, src_list, dst_list, craft, amount)
 	local inv = player:get_inventory()
+	local src_dst_list = {src_list, dst_list}
 
-	local counts = unified_inventory.count_items(inv, src_lists)
+	local counts = unified_inventory.count_items(inv, src_dst_list)
 	local positions = unified_inventory.count_craft_positions(craft)
 	local match_table, match_count = unified_inventory.match_items(counts, positions)
 
@@ -422,5 +422,5 @@ function unified_inventory.craftguide_match_craft(player, src_lists, dst_list, c
 		amount = match_count
 	end
 
-	unified_inventory.move_match(player, src_lists, dst_list, match_table, amount)
+	unified_inventory.move_match(player, src_list, dst_list, match_table, amount)
 end
