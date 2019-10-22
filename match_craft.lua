@@ -328,66 +328,65 @@ Arguments:
 	amount: amount of items per every position
 --]]
 function unified_inventory.move_match(player, src_list, dst_list, match_table, amount)
-	local src_dst_list = {src_list, dst_list}
-	local dst_src_list = {dst_list, src_list}
 	local inv = player:get_inventory()
 	local item_drop = minetest.item_drop
-	local moved_positions = {}
+	local src_dst_list = {src_list, dst_list}
+
+	local needed = {}
+	local remained = {}
+	local moved = {}
 
 	for item, pos_set in pairs(match_table) do
-		local needed = {}
-		local remained = {}
-
 		local stack = ItemStack(item)
 		local stack_max = stack:get_stack_max()
 		local bounded_amount = math.min(stack_max, amount)
 
-		-- Pass 1: Remove stacks needed for craft
+		-- Remove stacks needed for craft
 		stack:set_count(bounded_amount)
 
 		for pos in pairs(pos_set) do
-			needed[pos] = unified_inventory.remove_item(inv, dst_src_list, stack)
+			needed[pos] = unified_inventory.remove_item(inv, src_dst_list, stack)
 		end
 
-		-- Pass 2: Remove remainder to free up positions
+		-- Remove remainder to free up positions
 		stack:set_count(stack_max)
 
 		for pos in pairs(pos_set) do
-			remained[pos] = inv:remove_item(dst_list, stack)
-		end
-
-		-- Pass 3: Move only needed stacks
-		for pos, current in pairs(needed) do
-			local occupied = inv:get_stack(dst_list, pos)
-			inv:set_stack(dst_list, pos, current)
-
-			if not occupied:is_empty() then
-				local leftover = unified_inventory.add_item(inv, src_dst_list, occupied)
-
-				if not leftover:is_empty() then
-					inv:set_stack(dst_list, pos, leftover)
-					local oversize = unified_inventory.add_item(inv, src_dst_list, current)
-
-					if not oversize:is_empty() then
-						item_drop(oversize, player, player:get_pos())
-					end
-				end
-			end
-
-			moved_positions[pos] = true
-		end
-
-		-- Pass 4: Re-add remainder stacks
-		for _, current in pairs(remained) do
-			local oversize = unified_inventory.add_item(inv, src_dst_list, current)
-
-			if not oversize:is_empty() then
-				item_drop(oversize, player, player:get_pos())
-			end
+			remained[pos] = unified_inventory.remove_item(inv, src_dst_list, stack)
 		end
 	end
 
-	unified_inventory.swap_items(inv, dst_list, src_list, moved_positions)
+	-- Move only needed stacks
+	for pos, stack in pairs(needed) do
+		local occupied = inv:get_stack(dst_list, pos)
+		inv:set_stack(dst_list, pos, stack)
+
+		if not occupied:is_empty() then
+			local leftover = unified_inventory.add_item(inv, src_dst_list, occupied)
+
+			if not leftover:is_empty() then
+				inv:set_stack(dst_list, pos, leftover)
+				local oversize = unified_inventory.add_item(inv, src_dst_list, stack)
+
+				if not oversize:is_empty() then
+					item_drop(oversize, player, player:get_pos())
+				end
+			end
+		end
+
+		moved[pos] = true
+	end
+
+	unified_inventory.swap_items(inv, dst_list, src_list, moved)
+
+	-- Re-add remainder stacks
+	for _, stack in pairs(remained) do
+		local oversize = unified_inventory.add_item(inv, src_dst_list, stack)
+
+		if not oversize:is_empty() then
+			item_drop(oversize, player, player:get_pos())
+		end
+	end
 end
 
 --[[
