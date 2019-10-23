@@ -331,32 +331,24 @@ function unified_inventory.move_match(player, src_list, dst_list, match_table, a
 	local inv = player:get_inventory()
 	local item_drop = minetest.item_drop
 	local src_dst_list = {src_list, dst_list}
+	local dst_src_list = {dst_list, src_list}
 
 	local needed = {}
-	local remained = {}
 	local moved = {}
 
+	-- Remove stacks needed for craft
 	for item, pos_set in pairs(match_table) do
 		local stack = ItemStack(item)
 		local stack_max = stack:get_stack_max()
 		local bounded_amount = math.min(stack_max, amount)
-
-		-- Remove stacks needed for craft
 		stack:set_count(bounded_amount)
 
 		for pos in pairs(pos_set) do
-			needed[pos] = unified_inventory.remove_item(inv, src_dst_list, stack)
-		end
-
-		-- Remove remainder to free up positions
-		stack:set_count(stack_max)
-
-		for pos in pairs(pos_set) do
-			remained[pos] = unified_inventory.remove_item(inv, src_dst_list, stack)
+			needed[pos] = unified_inventory.remove_item(inv, dst_src_list, stack)
 		end
 	end
 
-	-- Move only needed stacks
+	-- Add already removed stacks
 	for pos, stack in pairs(needed) do
 		local occupied = inv:get_stack(dst_list, pos)
 		inv:set_stack(dst_list, pos, stack)
@@ -377,16 +369,8 @@ function unified_inventory.move_match(player, src_list, dst_list, match_table, a
 		moved[pos] = true
 	end
 
+	-- Swap items from unused positions to src (moved positions excluded)
 	unified_inventory.swap_items(inv, dst_list, src_list, moved)
-
-	-- Re-add remainder stacks
-	for _, stack in pairs(remained) do
-		local oversize = unified_inventory.add_item(inv, src_dst_list, stack)
-
-		if not oversize:is_empty() then
-			item_drop(oversize, player, player:get_pos())
-		end
-	end
 end
 
 --[[
