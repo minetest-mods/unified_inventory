@@ -36,8 +36,10 @@ Time of day set to 6am=时间设置到早晨6点
 You don't have the settime privilege!=你没有“settime”权限！
 Set time to night=设置时间到晚上
 Time of day set to 9pm=时间设置到晚上9点
-msgid ""= 
+
 Inventory cleared!=清空背包
+Clear inventory=清空背包
+
 Trash:=丢弃：
 Refill:=填满：
 Recipe @1 of @2=第@1配方，共@2个
@@ -70,3 +72,7 @@ Finish editing=完成编辑
 World position=世界位置
 Name=名称
 HUD text color=HUD文本颜色
+
+#new
+
+Reset search and display everything=重置搜索并显示所有物品
