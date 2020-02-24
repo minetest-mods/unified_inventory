@@ -1,0 +1,100 @@
+# textdomain: unified_inventory
+
+# waypoints.lua
+
+White=
+Yellow=
+Red=
+Green=
+Blue=
+Waypoints=
+Select Waypoint #@1=
+Waypoint @1=
+Set waypoint to current location=
+Make waypoint @1=
+invisible=
+visible=
+@1 display of waypoint coordinates=
+Disable=
+Enable=
+Change color of waypoint display=
+Edit waypoint name=
+Waypoint active=
+Waypoint inactive=
+Finish editing=
+World position=
+Name=
+HUD text color=
+
+# group.lua
+
+ and =
+
+# register.lua
+
+Can use the creative inventory=
+Forces Unified Inventory to be displayed in Full mode if Lite mode is configured globally=
+Crafting Grid=
+Crafting Guide=
+Set home position=
+Home position set to: @1=
+You don't have the \"home\" privilege!=
+Go home=
+Set time to day=
+Set time to night=
+Time of day set to 6am=
+Time of day set to 9pm=
+You don't have the settime privilege!=
+Clear inventory=
+Inventory cleared!=
+This button has been disabled outside=
+Crafting=
+Trash:=
+Refill:=
+Any item belonging to the @1 group=
+Any item belonging to the groups @1=
+Recipe @1 of @2=
+Usage @1 of @2=
+No recipes=
+No usages=
+Result=
+Ingredient=
+Show next recipe=
+Show next usage=
+Show previous recipe=
+Show previous usage=
+@1 (@2)=
+Give me:=
+This recipe is too@nlarge to be displayed.=
+To craft grid:=
+All=
+
+# api.lua
+
+Mixing=
+Cooking=
+Digging=
+
+# internal.lua
+
+First page=
+Back three pages=
+Back one page=
+Forward one page=
+Forward three pages=
+Last page=
+Search=
+Reset search and display everything=
+No matching items=
+No matches.=
+Page=
+@1 of @2=
+Filter=
+
+# bags.lua
+
+Bags=
+Bag @1=
+Small Bag=
+Medium Bag=
+Large Bag=
