@@ -1,38 +1,100 @@
 # textdomain: unified_inventory
-Crafting=Elaboración
-Cooking=hornear
-Bags=Bolsas
-Bag @1=Bolsa @1
-Small Bag=Bolsa Pequeña
-Medium Bag=Bolsa Mediana
-Large Bag=Bolsa Grande
-Page=Página
-@1 of @2=@1 de @2
-Filter=Filtro
-Can use the creative inventory=Puede usar el inventario creativo
-Crafting Guide=Guía de Elaboración
-Set home position=Posición en el mundo
-Home position set to: @1=Posición de hogar cambiada a: @1
-You don't have the "home" privilege!=¡No tienes el privilegio "home"!
-Time of day set to 6am=Hora del día cambiada a 6AM
-You don't have the settime privilege!=¡No tienes el privilegio "settime"!
-Time of day set to 9pm=Hora del día cambiada a 9PM
-Inventory cleared!=¡Inventario limpio!
-Trash:=Basura:
-Refill:=Rellenar:
-Recipe @1 of @2=Receta @1 de @2
-Result=Resultado
-To craft grid:=Copiar al cuadro de elaboración
-All=Todos
+
+# waypoints.lua
+
 White=Blanco
 Yellow=Amarillo
 Red=Rojo
 Green=Verde
 Blue=Azul
-Waypoints=Puntos de paso
-Waypoint @1=Puntos de paso @1
-Waypoint active=Punto de paso activo
-Waypoint inactive=Punto de paso inactivo
+Waypoints=Puntos
+Select Waypoint #@1=Seleccionar Punto #@1
+Waypoint @1=Punto @1
+Set waypoint to current location=Establecer el punto a la ubicación actual
+Make waypoint @1=Hacer punto @1
+invisible=invisible
+visible=visible
+@1 display of waypoint coordinates=Visualizar coordenadas del punto @1
+Disable=Deshabilitado
+Enable=Habilitado
+Change color of waypoint display=Cambiar el color del punto
+Edit waypoint name=Editar nombre del punto
+Waypoint active=Punto activo
+Waypoint inactive=Punto inactivo
+Finish editing=Edición Finalizada
 World position=Posición en el mundo
 Name=Nombre
-HUD text color=Color del HUD
+HUD text color=Color del texto de la Interfaz
+
+# group.lua
+
+ and = y
+
+# register.lua
+
+Can use the creative inventory=Puede usar el inventario creativo
+Forces Unified Inventory to be displayed in Full mode if Lite mode is configured globally=Obliga al Inventario Unificado a mostrarse en modo Completo si el modo Simple está configurado globalmente
+Crafting Grid=Cuadricula de Elaboración
+Crafting Guide=Guía de Elaboración
+Set home position=Establecer posición del hogar
+Home position set to: @1=Posición del hogar cambiada a: @1
+You don't have the \"home\" privilege!=¡No tienes el privilegio \"home\"!
+Go home=Ir a casa
+Set time to day=Cambiar a dia
+Set time to night=Cambiar a noche
+Time of day set to 6am=Hora del día cambiada a 6 AM
+Time of day set to 9pm=Hora del día cambiada a 9 PM
+You don't have the settime privilege!=¡No tienes el privilegio "settime"!
+Clear inventory=Limpiar inventario
+Inventory cleared!=¡Inventario limpio!
+This button has been disabled outside=Este botón ha sido deshabilitado
+Crafting=Elaboración
+Trash:=Basura:
+Refill:=Rellenar:
+Any item belonging to the @1 group=Cualquier elemento que pertenezca al grupo @1
+Any item belonging to the groups @1=Cualquier elemento perteneciente a los grupos @1
+Recipe @1 of @2=Receta @1 de @2
+Usage @1 of @2=Uso @1 de @2
+No recipes=No tiene receta
+No usages=No tiene uso
+Result=Resultado
+Ingredient=Ingrediente
+Show next recipe=Mostrar la siguiente receta
+Show next usage=Mostrar el siguiente uso
+Show previous recipe=Mostrar la receta anterior
+Show previous usage=Mostrar el uso anterior
+@1 (@2)=@1 (@2)
+Give me:=Dame:
+This recipe is too@nlarge to be displayed.=Esta receta es demaciado@ngrande para ser mostrada.
+To craft grid:=Construir:
+All=Todos
+
+# api.lua
+
+Mixing=Mezclar
+Cooking=Hornear
+Digging=Recoger
+
+# internal.lua
+
+First page=Primera página
+Back three pages=Volver tres páginas
+Back one page=Volver una página
+Forward one page=Avanzar una página
+Forward three pages=Avanzar tres páginas
+Last page=Ultima Pagina
+Search=Buscar
+Reset search and display everything=Limpiar la busqueda y mostrar todo
+No matching items=No se encontro ningun elemeto
+No matches.=No hay resultados.
+Page=Página
+@1 of @2=@1 de @2
+Filter=Filtro
+
+# bags.lua
+
+Bags=Bolsos
+Bag @1=Bolso @1
+Small Bag=Bolso Pequeño
+Medium Bag=Bolso Mediano
+Large Bag=Bolso Grande
