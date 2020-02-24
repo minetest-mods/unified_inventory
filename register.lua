@@ -386,7 +386,7 @@ unified_inventory.register_page("craftguide", {
 		else
 			-- Error
 			fs[#fs + 1] = string.format("label[2,%f;%s]",
-				formspecy, F(S("This recipe is too\nlarge to be displayed.")))
+				formspecy, F(S("This recipe is too@nlarge to be displayed.")))
 		end
 
 		if craft_type.uses_crafting_grid and display_size.width <= 3 then
