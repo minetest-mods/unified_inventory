@@ -3,15 +3,15 @@ allow_defined_top = true
 max_line_length = 999
 
 globals = {
-    "unified_inventory",
+	"unified_inventory",
 }
 
 read_globals = {
 	string = {fields = {"split", "trim"}},
 	table = {fields = {"copy", "getn"}},
 
-    "minetest", "vector",
-    "ItemStack", "datastorage",
+	"minetest", "vector",
+	"ItemStack", "datastorage",
 }
 
 files["callbacks.lua"].ignore = { "player", "draw_lite_mode" }
