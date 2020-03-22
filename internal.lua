@@ -215,11 +215,10 @@ function unified_inventory.get_formspec(player, page)
 	else
 		local dir = unified_inventory.active_search_direction[player_name]
 		local list_index = unified_inventory.current_index[player_name]
-		local page = math.floor(list_index / (ui_peruser.items_per_page) + 1)
+		local page2 = math.floor(list_index / (ui_peruser.items_per_page) + 1)
 		local pagemax = math.floor(
 			(#unified_inventory.filtered_items_list[player_name] - 1)
 				/ (ui_peruser.items_per_page) + 1)
-		local item = {}
 		for y = 0, ui_peruser.pagerows - 1 do
 			for x = 0, ui_peruser.pagecols - 1 do
 				local name = unified_inventory.filtered_items_list[player_name][list_index]
@@ -254,7 +253,7 @@ function unified_inventory.get_formspec(player, page)
 			end
 		end
 		formspec[n] = "label[8.2,"..ui_peruser.form_header_y..";"..F(S("Page")) .. ": "
-			.. S("@1 of @2",page,pagemax).."]"
+			.. S("@1 of @2",page2,pagemax).."]"
 	end
 	n= n+1
 

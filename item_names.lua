@@ -1,6 +1,6 @@
 -- Based on 4itemnames mod by 4aiman
 
-local item_names = {} -- [player_name] = { hud, dtime, itemname } 
+local item_names = {} -- [player_name] = { hud, dtime, itemname }
 local dlimit = 3  -- HUD element will be hidden after this many seconds
 local air_hud_mod = minetest.get_modpath("4air")
 local hud_mod = minetest.get_modpath("hud")

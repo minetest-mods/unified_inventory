@@ -1,4 +1,4 @@
---[[ 
+--[[
 Bags for Minetest
 
 Copyright (c) 2012 cornernote, Brett O'Donnell <cornernote@gmail.com>
@@ -166,7 +166,6 @@ local function load_bags_metadata(player, bags_inv)
 end
 
 minetest.register_on_joinplayer(function(player)
-	local player_inv = player:get_inventory()
 	local player_name = player:get_player_name()
 	local bags_inv = minetest.create_detached_inventory(player_name .. "_bags",{
 		on_put = function(inv, listname, index, stack, player)
