@@ -1,5 +1,7 @@
 # Unified Inventory
 
+[![](https://github.com/minetest-mods/unified_inventory/workflows/Check%20&%20Release/badge.svg)](https://github.com/minetest-mods/unified_inventory/actions)
+
 ![Screenshot](screenshot.png)
 
 Unified Inventory replaces the default survival and creative inventory.
@@ -23,7 +25,6 @@ Unified Inventory replaces the default survival and creative inventory.
 ## Requirements
 
  * Minetest 5.0.0+
-
 
 # Licenses
 
