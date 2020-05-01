@@ -65,7 +65,7 @@ Show previous recipe=Mostrar la receta anterior
 Show previous usage=Mostrar el uso anterior
 @1 (@2)=@1 (@2)
 Give me:=Dame:
-This recipe is too@nlarge to be displayed.=Esta receta es demaciado@ngrande para ser mostrada.
+This recipe is too@nlarge to be displayed.=Esta receta es demasiado@ngrande para ser mostrada.
 To craft grid:=Construir:
 All=Todos
 
