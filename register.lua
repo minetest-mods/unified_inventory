@@ -21,10 +21,10 @@ local trash = minetest.create_detached_inventory("trash", {
 	--		return 0
 	--	end
 	--end,
-	on_put = function(inv, listname, index, stack, player)
+	on_put = function(inv, listname, index, _, player)
 		inv:set_stack(listname, index, nil)
 		local player_name = player:get_player_name()
-		minetest.sound_play("trash", {to_player=player_name, gain = 1.0})
+		minetest.sound_play("trash", {to_player = player_name})
 	end,
 })
 trash:set_size("main", 1)
@@ -45,15 +45,14 @@ unified_inventory.register_button("home_gui_set", {
 	type = "image",
 	image = "ui_sethome_icon.png",
 	tooltip = S("Set home position"),
-	hide_lite=true,
+	hide_lite = true,
 	action = function(player)
 		local player_name = player:get_player_name()
-		if minetest.check_player_privs(player_name, {home=true}) then
+		if minetest.check_player_privs(player_name, {home = true}) then
 			unified_inventory.set_home(player, player:get_pos())
 			local home = unified_inventory.home_pos[player_name]
 			if home ~= nil then
-				minetest.sound_play("dingdong",
-						{to_player=player_name, gain = 1.0})
+				minetest.sound_play("dingdong", {to_player = player_name})
 				minetest.chat_send_player(player_name,
 					S("Home position set to: @1", minetest.pos_to_string(home)))
 			end
@@ -64,7 +63,7 @@ unified_inventory.register_button("home_gui_set", {
 		end
 	end,
 	condition = function(player)
-		return minetest.check_player_privs(player:get_player_name(), {home=true})
+		return minetest.check_player_privs(player:get_player_name(), {home = true})
 	end,
 })
 
@@ -72,13 +71,13 @@ unified_inventory.register_button("home_gui_go", {
 	type = "image",
 	image = "ui_gohome_icon.png",
 	tooltip = S("Go home"),
-	hide_lite=true,
+	hide_lite = true,
 	action = function(player)
 		local player_name = player:get_player_name()
-		if minetest.check_player_privs(player_name, {home=true}) then
-			minetest.sound_play("teleport",
-				{to_player=player:get_player_name(), gain = 1.0})
-			unified_inventory.go_home(player)
+		if minetest.check_player_privs(player_name, {home = true}) then
+			if unified_inventory.go_home(player) then
+				minetest.sound_play("teleport", {to_player = player_name})
+			end
 		else
 			minetest.chat_send_player(player_name,
 				S("You don't have the \"home\" privilege!"))
@@ -86,7 +85,7 @@ unified_inventory.register_button("home_gui_go", {
 		end
 	end,
 	condition = function(player)
-		return minetest.check_player_privs(player:get_player_name(), {home=true})
+		return minetest.check_player_privs(player:get_player_name(), {home = true})
 	end,
 })
 
@@ -94,12 +93,11 @@ unified_inventory.register_button("misc_set_day", {
 	type = "image",
 	image = "ui_sun_icon.png",
 	tooltip = S("Set time to day"),
-	hide_lite=true,
+	hide_lite = true,
 	action = function(player)
 		local player_name = player:get_player_name()
-		if minetest.check_player_privs(player_name, {settime=true}) then
-			minetest.sound_play("birds",
-					{to_player=player_name, gain = 1.0})
+		if minetest.check_player_privs(player_name, {settime = true}) then
+			minetest.sound_play("birds", {to_player = player_name})
 			minetest.set_timeofday((6000 % 24000) / 24000)
 			minetest.chat_send_player(player_name,
 				S("Time of day set to 6am"))
@@ -110,7 +108,7 @@ unified_inventory.register_button("misc_set_day", {
 		end
 	end,
 	condition = function(player)
-		return minetest.check_player_privs(player:get_player_name(), {settime=true})
+		return minetest.check_player_privs(player:get_player_name(), {settime = true})
 	end,
 })
 
@@ -118,12 +116,11 @@ unified_inventory.register_button("misc_set_night", {
 	type = "image",
 	image = "ui_moon_icon.png",
 	tooltip = S("Set time to night"),
-	hide_lite=true,
+	hide_lite = true,
 	action = function(player)
 		local player_name = player:get_player_name()
-		if minetest.check_player_privs(player_name, {settime=true}) then
-			minetest.sound_play("owl",
-					{to_player=player_name, gain = 1.0})
+		if minetest.check_player_privs(player_name, {settime = true}) then
+			minetest.sound_play("owl", {to_player = player_name})
 			minetest.set_timeofday((21000 % 24000) / 24000)
 			minetest.chat_send_player(player_name,
 					S("Time of day set to 9pm"))
@@ -134,7 +131,7 @@ unified_inventory.register_button("misc_set_night", {
 		end
 	end,
 	condition = function(player)
-		return minetest.check_player_privs(player:get_player_name(), {settime=true})
+		return minetest.check_player_privs(player:get_player_name(), {settime = true})
 	end,
 })
 
@@ -155,8 +152,7 @@ unified_inventory.register_button("clear_inv", {
 		end
 		player:get_inventory():set_list("main", {})
 		minetest.chat_send_player(player_name, S('Inventory cleared!'))
-		minetest.sound_play("trash_all",
-				{to_player=player_name, gain = 1.0})
+		minetest.sound_play("trash_all", {to_player = player_name})
 	end,
 	condition = function(player)
 		return unified_inventory.is_creative(player:get_player_name())
@@ -187,15 +183,15 @@ unified_inventory.register_page("craft", {
 			formspec = formspec.."label[0,"..(formspecy + 1.5)..";" .. F(S("Refill:")) .. "]"
 			formspec = formspec.."list[detached:"..F(player_name).."refill;main;0,"..(formspecy +2)..";1,1;]"
 		end
-		return {formspec=formspec}
+		return {formspec = formspec}
 	end,
 })
 
 -- stack_image_button(): generate a form button displaying a stack of items
 --
--- The specified item may be a group.  In that case, the group will be
+-- The specified item may be a group. In that case, the group will be
 -- represented by some item in the group, along with a flag indicating
--- that it's a group.  If the group contains only one item, it will be
+-- that it's a group. If the group contains only one item, it will be
 -- treated as if that item had been specified directly.
 
 local function stack_image_button(x, y, w, h, buttonname_prefix, item)
@@ -226,7 +222,7 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		end
 		grouptip = F(grouptip)
 		if andcount >= 1 then
-			button = button  .. string.format("tooltip[%s;%s]", buttonname, grouptip)
+			button = button .. string.format("tooltip[%s;%s]", buttonname, grouptip)
 		end
 	end
 	return button
@@ -260,8 +256,8 @@ local other_dir = {
 unified_inventory.register_page("craftguide", {
 	get_formspec = function(player, perplayer_formspec)
 
-		local formspecy =    perplayer_formspec.formspec_y
-		local formheadery =  perplayer_formspec.form_header_y
+		local formspecy    = perplayer_formspec.formspec_y
+		local formheadery  = perplayer_formspec.form_header_y
 		local craftresultx = perplayer_formspec.craft_result_x
 		local craftresulty = perplayer_formspec.craft_result_y
 
@@ -414,7 +410,7 @@ unified_inventory.register_page("craftguide", {
 	end,
 })
 
-local function craftguide_giveme(player, formname, fields)
+local function craftguide_giveme(player, _, fields)
 	local player_name = player:get_player_name()
 	local player_privs = minetest.get_player_privs(player_name)
 	if not player_privs.give and
@@ -425,7 +421,7 @@ local function craftguide_giveme(player, formname, fields)
 	end
 
 	local amount
-	for k, v in pairs(fields) do
+	for k, _ in pairs(fields) do
 		amount = k:match("craftguide_giveme_(.*)")
 		if amount then break end
 	end
@@ -441,9 +437,9 @@ local function craftguide_giveme(player, formname, fields)
 	player_inv:add_item("main", {name = output, count = amount})
 end
 
-local function craftguide_craft(player, formname, fields)
+local function craftguide_craft(player, _, fields)
 	local amount
-	for k, v in pairs(fields) do
+	for k, _ in pairs(fields) do
 		amount = k:match("craftguide_craft_(.*)")
 		if amount then break end
 	end
@@ -476,7 +472,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		return
 	end
 
-	for k, v in pairs(fields) do
+	for k, _ in pairs(fields) do
 		if k:match("craftguide_craft_") then
 			craftguide_craft(player, formname, fields)
 			return

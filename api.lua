@@ -11,8 +11,8 @@ minetest.after(0.01, function()
 	unified_inventory.items_list = {}
 	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory or
-		   def.groups.not_in_creative_inventory == 0) and
-		   def.description and def.description ~= "" then
+				def.groups.not_in_creative_inventory == 0) and
+				def.description and def.description ~= "" then
 			table.insert(unified_inventory.items_list, name)
 			local all_names = rev_aliases[name] or {}
 			table.insert(all_names, name)
@@ -188,7 +188,9 @@ function unified_inventory.go_home(player)
 	local pos = unified_inventory.home_pos[player:get_player_name()]
 	if pos then
 		player:set_pos(pos)
+		return true
 	end
+	return false
 end
 
 -- register_craft
