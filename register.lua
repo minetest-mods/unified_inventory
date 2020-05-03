@@ -24,7 +24,7 @@ local trash = minetest.create_detached_inventory("trash", {
 	on_put = function(inv, listname, index, _, player)
 		inv:set_stack(listname, index, nil)
 		local player_name = player:get_player_name()
-		minetest.sound_play("trash", {to_player=player_name, gain = 1.0})
+		minetest.sound_play("trash", {to_player = player_name})
 	end,
 })
 trash:set_size("main", 1)
@@ -45,15 +45,14 @@ unified_inventory.register_button("home_gui_set", {
 	type = "image",
 	image = "ui_sethome_icon.png",
 	tooltip = S("Set home position"),
-	hide_lite=true,
+	hide_lite = true,
 	action = function(player)
 		local player_name = player:get_player_name()
-		if minetest.check_player_privs(player_name, {home=true}) then
+		if minetest.check_player_privs(player_name, {home = true}) then
 			unified_inventory.set_home(player, player:get_pos())
 			local home = unified_inventory.home_pos[player_name]
 			if home ~= nil then
-				minetest.sound_play("dingdong",
-						{to_player=player_name, gain = 1.0})
+				minetest.sound_play("dingdong", {to_player = player_name})
 				minetest.chat_send_player(player_name,
 					S("Home position set to: @1", minetest.pos_to_string(home)))
 			end
@@ -64,7 +63,7 @@ unified_inventory.register_button("home_gui_set", {
 		end
 	end,
 	condition = function(player)
-		return minetest.check_player_privs(player:get_player_name(), {home=true})
+		return minetest.check_player_privs(player:get_player_name(), {home = true})
 	end,
 })
 
@@ -72,13 +71,13 @@ unified_inventory.register_button("home_gui_go", {
 	type = "image",
 	image = "ui_gohome_icon.png",
 	tooltip = S("Go home"),
-	hide_lite=true,
+	hide_lite = true,
 	action = function(player)
 		local player_name = player:get_player_name()
-		if minetest.check_player_privs(player_name, {home=true}) then
-			minetest.sound_play("teleport",
-				{to_player=player:get_player_name(), gain = 1.0})
-			unified_inventory.go_home(player)
+		if minetest.check_player_privs(player_name, {home = true}) then
+			if unified_inventory.go_home(player) then
+				minetest.sound_play("teleport", {to_player = player_name})
+			end
 		else
 			minetest.chat_send_player(player_name,
 				S("You don't have the \"home\" privilege!"))
@@ -86,7 +85,7 @@ unified_inventory.register_button("home_gui_go", {
 		end
 	end,
 	condition = function(player)
-		return minetest.check_player_privs(player:get_player_name(), {home=true})
+		return minetest.check_player_privs(player:get_player_name(), {home = true})
 	end,
 })
 
@@ -94,12 +93,11 @@ unified_inventory.register_button("misc_set_day", {
 	type = "image",
 	image = "ui_sun_icon.png",
 	tooltip = S("Set time to day"),
-	hide_lite=true,
+	hide_lite = true,
 	action = function(player)
 		local player_name = player:get_player_name()
-		if minetest.check_player_privs(player_name, {settime=true}) then
-			minetest.sound_play("birds",
-					{to_player=player_name, gain = 1.0})
+		if minetest.check_player_privs(player_name, {settime = true}) then
+			minetest.sound_play("birds", {to_player = player_name})
 			minetest.set_timeofday((6000 % 24000) / 24000)
 			minetest.chat_send_player(player_name,
 				S("Time of day set to 6am"))
@@ -110,7 +108,7 @@ unified_inventory.register_button("misc_set_day", {
 		end
 	end,
 	condition = function(player)
-		return minetest.check_player_privs(player:get_player_name(), {settime=true})
+		return minetest.check_player_privs(player:get_player_name(), {settime = true})
 	end,
 })
 
@@ -118,12 +116,11 @@ unified_inventory.register_button("misc_set_night", {
 	type = "image",
 	image = "ui_moon_icon.png",
 	tooltip = S("Set time to night"),
-	hide_lite=true,
+	hide_lite = true,
 	action = function(player)
 		local player_name = player:get_player_name()
-		if minetest.check_player_privs(player_name, {settime=true}) then
-			minetest.sound_play("owl",
-					{to_player=player_name, gain = 1.0})
+		if minetest.check_player_privs(player_name, {settime = true}) then
+			minetest.sound_play("owl", {to_player = player_name})
 			minetest.set_timeofday((21000 % 24000) / 24000)
 			minetest.chat_send_player(player_name,
 					S("Time of day set to 9pm"))
@@ -134,7 +131,7 @@ unified_inventory.register_button("misc_set_night", {
 		end
 	end,
 	condition = function(player)
-		return minetest.check_player_privs(player:get_player_name(), {settime=true})
+		return minetest.check_player_privs(player:get_player_name(), {settime = true})
 	end,
 })
 
@@ -155,8 +152,7 @@ unified_inventory.register_button("clear_inv", {
 		end
 		player:get_inventory():set_list("main", {})
 		minetest.chat_send_player(player_name, S('Inventory cleared!'))
-		minetest.sound_play("trash_all",
-				{to_player=player_name, gain = 1.0})
+		minetest.sound_play("trash_all", {to_player = player_name})
 	end,
 	condition = function(player)
 		return unified_inventory.is_creative(player:get_player_name())
@@ -187,7 +183,7 @@ unified_inventory.register_page("craft", {
 			formspec = formspec.."label[0,"..(formspecy + 1.5)..";" .. F(S("Refill:")) .. "]"
 			formspec = formspec.."list[detached:"..F(player_name).."refill;main;0,"..(formspecy +2)..";1,1;]"
 		end
-		return {formspec=formspec}
+		return {formspec = formspec}
 	end,
 })
 
