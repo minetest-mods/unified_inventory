@@ -3,26 +3,26 @@
 -- according to the recipe.
 
 --[[
-Retrieve items from inventory lists and calculate their total count.
-Return a table of "item name" - "total count" pairs.
+	Retrieve items from inventory lists and calculate their total count.
+	Return a table of "item name" - "total count" pairs.
 
-Arguments:
-	inv: minetest inventory reference
-	lists: names of inventory lists to use
+	Arguments:
+		inv: minetest inventory reference
+		lists: names of inventory lists to use
 
-Example usage:
-	-- Count items in "main" and "craft" lists of player inventory
-	unified_inventory.count_items(player_inv_ref, {"main", "craft"})
+	Example usage:
+		-- Count items in "main" and "craft" lists of player inventory
+		unified_inventory.count_items(player_inv_ref, {"main", "craft"})
 
-Example output:
-	{
-		["default:pine_wood"] = 2,
-		["default:acacia_wood"] = 4,
-		["default:chest"] = 3,
-		["default:axe_diamond"] = 2, -- unstackable item are counted too
-		["wool:white"] = 6
-	}
-]]--
+	Example output:
+		{
+			["default:pine_wood"] = 2,
+			["default:acacia_wood"] = 4,
+			["default:chest"] = 3,
+			["default:axe_diamond"] = 2, -- unstackable item are counted too
+			["wool:white"] = 6
+		}
+]]
 function unified_inventory.count_items(inv, lists)
 	local counts = {}
 
@@ -47,23 +47,23 @@ function unified_inventory.count_items(inv, lists)
 end
 
 --[[
-Retrieve craft recipe items and their positions in the crafting grid.
-Return a table of "craft item name" - "set of positions" pairs.
+	Retrieve craft recipe items and their positions in the crafting grid.
+	Return a table of "craft item name" - "set of positions" pairs.
 
-Note that if craft width is not 3 then positions are recalculated as
-if items were placed on a 3x3 grid. Also note that craft can contain
-groups of items with "group:" prefix.
+	Note that if craft width is not 3 then positions are recalculated as
+	if items were placed on a 3x3 grid. Also note that craft can contain
+	groups of items with "group:" prefix.
 
-Arguments:
-	craft: minetest craft recipe
+	Arguments:
+		craft: minetest craft recipe
 
-Example output:
-	-- Bed recipe
-	{
-		["wool:white"] = {[1] = true, [2] = true, [3] = true}
-		["group:wood"] = {[4] = true, [5] = true, [6] = true}
-	}
---]]
+	Example output:
+		-- Bed recipe
+		{
+			["wool:white"] = {[1] = true, [2] = true, [3] = true}
+			["group:wood"] = {[4] = true, [5] = true, [6] = true}
+		}
+]]
 function unified_inventory.count_craft_positions(craft)
 	local positions = {}
 	local craft_items = craft.items
@@ -99,32 +99,32 @@ function unified_inventory.count_craft_positions(craft)
 end
 
 --[[
-For every craft item find all matching inventory items.
-- If craft item is a group then find all inventory items that matches
-  this group.
-- If craft item is not a group (regular item) then find only this item.
+	For every craft item find all matching inventory items.
+	- If craft item is a group then find all inventory items that matches
+	  this group.
+	- If craft item is not a group (regular item) then find only this item.
 
-If inventory doesn't contain needed item then found set is empty for
-this item.
+	If inventory doesn't contain needed item then found set is empty for
+	this item.
 
-Return a table of "craft item name" - "set of matching inventory items"
-pairs.
+	Return a table of "craft item name" - "set of matching inventory items"
+	pairs.
 
-Arguments:
-	inv_items: table with items names as keys
-	craft_items: table with items names or groups as keys
+	Arguments:
+		inv_items: table with items names as keys
+		craft_items: table with items names or groups as keys
 
-Example output:
-	{
-		["group:wood"] = {
-			["default:pine_wood"] = true,
-			["default:acacia_wood"] = true
-		},
-		["wool:white"] = {
-			["wool:white"] = true
+	Example output:
+		{
+			["group:wood"] = {
+				["default:pine_wood"] = true,
+				["default:acacia_wood"] = true
+			},
+			["wool:white"] = {
+				["wool:white"] = true
+			}
 		}
-	}
---]]
+]]
 function unified_inventory.find_usable_items(inv_items, craft_items)
 	local get_group = minetest.get_item_group
 	local result = {}
@@ -152,28 +152,28 @@ function unified_inventory.find_usable_items(inv_items, craft_items)
 end
 
 --[[
-Match inventory items with craft grid positions.
-For every position select the matching inventory item with maximum
-(total_count / (times_matched + 1)) value.
+	Match inventory items with craft grid positions.
+	For every position select the matching inventory item with maximum
+	(total_count / (times_matched + 1)) value.
 
-If for some position matching item cannot be found or match count is 0
-then return nil.
+	If for some position matching item cannot be found or match count is 0
+	then return nil.
 
-Return a table of "matched item name" - "set of craft positions" pairs
-and overall match count.
+	Return a table of "matched item name" - "set of craft positions" pairs
+	and overall match count.
 
-Arguments:
-	inv_counts: table of inventory items counts from "count_items"
-	craft_positions: table of craft positions from "count_craft_positions"
+	Arguments:
+		inv_counts: table of inventory items counts from "count_items"
+		craft_positions: table of craft positions from "count_craft_positions"
 
-Example output:
-	match_table = {
-		["wool:white"] = {[1] = true, [2] = true, [3] = true}
-		["default:acacia_wood"] = {[4] = true, [6] = true}
-		["default:pine_wood"] = {[5] = true}
-	}
-	match_count = 2
---]]
+	Example output:
+		match_table = {
+			["wool:white"] = {[1] = true, [2] = true, [3] = true}
+			["default:acacia_wood"] = {[4] = true, [6] = true}
+			["default:pine_wood"] = {[5] = true}
+		}
+		match_count = 2
+]]
 function unified_inventory.match_items(inv_counts, craft_positions)
 	local usable = unified_inventory.find_usable_items(inv_counts, craft_positions)
 	local match_table = {}
@@ -227,17 +227,17 @@ function unified_inventory.match_items(inv_counts, craft_positions)
 end
 
 --[[
-Remove item from inventory lists.
-Return stack of actually removed items.
+	Remove item from inventory lists.
+	Return stack of actually removed items.
 
-This function replicates the inv:remove_item function but can accept
-multiple lists.
+	This function replicates the inv:remove_item function but can accept
+	multiple lists.
 
-Arguments:
-	inv: minetest inventory reference
-	lists: names of inventory lists
-	stack: minetest item stack
---]]
+	Arguments:
+		inv: minetest inventory reference
+		lists: names of inventory lists
+		stack: minetest item stack
+]]
 function unified_inventory.remove_item(inv, lists, stack)
 	local removed = ItemStack(nil)
 	local leftover = ItemStack(stack)
@@ -256,17 +256,17 @@ function unified_inventory.remove_item(inv, lists, stack)
 end
 
 --[[
-Add item to inventory lists.
-Return leftover stack.
+	Add item to inventory lists.
+	Return leftover stack.
 
-This function replicates the inv:add_item function but can accept
-multiple lists.
+	This function replicates the inv:add_item function but can accept
+	multiple lists.
 
-Arguments:
-	inv: minetest inventory reference
-	lists: names of inventory lists
-	stack: minetest item stack
---]]
+	Arguments:
+		inv: minetest inventory reference
+		lists: names of inventory lists
+		stack: minetest item stack
+]]
 function unified_inventory.add_item(inv, lists, stack)
 	local leftover = ItemStack(stack)
 
@@ -282,15 +282,15 @@ function unified_inventory.add_item(inv, lists, stack)
 end
 
 --[[
-Move items from source list to destination list if possible.
-Skip positions specified in exclude set.
+	Move items from source list to destination list if possible.
+	Skip positions specified in exclude set.
 
-Arguments:
-	inv: minetest inventory reference
-	src_list: name of source list
-	dst_list: name of destination list
-	exclude: set of positions to skip
---]]
+	Arguments:
+		inv: minetest inventory reference
+		src_list: name of source list
+		dst_list: name of destination list
+		exclude: set of positions to skip
+]]
 function unified_inventory.swap_items(inv, src_list, dst_list, exclude)
 	local size = inv:get_size(src_list)
 	local empty = ItemStack(nil)
@@ -312,21 +312,21 @@ function unified_inventory.swap_items(inv, src_list, dst_list, exclude)
 end
 
 --[[
-Move matched items to the destination list.
+	Move matched items to the destination list.
 
-If destination list position is already occupied with some other item
-then function tries to (in that order):
-1. Move it to the source list
-2. Move it to some other unused position in destination list itself
-3. Drop it to the ground if nothing else is possible.
+	If destination list position is already occupied with some other item
+	then function tries to (in that order):
+	1. Move it to the source list
+	2. Move it to some other unused position in destination list itself
+	3. Drop it to the ground if nothing else is possible.
 
-Arguments:
-	player: minetest player object
-	src_list: name of source list
-	dst_list: name of destination list
-	match_table: table of matched items
-	amount: amount of items per every position
---]]
+	Arguments:
+		player: minetest player object
+		src_list: name of source list
+		dst_list: name of destination list
+		match_table: table of matched items
+		amount: amount of items per every position
+]]
 function unified_inventory.move_match(player, src_list, dst_list, match_table, amount)
 	local inv = player:get_inventory()
 	local item_drop = minetest.item_drop
@@ -374,21 +374,21 @@ function unified_inventory.move_match(player, src_list, dst_list, match_table, a
 end
 
 --[[
-Find craft match and move matched items to the destination list.
+	Find craft match and move matched items to the destination list.
 
-If match cannot be found or match count is smaller than the desired
-amount then do nothing.
+	If match cannot be found or match count is smaller than the desired
+	amount then do nothing.
 
-If amount passed is -1 then amount is defined by match count itself.
-This is used to indicate "craft All" case.
+	If amount passed is -1 then amount is defined by match count itself.
+	This is used to indicate "craft All" case.
 
-Arguments:
-	player: minetest player object
-	src_list: name of source list
-	dst_list: name of destination list
-	craft: minetest craft recipe
-	amount: desired amount of output items
---]]
+	Arguments:
+		player: minetest player object
+		src_list: name of source list
+		dst_list: name of destination list
+		craft: minetest craft recipe
+		amount: desired amount of output items
+]]
 function unified_inventory.craftguide_match_craft(player, src_list, dst_list, craft, amount)
 	local inv = player:get_inventory()
 	local src_dst_list = {src_list, dst_list}

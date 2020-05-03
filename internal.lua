@@ -1,14 +1,16 @@
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
 
--- This pair of encoding functions is used where variable text must go in
--- button names, where the text might contain formspec metacharacters.
--- We can escape button names for the formspec, to avoid screwing up
--- form structure overall, but they then don't get de-escaped, and so
--- the input we get back from the button contains the formspec escaping.
--- This is a game engine bug, and in the anticipation that it might be
--- fixed some day we don't want to rely on it.  So for safety we apply
--- an encoding that avoids all formspec metacharacters.
+--[[
+	This pair of encoding functions is used where variable text must go in
+	button names, where the text might contain formspec metacharacters.
+	We can escape button names for the formspec, to avoid screwing up
+	form structure overall, but they then don't get de-escaped, and so
+	the input we get back from the button contains the formspec escaping.
+	This is a game engine bug, and in the anticipation that it might be
+	fixed some day we don't want to rely on it.  So for safety we apply
+	an encoding that avoids all formspec metacharacters.
+]]
 function unified_inventory.mangle_for_formspec(str)
 	return string.gsub(str, "([^A-Za-z0-9])", function (c) return string.format("_%d_", string.byte(c)) end)
 end
@@ -47,7 +49,6 @@ function unified_inventory.get_per_player_formspec(player_name)
 end
 
 function unified_inventory.get_formspec(player, page)
-
 	if not player then
 		return ""
 	end
@@ -93,7 +94,7 @@ function unified_inventory.get_formspec(player, page)
 
 	local filtered_inv_buttons = {}
 
-	for i, def in pairs(unified_inventory.buttons) do
+	for _, def in pairs(unified_inventory.buttons) do
 		if not (draw_lite_mode and def.hide_lite) then
 			table.insert(filtered_inv_buttons, def)
 		end
@@ -280,7 +281,7 @@ function unified_inventory.apply_filter(player, filter, search_dir)
 	local ffilter
 	if lfilter:sub(1, 6) == "group:" then
 		local groups = lfilter:sub(7):split(",")
-		ffilter = function(name, def)
+		ffilter = function(_, def)
 			for _, group in ipairs(groups) do
 				if not def.groups[group]
 				or def.groups[group] <= 0 then
