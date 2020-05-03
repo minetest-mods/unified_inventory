@@ -1,14 +1,14 @@
 -- Based on 4itemnames mod by 4aiman
 
 local item_names = {} -- [player_name] = { hud, dtime, itemname }
-local dlimit = 3  -- HUD element will be hidden after this many seconds
+local dlimit = 3 -- HUD element will be hidden after this many seconds
 local air_hud_mod = minetest.get_modpath("4air")
 local hud_mod = minetest.get_modpath("hud")
 local hudbars_mod = minetest.get_modpath("hudbars")
 
 local function set_hud(player)
 	local player_name = player:get_player_name()
-	local off = {x=0, y=-70}
+	local off = {x = 0, y = -70}
 	if air_hud_mod or hud_mod then
 		off.y = off.y - 20
 	elseif hudbars_mod then
@@ -17,9 +17,9 @@ local function set_hud(player)
 	item_names[player_name] = {
 		hud = player:hud_add({
 			hud_elem_type = "text",
-			position = {x=0.5, y=1},
+			position = {x = 0.5, y = 1},
 			offset = off,
-			alignment = {x=0, y=0},
+			alignment = {x = 0, y = 0},
 			number = 0xFFFFFF,
 			text = "",
 		}),
@@ -30,6 +30,15 @@ local function set_hud(player)
 end
 
 minetest.register_on_joinplayer(function(player)
+	local player_name = player:get_player_name()
+
+	-- Do not handle MultiCraft client
+	local info = minetest.get_player_information(player_name)
+	if info and info.version_string and info.version_string > "1.6.0"
+			and info.version_string < "2.9.9" then
+		return
+	end
+
 	minetest.after(0, set_hud, player)
 end)
 
@@ -39,7 +48,16 @@ end)
 
 minetest.register_globalstep(function(dtime)
 	for _, player in pairs(minetest.get_connected_players()) do
-		local data = item_names[player:get_player_name()]
+		local player_name = player:get_player_name()
+
+		-- Do not handle MultiCraft client
+		local info = minetest.get_player_information(player_name)
+		if info and info.version_string and info.version_string > "1.6.0"
+				and info.version_string < "2.9.9" then
+			return
+		end
+
+		local data = item_names[player_name]
 		if not data or not data.hud then
 			data = {} -- Update on next step
 			set_hud(player)
@@ -52,7 +70,7 @@ minetest.register_globalstep(function(dtime)
 		if data.hud and data.dtime < dlimit then
 			data.dtime = data.dtime + dtime
 			if data.dtime > dlimit then
-				player:hud_change(data.hud, 'text', "")
+				player:hud_change(data.hud, "text", "")
 			end
 		end
 
@@ -69,7 +87,7 @@ minetest.register_globalstep(function(dtime)
 				local def = minetest.registered_items[itemname]
 				desc = def and def.description or ""
 			end
-			player:hud_change(data.hud, 'text', desc)
+			player:hud_change(data.hud, "text", desc)
 		end
 	end
 end)
