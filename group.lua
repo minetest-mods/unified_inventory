@@ -115,7 +115,6 @@ local function compute_group_item(group_name_list)
 	return {item = bestitem, sole = false}
 end
 
-
 local group_item_cache = {}
 
 function unified_inventory.get_group_item(group_name)
@@ -124,4 +123,3 @@ function unified_inventory.get_group_item(group_name)
 	end
 	return group_item_cache[group_name]
 end
-

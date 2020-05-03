@@ -27,14 +27,14 @@ minetest.register_on_joinplayer(function(player)
 
 	-- Refill slot
 	local refill = minetest.create_detached_inventory(player_name.."refill", {
-		allow_put = function(inv, listname, index, stack, player)
+		allow_put = function(_, _, _, stack)
 			if unified_inventory.is_creative(player_name) then
 				return stack:get_count()
 			else
 				return 0
 			end
 		end,
-		on_put = function(inv, listname, index, stack, player)
+		on_put = function(inv, listname, index, stack)
 			local handle_refill = (minetest.registered_items[stack:get_name()] or {}).on_refill or default_refill
 			stack = handle_refill(stack)
 			inv:set_stack(listname, index, stack)
@@ -57,7 +57,7 @@ end
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local player_name = player:get_player_name()
 
-	local ui_peruser,draw_lite_mode = unified_inventory.get_per_player_formspec(player_name)
+	local ui_peruser, _ = unified_inventory.get_per_player_formspec(player_name)
 
 	if formname ~= "" then
 		return
@@ -69,7 +69,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		unified_inventory.current_searchbox[player_name] = fields.searchbox
 	end
 
-	for i, def in pairs(unified_inventory.buttons) do
+	for _, def in pairs(unified_inventory.buttons) do
 		if fields[def.name] then
 			def.action(player)
 			minetest.sound_play("click",
@@ -120,7 +120,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 	-- Check clicked item image button
 	local clicked_item
-	for name, value in pairs(fields) do
+	for name, _ in pairs(fields) do
 		local new_dir, mangled_item = string.match(name, "^item_button_([a-z]+)_(.*)$")
 		if new_dir and mangled_item then
 			clicked_item = unified_inventory.demangle_for_formspec(mangled_item)

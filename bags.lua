@@ -1,8 +1,8 @@
 --[[
-Bags for Minetest
+	Bags for Minetest
 
-Copyright (c) 2012 cornernote, Brett O'Donnell <cornernote@gmail.com>
-License: GPLv3
+	Copyright (c) 2012 cornernote, Brett O'Donnell <cornernote@gmail.com>
+	License: GPLv3
 --]]
 
 local S = minetest.get_translator("unified_inventory")
@@ -31,7 +31,7 @@ unified_inventory.register_button("bags", {
 	type = "image",
 	image = "ui_bags_icon.png",
 	tooltip = S("Bags"),
-	hide_lite=true
+	hide_lite = true
 })
 
 local function get_player_bag_stack(player, i)
@@ -168,12 +168,12 @@ end
 minetest.register_on_joinplayer(function(player)
 	local player_name = player:get_player_name()
 	local bags_inv = minetest.create_detached_inventory(player_name .. "_bags",{
-		on_put = function(inv, listname, index, stack, player)
+		on_put = function(inv, listname, _, stack, player)
 			player:get_inventory():set_size(listname .. "contents",
 					stack:get_definition().groups.bagslots)
 			save_bags_metadata(player, inv)
 		end,
-		allow_put = function(inv, listname, index, stack, player)
+		allow_put = function(_, listname, _, stack, player)
 			local new_slots = stack:get_definition().groups.bagslots
 			if not new_slots then
 				return 0
@@ -207,13 +207,13 @@ minetest.register_on_joinplayer(function(player)
 			-- New bag is smaller: Disallow inserting
 			return 0
 		end,
-		allow_take = function(inv, listname, index, stack, player)
+		allow_take = function(_, listname, _, stack, player)
 			if player:get_inventory():is_empty(listname .. "contents") then
 				return stack:get_count()
 			end
 			return 0
 		end,
-		on_take = function(inv, listname, index, stack, player)
+		on_take = function(inv, listname, _, _, player)
 			player:get_inventory():set_size(listname .. "contents", 0)
 			save_bags_metadata(player, inv)
 		end,
@@ -229,19 +229,19 @@ end)
 minetest.register_tool("unified_inventory:bag_small", {
 	description = S("Small Bag"),
 	inventory_image = "bags_small.png",
-	groups = {bagslots=8},
+	groups = {bagslots = 8},
 })
 
 minetest.register_tool("unified_inventory:bag_medium", {
 	description = S("Medium Bag"),
 	inventory_image = "bags_medium.png",
-	groups = {bagslots=16},
+	groups = {bagslots = 16},
 })
 
 minetest.register_tool("unified_inventory:bag_large", {
 	description = S("Large Bag"),
 	inventory_image = "bags_large.png",
-	groups = {bagslots=24},
+	groups = {bagslots = 24},
 })
 
 -- register bag crafts
@@ -270,6 +270,6 @@ if minetest.get_modpath("farming") ~= nil then
 			{"",               "",                             ""},
 			{"farming:string", "unified_inventory:bag_medium", "farming:string"},
 			{"farming:string", "unified_inventory:bag_medium", "farming:string"},
-	    },
+		},
 	})
 end

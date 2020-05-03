@@ -21,7 +21,7 @@ local trash = minetest.create_detached_inventory("trash", {
 	--		return 0
 	--	end
 	--end,
-	on_put = function(inv, listname, index, stack, player)
+	on_put = function(inv, listname, index, _, player)
 		inv:set_stack(listname, index, nil)
 		local player_name = player:get_player_name()
 		minetest.sound_play("trash", {to_player=player_name, gain = 1.0})
@@ -193,9 +193,9 @@ unified_inventory.register_page("craft", {
 
 -- stack_image_button(): generate a form button displaying a stack of items
 --
--- The specified item may be a group.  In that case, the group will be
+-- The specified item may be a group. In that case, the group will be
 -- represented by some item in the group, along with a flag indicating
--- that it's a group.  If the group contains only one item, it will be
+-- that it's a group. If the group contains only one item, it will be
 -- treated as if that item had been specified directly.
 
 local function stack_image_button(x, y, w, h, buttonname_prefix, item)
@@ -226,7 +226,7 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		end
 		grouptip = F(grouptip)
 		if andcount >= 1 then
-			button = button  .. string.format("tooltip[%s;%s]", buttonname, grouptip)
+			button = button .. string.format("tooltip[%s;%s]", buttonname, grouptip)
 		end
 	end
 	return button
@@ -260,8 +260,8 @@ local other_dir = {
 unified_inventory.register_page("craftguide", {
 	get_formspec = function(player, perplayer_formspec)
 
-		local formspecy =    perplayer_formspec.formspec_y
-		local formheadery =  perplayer_formspec.form_header_y
+		local formspecy    = perplayer_formspec.formspec_y
+		local formheadery  = perplayer_formspec.form_header_y
 		local craftresultx = perplayer_formspec.craft_result_x
 		local craftresulty = perplayer_formspec.craft_result_y
 
@@ -414,7 +414,7 @@ unified_inventory.register_page("craftguide", {
 	end,
 })
 
-local function craftguide_giveme(player, formname, fields)
+local function craftguide_giveme(player, _, fields)
 	local player_name = player:get_player_name()
 	local player_privs = minetest.get_player_privs(player_name)
 	if not player_privs.give and
@@ -425,7 +425,7 @@ local function craftguide_giveme(player, formname, fields)
 	end
 
 	local amount
-	for k, v in pairs(fields) do
+	for k, _ in pairs(fields) do
 		amount = k:match("craftguide_giveme_(.*)")
 		if amount then break end
 	end
@@ -441,9 +441,9 @@ local function craftguide_giveme(player, formname, fields)
 	player_inv:add_item("main", {name = output, count = amount})
 end
 
-local function craftguide_craft(player, formname, fields)
+local function craftguide_craft(player, _, fields)
 	local amount
-	for k, v in pairs(fields) do
+	for k, _ in pairs(fields) do
 		amount = k:match("craftguide_craft_(.*)")
 		if amount then break end
 	end
@@ -476,7 +476,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		return
 	end
 
-	for k, v in pairs(fields) do
+	for k, _ in pairs(fields) do
 		if k:match("craftguide_craft_") then
 			craftguide_craft(player, formname, fields)
 			return

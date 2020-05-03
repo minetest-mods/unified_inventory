@@ -92,4 +92,3 @@ Register a non-standard craft recipe:
 		width = 3,
 		-- ^ Same as `minetest.register_recipe`
 	})
-

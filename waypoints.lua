@@ -244,4 +244,3 @@ end)
 minetest.register_on_leaveplayer(function(player)
 	waypoints_temp[player:get_player_name()] = nil
 end)
-
