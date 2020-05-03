@@ -188,7 +188,9 @@ function unified_inventory.go_home(player)
 	local pos = unified_inventory.home_pos[player:get_player_name()]
 	if pos then
 		player:set_pos(pos)
+		return true
 	end
+	return false
 end
 
 -- register_craft
