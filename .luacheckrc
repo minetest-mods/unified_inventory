@@ -12,6 +12,8 @@ read_globals = {
 
 	"minetest", "vector",
 	"ItemStack", "datastorage",
+
+	"hb",
 }
 
 files["callbacks.lua"].ignore = { "player", "draw_lite_mode" }
