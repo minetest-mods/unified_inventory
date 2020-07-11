@@ -290,10 +290,14 @@ function unified_inventory.apply_filter(player, filter, search_dir)
 			return true
 		end
 	else
+		local lang = minetest.get_player_information(player_name).lang_code
 		ffilter = function(name, def)
 			local lname = string.lower(name)
 			local ldesc = string.lower(def.description)
+			local llocaldesc = minetest.get_translated_string
+				and string.lower(minetest.get_translated_string(lang, def.description))
 			return string.find(lname, lfilter, 1, true) or string.find(ldesc, lfilter, 1, true)
+				or llocaldesc and string.find(llocaldesc, lfilter, 1, true)
 		end
 	end
 	unified_inventory.filtered_items_list[player_name]={}
