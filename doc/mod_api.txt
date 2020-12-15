@@ -28,7 +28,7 @@ Register a new page: The callback inside this function is called on user input.
 				-- ^ Optional. Hides the player's `main` inventory list
 				draw_item_list = false,   -- default `true`
 				-- ^ Optional. Hides the item list on the right side
-				formspec_prepend = false, -- default `false`
+				formspec_prepend = false, -- default `true`
 				-- ^ Optional. When `false`: Disables the formspec prepend
 			}
 		end,
