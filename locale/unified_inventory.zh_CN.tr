@@ -73,6 +73,7 @@ World position=世界位置
 Name=名称
 HUD text color=HUD文本颜色
 
-#new
-
 Reset search and display everything=重置搜索并显示所有物品
+
+Any item belonging to the @1 group=属于@1组的任何项目
+Any item belonging to the groups @1=属于组@1的任何项目
