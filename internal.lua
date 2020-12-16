@@ -74,12 +74,6 @@ function unified_inventory.get_formspec(player, page)
 		formspec[1] = "size[11,7.7]"
 	end
 
-	if unified_inventory.is_creative(player_name)
-	and page == "craft" then
-		formspec[n] = "background[0,"..(ui_peruser.formspec_y + 2)..";1,1;ui_single_slot.png]"
-		n = n+1
-	end
-
 	local perplayer_formspec = unified_inventory.get_per_player_formspec(player_name)
 	local fsdata = pagedef.get_formspec(player, perplayer_formspec)
 
