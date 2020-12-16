@@ -79,6 +79,14 @@ function unified_inventory.get_formspec(player, page)
 
 	formspec[n] = fsdata.formspec
 	n = n+1
+	
+	-- Hack to make UI consistent until mods transition away from backgrounds
+	if minetest.features.formspec_version_element then
+		formspec[n] = "background9[5,5;1,1;gui_formbg.png;true;10]"
+	else
+		formspec[n] = "background[5,5;1,1;gui_formbg.png;true]"
+	end
+	n = n+1
 
 	local button_row = 0
 	local button_col = 0
