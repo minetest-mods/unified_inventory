@@ -123,9 +123,8 @@ function unified_inventory.get_formspec(player, page)
 
 	if fsdata.draw_inventory ~= false then
 		-- Player inventory
-		formspec[n] = "listcolors[#00000000;#00000000]"
-		formspec[n+1] = "list[current_player;main;0,"..(ui_peruser.formspec_y + 3.5)..";8,4;]"
-		n = n+2
+		formspec[n] = "list[current_player;main;0,"..(ui_peruser.formspec_y + 3.5)..";8,4;]"
+		n = n+1
 	end
 
 	if fsdata.draw_item_list == false then
