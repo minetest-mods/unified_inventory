@@ -12,7 +12,6 @@ unified_inventory.register_page("bags", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
 		return { formspec = table.concat({
-			"background[0.06,0.99;7.92,7.52;ui_bags_main_form.png]",
 			"label[0,0;" .. F(S("Bags")) .. "]",
 			"button[0,2;2,0.5;bag1;" .. F(S("Bag @1", 1)) .. "]",
 			"button[2,2;2,0.5;bag2;" .. F(S("Bag @1", 2)) .. "]",
@@ -49,19 +48,10 @@ for bag_i = 1, 4 do
 			local fs = {
 				"image[7,0;1,1;" .. image .. "]",
 				"label[0,0;" .. F(S("Bag @1", bag_i)) .. "]",
-				"listcolors[#00000000;#00000000]",
 				"list[current_player;bag" .. bag_i .. "contents;0,1;8,3;]",
 				"listring[current_name;bag" .. bag_i .. "contents]",
 				"listring[current_player;main]"
 			}
-			local slots = stack:get_definition().groups.bagslots
-			if slots == 8 then
-					fs[#fs + 1] = "background[0.06,0.99;7.92,7.52;ui_bags_sm_form.png]"
-			elseif slots == 16 then
-					fs[#fs + 1] = "background[0.06,0.99;7.92,7.52;ui_bags_med_form.png]"
-			elseif slots == 24 then
-					fs[#fs + 1] = "background[0.06,0.99;7.92,7.52;ui_bags_lg_form.png]"
-			end
 			local player_name = player:get_player_name() -- For if statement.
 			if unified_inventory.trash_enabled
 					or unified_inventory.is_creative(player_name)

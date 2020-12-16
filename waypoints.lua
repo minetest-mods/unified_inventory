@@ -23,8 +23,7 @@ unified_inventory.register_page("waypoints", {
 		if not waypoints_temp[player_name] then waypoints_temp[player_name] = {hud = 1} end
 
 		local waypoints = datastorage.get(player_name, "waypoints")
-		local formspec = "background[0,4.5;8,4;ui_main_inventory.png]" ..
-			"image[0,0;1,1;ui_waypoints_icon.png]" ..
+		local formspec = "image[0,0;1,1;ui_waypoints_icon.png]" ..
 			"label[1,0;" .. F(S("Waypoints")) .. "]"
 
 		-- Tabs buttons:

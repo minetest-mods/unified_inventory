@@ -62,28 +62,30 @@ function unified_inventory.get_formspec(player, page)
 		return "" -- Invalid page name
 	end
 
-	local formspec = {
-		"size[14,10]",
-		pagedef.formspec_prepend and "" or "no_prepend[]",
-		"background[-0.19,-0.25;14.4,10.75;ui_form_bg.png]" -- Background
-	}
-	local n = 4
+	local formspec = {"size[14,10]"}
+	if pagedef.formspec_prepend or pagedef.formspec_prepend == nil then
+		formspec[2] = ""
+	else
+		formspec[2] = "no_prepend[]"
+	end
+	local n = 3
 
 	if draw_lite_mode then
 		formspec[1] = "size[11,7.7]"
-		formspec[3] = "background[-0.19,-0.2;11.4,8.4;ui_form_bg.png]"
-	end
-
-	if unified_inventory.is_creative(player_name)
-	and page == "craft" then
-		formspec[n] = "background[0,"..(ui_peruser.formspec_y + 2)..";1,1;ui_single_slot.png]"
-		n = n+1
 	end
 
 	local perplayer_formspec = unified_inventory.get_per_player_formspec(player_name)
 	local fsdata = pagedef.get_formspec(player, perplayer_formspec)
 
 	formspec[n] = fsdata.formspec
+	n = n+1
+	
+	-- Hack to make UI consistent until mods transition away from backgrounds
+	if minetest.features.formspec_version_element then
+		formspec[n] = "background9[5,5;1,1;gui_formbg.png;true;10]"
+	else
+		formspec[n] = "background[5,5;1,1;gui_formbg.png;true]"
+	end
 	n = n+1
 
 	local button_row = 0
@@ -129,9 +131,8 @@ function unified_inventory.get_formspec(player, page)
 
 	if fsdata.draw_inventory ~= false then
 		-- Player inventory
-		formspec[n] = "listcolors[#00000000;#00000000]"
-		formspec[n+1] = "list[current_player;main;0,"..(ui_peruser.formspec_y + 3.5)..";8,4;]"
-		n = n+2
+		formspec[n] = "list[current_player;main;0,"..(ui_peruser.formspec_y + 3.5)..";8,4;]"
+		n = n+1
 	end
 
 	if fsdata.draw_item_list == false then

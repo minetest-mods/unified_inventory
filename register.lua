@@ -170,15 +170,12 @@ unified_inventory.register_page("craft", {
 		local formheadery =  perplayer_formspec.form_header_y
 
 		local player_name = player:get_player_name()
-		local formspec = "background[2,"..formspecy..";6,3;ui_crafting_form.png]"
-		formspec = formspec.."background[0,"..(formspecy + 3.5)..";8,4;ui_main_inventory.png]"
+		local formspec = "image[5,"..formspecy..";1,1;gui_furnace_arrow_bg.png^[transformR270]]"
 		formspec = formspec.."label[0,"..formheadery..";" ..F(S("Crafting")).."]"
-		formspec = formspec.."listcolors[#00000000;#00000000]"
 		formspec = formspec.."list[current_player;craftpreview;6,"..formspecy..";1,1;]"
 		formspec = formspec.."list[current_player;craft;2,"..formspecy..";3,3;]"
 		if unified_inventory.trash_enabled or unified_inventory.is_creative(player_name) or minetest.get_player_privs(player_name).give then
 			formspec = formspec.."label[7,"..(formspecy + 1.5)..";" .. F(S("Trash:")) .. "]"
-			formspec = formspec.."background[7,"..(formspecy + 2)..";1,1;ui_single_slot.png]"
 			formspec = formspec.."list[detached:trash;main;7,"..(formspecy + 2)..";1,1;]"
 		end
 		formspec = formspec.."listring[current_name;craft]"
@@ -267,11 +264,7 @@ unified_inventory.register_page("craftguide", {
 
 		local player_name = player:get_player_name()
 		local player_privs = minetest.get_player_privs(player_name)
-		local fs = {
-			"background[0,"..(formspecy + 3.5)..";8,4;ui_main_inventory.png]",
-			"label[0,"..formheadery..";" .. F(S("Crafting Guide")) .. "]",
-			"listcolors[#00000000;#00000000]"
-		}
+		local fs = {"label[0,"..formheadery..";" .. F(S("Crafting Guide")) .. "]"}
 		local item_name = unified_inventory.current_item[player_name]
 		if not item_name then
 			return { formspec = table.concat(fs) }
@@ -298,7 +291,7 @@ unified_inventory.register_page("craftguide", {
 		end
 		local has_give = player_privs.give or unified_inventory.is_creative(player_name)
 
-		fs[#fs + 1] = "background[0.5,"..(formspecy + 0.2)..";8,3;ui_craftguide_form.png]"
+		fs[#fs + 1] = "image[5.6,"..(formspecy + 0.2)..";1,1;gui_furnace_arrow_bg.png^[transformR270]]"
 		fs[#fs + 1] = string.format("textarea[%f,%f;10,1;;%s: %s;]",
 				craftresultx, craftresulty, F(role_text[dir]), item_name_shown)
 		fs[#fs + 1] = stack_image_button(0, formspecy, 1.1, 1.1,
