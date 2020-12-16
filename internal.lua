@@ -62,16 +62,16 @@ function unified_inventory.get_formspec(player, page)
 		return "" -- Invalid page name
 	end
 
-	local formspec = {
-		"size[14,10]",
-		pagedef.formspec_prepend and "" or "no_prepend[]",
-		"background[-0.19,-0.25;14.4,10.75;ui_form_bg.png]" -- Background
-	}
-	local n = 4
+	local formspec = {"size[14,10]"}
+	if pagedef.formspec_prepend or pagedef.formspec_prepend == nil then
+		formspec[2] = ""
+	else
+		formspec[2] = "no_prepend[]"
+	end
+	local n = 3
 
 	if draw_lite_mode then
 		formspec[1] = "size[11,7.7]"
-		formspec[3] = "background[-0.19,-0.2;11.4,8.4;ui_form_bg.png]"
 	end
 
 	if unified_inventory.is_creative(player_name)
