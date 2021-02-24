@@ -7,17 +7,19 @@ License: GPLv3
 
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
+local bags_inv_bg_prefix = "image[-0.1,0.9;10.05,"
 
 unified_inventory.register_page("bags", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
 		return { formspec = table.concat({
-			"background[0.06,0.99;7.92,7.52;ui_bags_main_form.png]",
+			string.gsub(unified_inventory.standard_inv_bg, "YYY", "4.4"),
+			bags_inv_bg_prefix.."1.175;ui_bags_header.png]",
 			"label[0,0;" .. F(S("Bags")) .. "]",
-			"button[0,2;2,0.5;bag1;" .. F(S("Bag @1", 1)) .. "]",
-			"button[2,2;2,0.5;bag2;" .. F(S("Bag @1", 2)) .. "]",
-			"button[4,2;2,0.5;bag3;" .. F(S("Bag @1", 3)) .. "]",
-			"button[6,2;2,0.5;bag4;" .. F(S("Bag @1", 4)) .. "]",
+			"button[0,2.1;2,0.5;bag1;" .. F(S("Bag @1", 1)) .. "]",
+			"button[2,2.1;2,0.5;bag2;" .. F(S("Bag @1", 2)) .. "]",
+			"button[4,2.1;2,0.5;bag3;" .. F(S("Bag @1", 3)) .. "]",
+			"button[6,2.1;2,0.5;bag4;" .. F(S("Bag @1", 4)) .. "]",
 			"listcolors[#00000000;#00000000]",
 			"list[detached:" .. F(player_name) .. "_bags;bag1;0.5,1;1,1;]",
 			"list[detached:" .. F(player_name) .. "_bags;bag2;2.5,1;1,1;]",
@@ -47,26 +49,27 @@ for bag_i = 1, 4 do
 			local stack = get_player_bag_stack(player, bag_i)
 			local image = stack:get_definition().inventory_image
 			local fs = {
+				string.gsub(unified_inventory.standard_inv_bg, "YYY", "4.4"),
 				"image[7,0;1,1;" .. image .. "]",
 				"label[0,0;" .. F(S("Bag @1", bag_i)) .. "]",
 				"listcolors[#00000000;#00000000]",
 				"list[current_player;bag" .. bag_i .. "contents;0,1;8,3;]",
 				"listring[current_name;bag" .. bag_i .. "contents]",
-				"listring[current_player;main]"
+				"listring[current_player;main]",
 			}
 			local slots = stack:get_definition().groups.bagslots
 			if slots == 8 then
-					fs[#fs + 1] = "background[0.06,0.99;7.92,7.52;ui_bags_sm_form.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix.."1.175;ui_bags_inv_small.png]"
 			elseif slots == 16 then
-					fs[#fs + 1] = "background[0.06,0.99;7.92,7.52;ui_bags_med_form.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix.."2.35;ui_bags_inv_medium.png]"
 			elseif slots == 24 then
-					fs[#fs + 1] = "background[0.06,0.99;7.92,7.52;ui_bags_lg_form.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix.."3.525;ui_bags_inv_large.png]"
 			end
 			local player_name = player:get_player_name() -- For if statement.
 			if unified_inventory.trash_enabled
 					or unified_inventory.is_creative(player_name)
 					or minetest.get_player_privs(player_name).give then
-				fs[#fs + 1] = "background[6.06,0;0.92,0.92;ui_bags_trash.png]"
+				fs[#fs + 1] = "image[6,0;1,1;ui_bags_trash.png]"
 						.. "list[detached:trash;main;6,0.1;1,1;]"
 			end
 			local inv = player:get_inventory()

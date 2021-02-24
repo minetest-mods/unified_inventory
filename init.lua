@@ -44,7 +44,10 @@ unified_inventory = {
 	main_button_y = 9,
 	craft_result_x = 0.3,
 	craft_result_y = 0.5,
-	form_header_y = 0
+	form_header_y = 0,
+	standard_background = "background[-0.2,-0.2;1,1;ui_form_bg.png;true]",    -- the 'true' scales to fill, overrides the 1,1
+	standard_inv =        "list[current_player;main;0,YYY;8,4;]",             -- the YYY's are placeholders which get
+	standard_inv_bg =     "image[-0.1,YYY;10.05,4.70;ui_main_inventory.png]", -- replaced later by string.gsub()
 }
 
 -- Disable default creative inventory

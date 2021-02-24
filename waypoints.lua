@@ -23,7 +23,7 @@ unified_inventory.register_page("waypoints", {
 		if not waypoints_temp[player_name] then waypoints_temp[player_name] = {hud = 1} end
 
 		local waypoints = datastorage.get(player_name, "waypoints")
-		local formspec = "background[0,4.5;8,4;ui_main_inventory.png]" ..
+		local formspec = string.gsub(unified_inventory.standard_inv_bg, "YYY", "4.4") ..
 			"image[0,0;1,1;ui_waypoints_icon.png]" ..
 			"label[1,0;" .. F(S("Waypoints")) .. "]"
 
