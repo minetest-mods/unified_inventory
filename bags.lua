@@ -7,7 +7,7 @@ License: GPLv3
 
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
-local bags_inv_bg_prefix = "image[-0.1,0.9;10.05,"
+local bags_inv_bg_prefix = "image[-0.1,1.0;10.05,"
 
 unified_inventory.register_page("bags", {
 	get_formspec = function(player)
@@ -16,15 +16,15 @@ unified_inventory.register_page("bags", {
 			string.gsub(unified_inventory.standard_inv_bg, "YYY", "4.4"),
 			bags_inv_bg_prefix.."1.175;ui_bags_header.png]",
 			"label[0,0;" .. F(S("Bags")) .. "]",
-			"button[0,2.1;2,0.5;bag1;" .. F(S("Bag @1", 1)) .. "]",
-			"button[2,2.1;2,0.5;bag2;" .. F(S("Bag @1", 2)) .. "]",
-			"button[4,2.1;2,0.5;bag3;" .. F(S("Bag @1", 3)) .. "]",
-			"button[6,2.1;2,0.5;bag4;" .. F(S("Bag @1", 4)) .. "]",
+			"button[0,2.2;2,0.5;bag1;" .. F(S("Bag @1", 1)) .. "]",
+			"button[2,2.2;2,0.5;bag2;" .. F(S("Bag @1", 2)) .. "]",
+			"button[4,2.2;2,0.5;bag3;" .. F(S("Bag @1", 3)) .. "]",
+			"button[6,2.2;2,0.5;bag4;" .. F(S("Bag @1", 4)) .. "]",
 			"listcolors[#00000000;#00000000]",
-			"list[detached:" .. F(player_name) .. "_bags;bag1;0.5,1;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag2;2.5,1;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag3;4.5,1;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag4;6.5,1;1,1;]"
+			"list[detached:" .. F(player_name) .. "_bags;bag1;0.5,1.1;1,1;]",
+			"list[detached:" .. F(player_name) .. "_bags;bag2;2.5,1.1;1,1;]",
+			"list[detached:" .. F(player_name) .. "_bags;bag3;4.5,1.1;1,1;]",
+			"list[detached:" .. F(player_name) .. "_bags;bag4;6.5,1.1;1,1;]"
 		}) }
 	end,
 })
@@ -53,7 +53,7 @@ for bag_i = 1, 4 do
 				"image[7,0;1,1;" .. image .. "]",
 				"label[0,0;" .. F(S("Bag @1", bag_i)) .. "]",
 				"listcolors[#00000000;#00000000]",
-				"list[current_player;bag" .. bag_i .. "contents;0,1;8,3;]",
+				"list[current_player;bag" .. bag_i .. "contents;0,1.1;8,3;]",
 				"listring[current_name;bag" .. bag_i .. "contents]",
 				"listring[current_player;main]",
 			}
