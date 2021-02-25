@@ -69,7 +69,7 @@ for bag_i = 1, 4 do
 			if unified_inventory.trash_enabled
 					or unified_inventory.is_creative(player_name)
 					or minetest.get_player_privs(player_name).give then
-				fs[#fs + 1] = "image[6,0;1,1;ui_bags_trash.png]"
+				fs[#fs + 1] = "image[5.91,-0.06;1.21,1.15;ui_bags_trash.png]"
 						.. "list[detached:trash;main;6,0.1;1,1;]"
 			end
 			local inv = player:get_inventory()
