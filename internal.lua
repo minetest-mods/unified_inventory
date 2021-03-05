@@ -9,6 +9,7 @@ local F = minetest.formspec_escape
 -- This is a game engine bug, and in the anticipation that it might be
 -- fixed some day we don't want to rely on it.  So for safety we apply
 -- an encoding that avoids all formspec metacharacters.
+
 function unified_inventory.mangle_for_formspec(str)
 	return string.gsub(str, "([^A-Za-z0-9])", function (c) return string.format("_%d_", string.byte(c)) end)
 end
@@ -16,30 +17,59 @@ function unified_inventory.demangle_for_formspec(str)
 	return string.gsub(str, "_([0-9]+)_", function (v) return string.char(v) end)
 end
 
+
 function unified_inventory.get_per_player_formspec(player_name)
 	local lite = unified_inventory.lite_mode and not minetest.check_player_privs(player_name, {ui_full=true})
 
 	local ui = {}
+	ui.formspec_x = unified_inventory.formspec_x
+	ui.formspec_y = unified_inventory.formspec_y
 	ui.pagecols = unified_inventory.pagecols
 	ui.pagerows = unified_inventory.pagerows
+	ui.page_x = unified_inventory.page_x
 	ui.page_y = unified_inventory.page_y
-	ui.formspec_y = unified_inventory.formspec_y
+	ui.craft_x = unified_inventory.craft_x
+	ui.craft_y = unified_inventory.craft_y
+	ui.resultstr_y = unified_inventory.resultstr_y
 	ui.main_button_x = unified_inventory.main_button_x
 	ui.main_button_y = unified_inventory.main_button_y
-	ui.craft_result_x = unified_inventory.craft_result_x
-	ui.craft_result_y = unified_inventory.craft_result_y
+	ui.page_buttons_x = unified_inventory.page_buttons_x
+	ui.page_buttons_y = unified_inventory.page_buttons_y
+	ui.searchwidth = unified_inventory.searchwidth
+	ui.form_header_x = unified_inventory.form_header_x
 	ui.form_header_y = unified_inventory.form_header_y
+	ui.btn_spc = unified_inventory.btn_spc
+	ui.btn_size = unified_inventory.btn_size
+	ui.std_inv_x = unified_inventory.std_inv_x
+	ui.std_inv_y = unified_inventory.std_inv_y
+	ui.standard_inv = unified_inventory.standard_inv
+	ui.standard_inv_bg = unified_inventory.standard_inv_bg
 
 	if lite then
+
+		ui.formspec_x =  0.6
+		ui.formspec_y =  0.6
 		ui.pagecols = 4
 		ui.pagerows = 6
-		ui.page_y = 0.25
-		ui.formspec_y = 0.47
-		ui.main_button_x = 8.2
-		ui.main_button_y = 6.5
-		ui.craft_result_x = 2.8
-		ui.craft_result_y = 3.4
-		ui.form_header_y = -0.1
+		ui.page_x = 10.5
+		ui.page_y = 1.1
+		ui.craft_x = 2.6
+		ui.craft_y = 0.65
+		ui.resultstr_y = 0.3
+		ui.main_button_x = ui.page_x
+		ui.main_button_y = 7.8
+		ui.page_buttons_x = ui.page_x
+		ui.page_buttons_y = 6.2
+		ui.searchwidth = 1.6
+		ui.form_header_x =  0.2
+		ui.form_header_y =  0.2
+		ui.btn_spc = 0.8
+		ui.btn_size = 0.7
+		ui.std_inv_x = 0.1
+		ui.std_inv_y = 4.6
+		ui.standard_inv =    "list[current_player;main;"..(ui.std_inv_x+0.15)..","..(ui.std_inv_y+0.15)..";8,4;]"
+		ui.standard_inv_bg = "image["..ui.std_inv_x..","..ui.std_inv_y..";"..(unified_inventory.imgscale*8)..
+                                 ","..(unified_inventory.imgscale*4)..";ui_main_inventory.png]"
 	end
 
 	ui.items_per_page = ui.pagecols * ui.pagerows
@@ -55,6 +85,9 @@ function unified_inventory.get_formspec(player, page)
 	local player_name = player:get_player_name()
 	local ui_peruser,draw_lite_mode = unified_inventory.get_per_player_formspec(player_name)
 
+		local formheaderx =  ui_peruser.form_header_x
+		local formheadery =  ui_peruser.form_header_y
+
 	unified_inventory.current_page[player_name] = page
 	local pagedef = unified_inventory.pages[page]
 
@@ -63,20 +96,20 @@ function unified_inventory.get_formspec(player, page)
 	end
 
 	local formspec = {
-		"size[14,10]",
+		"formspec_version[4]size[17.75,12.25]",
 		pagedef.formspec_prepend and "" or "no_prepend[]",
 		unified_inventory.standard_background -- Background
 	}
 	local n = 4
 
 	if draw_lite_mode then
-		formspec[1] = "size[11,7.7]"
+		formspec[1] = "formspec_version[4]size[14,9.75]"
 		formspec[3] = unified_inventory.standard_background
 	end
 
 	if unified_inventory.is_creative(player_name)
-	and page == "craft" then
-		formspec[n] = "background[0,"..(ui_peruser.formspec_y + 2)..";1,1;ui_single_slot.png]"
+	and page == "craft" then -- add the "Refill" slot.
+		formspec[n] = "image["..(ui_peruser.craft_x-2.5)..","..(ui_peruser.craft_y+2.5)..";"..uninv.imgscale..","..uninv.imgscale..";ui_single_slot.png]"
 		n = n+1
 	end
 
@@ -109,8 +142,8 @@ function unified_inventory.get_formspec(player, page)
 		if def.type == "image" then
 			if (def.condition == nil or def.condition(player) == true) then
 				formspec[n] = "image_button["
-				formspec[n+1] = ( ui_peruser.main_button_x + 0.65 * (i - 1) - button_col * 0.65 * 4)
-				formspec[n+2] = ","..(ui_peruser.main_button_y + button_row * 0.7)..";0.8,0.8;"
+				formspec[n+1] = ( ui_peruser.main_button_x + ui_peruser.btn_spc * (i - 1) - button_col * ui_peruser.btn_spc * 4)
+				formspec[n+2] = ","..(ui_peruser.main_button_y + button_row * ui_peruser.btn_spc)..";"..ui_peruser.btn_size..","..ui_peruser.btn_size..";"
 				formspec[n+3] = F(def.image)..";"
 				formspec[n+4] = F(def.name)..";]"
 				formspec[n+5] = "tooltip["..F(def.name)
@@ -118,8 +151,8 @@ function unified_inventory.get_formspec(player, page)
 				n = n+7
 			else
 				formspec[n] = "image["
-				formspec[n+1] = ( ui_peruser.main_button_x + 0.65 * (i - 1) - button_col * 0.65 * 4)
-				formspec[n+2] = ","..(ui_peruser.main_button_y + button_row * 0.7)..";0.8,0.8;"
+				formspec[n+1] = ( ui_peruser.main_button_x + ui_peruser.btn_spc * (i - 1) - button_col * ui_peruser.btn_spc * 4)
+				formspec[n+2] = ","..(ui_peruser.main_button_y + button_row * ui_peruser.btn_spc)..";"..ui_peruser.btn_size..","..ui_peruser.btn_size..";"
 				formspec[n+3] = F(def.image).."^[colorize:#808080:alpha]"
 				n = n+4
 
@@ -130,7 +163,7 @@ function unified_inventory.get_formspec(player, page)
 	if fsdata.draw_inventory ~= false then
 		-- Player inventory
 		formspec[n] = "listcolors[#00000000;#00000000]"
-		formspec[n+1] = string.gsub(unified_inventory.standard_inv, "YYY", ui_peruser.formspec_y + 3.5)
+		formspec[n+1] = ui_peruser.standard_inv
 		n = n+2
 	end
 
@@ -138,71 +171,55 @@ function unified_inventory.get_formspec(player, page)
 		return table.concat(formspec, "")
 	end
 
-	-- Controls to flip items pages
-	local start_x = 9.2
-
-	if not draw_lite_mode then
-		formspec[n] =
-			"image_button[" .. (start_x + 0.6 * 0)
-				.. ",9;.8,.8;ui_skip_backward_icon.png;start_list;]"
-			.. "tooltip[start_list;" .. F(S("First page")) .. "]"
-
-			.. "image_button[" .. (start_x + 0.6 * 1)
-				.. ",9;.8,.8;ui_doubleleft_icon.png;rewind3;]"
-			.. "tooltip[rewind3;" .. F(S("Back three pages")) .. "]"
-			.. "image_button[" .. (start_x + 0.6 * 2)
-				.. ",9;.8,.8;ui_left_icon.png;rewind1;]"
-			.. "tooltip[rewind1;" .. F(S("Back one page")) .. "]"
-
-			.. "image_button[" .. (start_x + 0.6 * 3)
-				.. ",9;.8,.8;ui_right_icon.png;forward1;]"
-			.. "tooltip[forward1;" .. F(S("Forward one page")) .. "]"
-			.. "image_button[" .. (start_x + 0.6 * 4)
-				.. ",9;.8,.8;ui_doubleright_icon.png;forward3;]"
-			.. "tooltip[forward3;" .. F(S("Forward three pages")) .. "]"
-
-			.. "image_button[" .. (start_x + 0.6 * 5)
-				.. ",9;.8,.8;ui_skip_forward_icon.png;end_list;]"
-			.. "tooltip[end_list;" .. F(S("Last page")) .. "]"
-	else
-		formspec[n] =
-			"image_button[" .. (8.2 + 0.65 * 0)
-				.. ",5.8;.8,.8;ui_skip_backward_icon.png;start_list;]"
-			.. "tooltip[start_list;" .. F(S("First page")) .. "]"
-			.. "image_button[" .. (8.2 + 0.65 * 1)
-				.. ",5.8;.8,.8;ui_left_icon.png;rewind1;]"
-			.. "tooltip[rewind1;" .. F(S("Back one page")) .. "]"
-			.. "image_button[" .. (8.2 + 0.65 * 2)
-				.. ",5.8;.8,.8;ui_right_icon.png;forward1;]"
-			.. "tooltip[forward1;" .. F(S("Forward one page")) .. "]"
-			.. "image_button[" .. (8.2 + 0.65 * 3)
-				.. ",5.8;.8,.8;ui_skip_forward_icon.png;end_list;]"
-			.. "tooltip[end_list;" .. F(S("Last page")) .. "]"
-	end
-	n = n+1
-
 	-- Search box
 	formspec[n] = "field_close_on_enter[searchbox;false]"
-	n = n+1
 
-	if not draw_lite_mode then
-		formspec[n] = "field[9.5,8.325;3,1;searchbox;;"
-			.. F(unified_inventory.current_searchbox[player_name]) .. "]"
-		formspec[n+1] = "image_button[12.2,8.1;.8,.8;ui_search_icon.png;searchbutton;]"
-			.. "tooltip[searchbutton;" ..F(S("Search")) .. "]"
-		formspec[n+2] = "image_button[12.9,8.1;.8,.8;ui_reset_icon.png;searchresetbutton;]"
-			.. "tooltip[searchbutton;" ..F(S("Search")) .. "]"
-			.. "tooltip[searchresetbutton;" ..F(S("Reset search and display everything")) .. "]"
-	else
-		formspec[n] = "field[8.5,5.225;2.2,1;searchbox;;"
-			.. F(unified_inventory.current_searchbox[player_name]) .. "]"
-		formspec[n+1] = "image_button[10.3,5;.8,.8;ui_search_icon.png;searchbutton;]"
-			.. "tooltip[searchbutton;" ..F(S("Search")) .. "]"
-		formspec[n+2] = "image_button[11,5;.8,.8;ui_reset_icon.png;searchresetbutton;]"
-			.. "tooltip[searchbutton;" ..F(S("Search")) .. "]"
-			.. "tooltip[searchresetbutton;" ..F(S("Reset search and display everything")) .. "]"
+	formspec[n+1] = "field["..ui_peruser.page_buttons_x..","..
+		ui_peruser.page_buttons_y..";"..
+		(ui_peruser.searchwidth - 0.1)..","..
+		ui_peruser.btn_size..";searchbox;;"..
+		F(unified_inventory.current_searchbox[player_name]) .. "]"
+	formspec[n+2] = "image_button["..(ui_peruser.page_buttons_x + ui_peruser.searchwidth)..","..
+		ui_peruser.page_buttons_y..";"..
+		ui_peruser.btn_size..","..ui_peruser.btn_size..
+		";ui_search_icon.png;searchbutton;]"..
+		"tooltip[searchbutton;" ..F(S("Search")) .. "]"
+	formspec[n+3] = "image_button["..(ui_peruser.page_buttons_x + ui_peruser.searchwidth + ui_peruser.btn_spc)..","..
+		ui_peruser.page_buttons_y..";"..
+		ui_peruser.btn_size..","..ui_peruser.btn_size..
+		";ui_reset_icon.png;searchresetbutton;]"..
+		"tooltip[searchresetbutton;" ..F(S("Reset search and display everything")) .. "]"
+
+	n = n + 4
+
+	-- Controls to flip items pages
+
+	local btnlist = {
+		{ "ui_skip_backward_icon.png", "start_list", "First page" },
+		{ "ui_doubleleft_icon.png",    "rewind3",    "Back three pages" },
+		{ "ui_left_icon.png",          "rewind1",    "Back one page" },
+		{ "ui_right_icon.png",         "forward1",   "Forward one page" },
+		{ "ui_doubleright_icon.png",   "forward3",   "Forward three pages" },
+		{ "ui_skip_forward_icon.png",  "end_list",   "Last page" },
+	}
+
+	if draw_lite_mode then
+		btnlist[5] = nil
+		btnlist[2] = nil
 	end
-	n = n+3
+
+	local bn = 0
+	for _, b in pairs(btnlist) do
+			formspec[n] =  "image_button["..
+			(ui_peruser.page_buttons_x + ui_peruser.btn_spc*bn)..","..
+			(ui_peruser.page_buttons_y + ui_peruser.btn_spc)..";"..
+			ui_peruser.btn_size..","..
+			ui_peruser.btn_size..";"..
+			b[1]..";"..b[2]..";]"..
+			"tooltip["..b[2]..";"..F(S(b[3])).."]"
+		bn = bn + 1
+		n = n + 1
+	end
 
 	local no_matches = S("No matching items")
 	if draw_lite_mode then
@@ -211,7 +228,7 @@ function unified_inventory.get_formspec(player, page)
 
 	-- Items list
 	if #unified_inventory.filtered_items_list[player_name] == 0 then
-		formspec[n] = "label[8.2,"..ui_peruser.form_header_y..";" .. F(no_matches) .. "]"
+		formspec[n] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y+0.15)..";" .. F(no_matches) .. "]"
 	else
 		local dir = unified_inventory.active_search_direction[player_name]
 		local list_index = unified_inventory.current_index[player_name]
@@ -239,8 +256,8 @@ function unified_inventory.get_formspec(player, page)
 
 					local button_name = "item_button_" .. dir .. "_"
 						.. unified_inventory.mangle_for_formspec(name)
-					formspec[n] = ("item_image_button[%f,%f;.81,.81;%s;%s;]"):format(
-						8.2 + x * 0.7, ui_peruser.formspec_y + ui_peruser.page_y + y * 0.7,
+					formspec[n] = ("item_image_button[%f,%f;"..ui_peruser.btn_size..","..ui_peruser.btn_size..";%s;%s;]"):format(
+						ui_peruser.page_x + x * ui_peruser.btn_spc, ui_peruser.page_y + y * ui_peruser.btn_spc,
 						name, button_name
 					)
 					formspec[n + 1] = ("tooltip[%s;%s \\[%s\\]]"):format(
@@ -252,14 +269,14 @@ function unified_inventory.get_formspec(player, page)
 				end
 			end
 		end
-		formspec[n] = "label[8.2,"..ui_peruser.form_header_y..";"..F(S("Page")) .. ": "
+		formspec[n] = "label["..ui_peruser.page_x..","..formheadery..";"..F(S("Page")) .. ": "
 			.. S("@1 of @2",page2,pagemax).."]"
 	end
 	n= n+1
 
 	if unified_inventory.activefilter[player_name] ~= "" then
-		formspec[n] = "label[8.2,"..(ui_peruser.form_header_y + 0.4)..";" .. F(S("Filter")) .. ":]"
-		formspec[n+1] = "label[9.1,"..(ui_peruser.form_header_y + 0.4)..";"..F(unified_inventory.activefilter[player_name]).."]"
+		formspec[n] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.55)..";" .. F(S("Filter")) .. ":]"
+		formspec[n+1] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.2)..";"..F(unified_inventory.activefilter[player_name]).."]"
 	end
 	return table.concat(formspec, "")
 end

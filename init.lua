@@ -36,19 +36,35 @@ unified_inventory = {
 	-- Trash enabled
 	trash_enabled = (minetest.settings:get_bool("unified_inventory_trash") ~= false),
 
+	formspec_x = 1,  -- UI doesn't use these first two anymore, but other mods
+	formspec_y = 1,  -- may need them.
 	pagecols = 8,
 	pagerows = 10,
-	page_y = 0,
-	formspec_y = 1,
-	main_button_x = 0,
-	main_button_y = 9,
-	craft_result_x = 0.3,
-	craft_result_y = 0.5,
-	form_header_y = 0,
-	standard_background = "background[-0.2,-0.2;1,1;ui_form_bg.png;true]",    -- the 'true' scales to fill, overrides the 1,1
-	standard_inv =        "list[current_player;main;0,YYY;8,4;]",             -- the YYY's are placeholders which get
-	standard_inv_bg =     "image[-0.1,YYY;10.05,4.70;ui_main_inventory.png]", -- replaced later by string.gsub()
+	page_x = 10.75,
+	page_y = 1.25,
+	craft_x = 2.8,
+	craft_y = 1,
+	resultstr_y = 0.6,
+	main_button_x = 0.4,
+	main_button_y = 11.0,
+	page_buttons_x = 11.60,
+	page_buttons_y = 10.15,
+	searchwidth = 3.4,
+	form_header_x = 0.4,
+	form_header_y = 0.4,
+	btn_spc = 0.85,
+	btn_size = 0.75,
+	imgscale = 1.25,
+	std_inv_x = 0.3,
+	std_inv_y = 5.5,
+	standard_background = "background[0,0;1,1;ui_form_bg.png;true]",
 }
+
+uninv = unified_inventory
+
+uninv.standard_inv =       "list[current_player;main;"..(uninv.std_inv_x+0.15)..","..(uninv.std_inv_y+0.15)..";8,4;]"
+uninv.standard_inv_bg =    "image["..uninv.std_inv_x..","..uninv.std_inv_y..";"..(uninv.imgscale*8)..
+                              ","..(uninv.imgscale*4)..";ui_main_inventory.png]"
 
 -- Disable default creative inventory
 local creative = rawget(_G, "creative") or rawget(_G, "creative_inventory")

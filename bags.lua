@@ -7,24 +7,24 @@ License: GPLv3
 
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
-local bags_inv_bg_prefix = "image[-0.1,1.0;10.05,"
+local bags_inv_bg_prefix = "image[0.3,1.5;"..(unified_inventory.imgscale*8)..","
 
 unified_inventory.register_page("bags", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
 		return { formspec = table.concat({
-			string.gsub(unified_inventory.standard_inv_bg, "YYY", "4.4"),
-			bags_inv_bg_prefix.."1.175;ui_bags_header.png]",
-			"label[0,0;" .. F(S("Bags")) .. "]",
-			"button[0,2.2;2,0.5;bag1;" .. F(S("Bag @1", 1)) .. "]",
-			"button[2,2.2;2,0.5;bag2;" .. F(S("Bag @1", 2)) .. "]",
-			"button[4,2.2;2,0.5;bag3;" .. F(S("Bag @1", 3)) .. "]",
-			"button[6,2.2;2,0.5;bag4;" .. F(S("Bag @1", 4)) .. "]",
+			unified_inventory.standard_inv_bg,
+			bags_inv_bg_prefix..uninv.imgscale..";ui_bags_header.png]",
+			"label["..unified_inventory.form_header_x..","..unified_inventory.form_header_y..";" .. F(S("Bags")) .. "]",
+			"button[0.6125,2.75;1.875,0.75;bag1;" .. F(S("Bag @1", 1)) .. "]",
+			"button[3.1125,2.75;1.875,0.75;bag2;" .. F(S("Bag @1", 2)) .. "]",
+			"button[5.6125,2.75;1.875,0.75;bag3;" .. F(S("Bag @1", 3)) .. "]",
+			"button[8.1125,2.75;1.875,0.75;bag4;" .. F(S("Bag @1", 4)) .. "]",
 			"listcolors[#00000000;#00000000]",
-			"list[detached:" .. F(player_name) .. "_bags;bag1;0.5,1.1;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag2;2.5,1.1;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag3;4.5,1.1;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag4;6.5,1.1;1,1;]"
+			"list[detached:" .. F(player_name) .. "_bags;bag1;1.075,1.65;1,1;]",
+			"list[detached:" .. F(player_name) .. "_bags;bag2;3.575,1.65;1,1;]",
+			"list[detached:" .. F(player_name) .. "_bags;bag3;6.075,1.65;1,1;]",
+			"list[detached:" .. F(player_name) .. "_bags;bag4;8.575,1.65;1,1;]"
 		}) }
 	end,
 })
@@ -49,28 +49,29 @@ for bag_i = 1, 4 do
 			local stack = get_player_bag_stack(player, bag_i)
 			local image = stack:get_definition().inventory_image
 			local fs = {
-				string.gsub(unified_inventory.standard_inv_bg, "YYY", "4.4"),
-				"image[7,0;1,1;" .. image .. "]",
-				"label[0,0;" .. F(S("Bag @1", bag_i)) .. "]",
+				unified_inventory.standard_inv_bg,
+				"image[9.2,0.4;1,1;" .. image .. "]",
+				"label[0.3,0.65;" .. F(S("Bag @1", bag_i)) .. "]",
 				"listcolors[#00000000;#00000000]",
-				"list[current_player;bag" .. bag_i .. "contents;0,1.1;8,3;]",
-				"listring[current_name;bag" .. bag_i .. "contents]",
 				"listring[current_player;main]",
 			}
 			local slots = stack:get_definition().groups.bagslots
 			if slots == 8 then
-					fs[#fs + 1] = bags_inv_bg_prefix.."1.175;ui_bags_inv_small.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix..uninv.imgscale..";ui_bags_inv_small.png]"
 			elseif slots == 16 then
-					fs[#fs + 1] = bags_inv_bg_prefix.."2.35;ui_bags_inv_medium.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix..(uninv.imgscale*2)..";ui_bags_inv_medium.png]"
 			elseif slots == 24 then
-					fs[#fs + 1] = bags_inv_bg_prefix.."3.525;ui_bags_inv_large.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix..(uninv.imgscale*3)..";ui_bags_inv_large.png]"
 			end
+			fs[#fs + 1] = "list[current_player;bag" .. bag_i .. "contents;0.45,1.65;8,3;]"
+			fs[#fs + 1] = "listring[current_name;bag" .. bag_i .. "contents]"
+
 			local player_name = player:get_player_name() -- For if statement.
 			if unified_inventory.trash_enabled
 					or unified_inventory.is_creative(player_name)
 					or minetest.get_player_privs(player_name).give then
-				fs[#fs + 1] = "image[5.91,-0.06;1.21,1.15;ui_bags_trash.png]"
-						.. "list[detached:trash;main;6,0.1;1,1;]"
+				fs[#fs + 1] = "image[7.8,0.25;"..uninv.imgscale..","..uninv.imgscale..";ui_trash_slot.png]"
+						.. "list[detached:trash;main;7.95,0.25;1,1;]"
 			end
 			local inv = player:get_inventory()
 			for i = 1, 4 do
@@ -87,8 +88,8 @@ for bag_i = 1, 4 do
 					end
 					local img = def.inventory_image
 					local label = F(S("Bag @1", i)) .. "\n" .. used .. "/" .. size
-					fs[#fs + 1] = string.format("image_button[%i,0;1,1;%s;bag%i;%s]",
-							i + 1, img, i, label)
+					fs[#fs + 1] = string.format("image_button[%f,0.4;1,1;%s;bag%i;%s]",
+							(i + 1.35)*1.25, img, i, label)
 				end
 			end
 			return { formspec = table.concat(fs) }
