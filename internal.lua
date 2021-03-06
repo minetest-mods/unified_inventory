@@ -85,7 +85,6 @@ function unified_inventory.get_formspec(player, page)
 	local player_name = player:get_player_name()
 	local ui_peruser,draw_lite_mode = unified_inventory.get_per_player_formspec(player_name)
 
-		local formheaderx =  ui_peruser.form_header_x
 		local formheadery =  ui_peruser.form_header_y
 
 	unified_inventory.current_page[player_name] = page

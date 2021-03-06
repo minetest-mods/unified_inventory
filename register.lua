@@ -1,7 +1,6 @@
 local S = minetest.get_translator("unified_inventory")
 local NS = function(s) return s end
 local F = minetest.formspec_escape
-local inv_voffs = 4.75
 
 minetest.register_privilege("creative", {
 	description = S("Can use the creative inventory"),
@@ -170,7 +169,6 @@ unified_inventory.register_page("craft", {
 		local formheadery = perplayer_formspec.form_header_y
 		local craftx = perplayer_formspec.craft_x
 		local crafty = perplayer_formspec.craft_y
-		local inv_voffs = perplayer_formspec.inv_voffs
 		local craftresultx = craftx + 5
 
 		local player_name = player:get_player_name()
