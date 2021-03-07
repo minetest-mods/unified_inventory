@@ -13,9 +13,9 @@ unified_inventory.register_page("bags", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
 		return { formspec = table.concat({
-			unified_inventory.standard_inv_bg,
+			unified_inventory.style_full.standard_inv_bg,
 			bags_inv_bg_prefix..unified_inventory.imgscale..";ui_bags_header.png]",
-			"label["..unified_inventory.form_header_x..","..unified_inventory.form_header_y..";" .. F(S("Bags")) .. "]",
+			"label["..unified_inventory.style_full.form_header_x..","..unified_inventory.style_full.form_header_y..";" .. F(S("Bags")) .. "]",
 			"button[0.6125,2.75;1.875,0.75;bag1;" .. F(S("Bag @1", 1)) .. "]",
 			"button[3.1125,2.75;1.875,0.75;bag2;" .. F(S("Bag @1", 2)) .. "]",
 			"button[5.6125,2.75;1.875,0.75;bag3;" .. F(S("Bag @1", 3)) .. "]",
@@ -49,7 +49,7 @@ for bag_i = 1, 4 do
 			local stack = get_player_bag_stack(player, bag_i)
 			local image = stack:get_definition().inventory_image
 			local fs = {
-				unified_inventory.standard_inv_bg,
+				unified_inventory.style_full.standard_inv_bg,
 				"image[9.2,0.4;1,1;" .. image .. "]",
 				"label[0.3,0.65;" .. F(S("Bag @1", bag_i)) .. "]",
 				"listcolors[#00000000;#00000000]",
