@@ -9,3 +9,7 @@ unified_inventory_bags (Enable bags) bool true
 #If enabled, the trash slot can be used by those without both creative
 #and the give privilege.
 unified_inventory_trash (Enable trash) bool true
+
+#If enabled, players in creative mode or with give privilege can
+#delete items by shift-clicking on them.
+unified_inventory_trash_listring (Enable trash listring) bool false
