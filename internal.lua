@@ -73,7 +73,7 @@ function unified_inventory.get_per_player_formspec(player_name)
 	end
 
 	ui.items_per_page = ui.pagecols * ui.pagerows
-	ui.standard_inv =     string.format("list[current_player;main;%f,%f;8,4;]", 
+	ui.standard_inv =     string.format("list[current_player;main;%f,%f;8,4;]",
                                      ui.std_inv_x+0.15, ui.std_inv_y+0.15)
 
 	ui.standard_inv_bg =  string.format("image[%f,%f;%f,%f;ui_main_inventory.png]",
@@ -259,8 +259,10 @@ function unified_inventory.get_formspec(player, page)
 
 					local button_name = "item_button_" .. dir .. "_"
 						.. unified_inventory.mangle_for_formspec(name)
-					formspec[n] = ("item_image_button[%f,%f;"..ui_peruser.btn_size..","..ui_peruser.btn_size..";%s;%s;]"):format(
-						ui_peruser.page_x + x * ui_peruser.btn_spc, ui_peruser.page_y + y * ui_peruser.btn_spc,
+					formspec[n] = ("item_image_button[%f,%f;%f,%f;%s;%s;]"):format(
+						ui_peruser.page_x + x * ui_peruser.btn_spc,
+						ui_peruser.page_y + y * ui_peruser.btn_spc,
+						ui_peruser.btn_size, ui_peruser.btn_size,
 						name, button_name
 					)
 					formspec[n + 1] = ("tooltip[%s;%s \\[%s\\]]"):format(
