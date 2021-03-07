@@ -1,6 +1,7 @@
 local S = minetest.get_translator("unified_inventory")
 local NS = function(s) return s end
 local F = minetest.formspec_escape
+local ui = unified_inventory
 
 minetest.register_privilege("creative", {
 	description = S("Can use the creative inventory"),
@@ -14,7 +15,7 @@ minetest.register_privilege("ui_full", {
 
 local trash = minetest.create_detached_inventory("trash", {
 	--allow_put = function(inv, listname, index, stack, player)
-	--	if unified_inventory.is_creative(player:get_player_name()) then
+	--	if ui.is_creative(player:get_player_name()) then
 	--		return stack:get_count()
 	--	else
 	--		return 0
@@ -28,19 +29,19 @@ local trash = minetest.create_detached_inventory("trash", {
 })
 trash:set_size("main", 1)
 
-unified_inventory.register_button("craft", {
+ui.register_button("craft", {
 	type = "image",
 	image = "ui_craft_icon.png",
 	tooltip = S("Crafting Grid")
 })
 
-unified_inventory.register_button("craftguide", {
+ui.register_button("craftguide", {
 	type = "image",
 	image = "ui_craftguide_icon.png",
 	tooltip = S("Crafting Guide")
 })
 
-unified_inventory.register_button("home_gui_set", {
+ui.register_button("home_gui_set", {
 	type = "image",
 	image = "ui_sethome_icon.png",
 	tooltip = S("Set home position"),
@@ -48,8 +49,8 @@ unified_inventory.register_button("home_gui_set", {
 	action = function(player)
 		local player_name = player:get_player_name()
 		if minetest.check_player_privs(player_name, {home=true}) then
-			unified_inventory.set_home(player, player:get_pos())
-			local home = unified_inventory.home_pos[player_name]
+			ui.set_home(player, player:get_pos())
+			local home = ui.home_pos[player_name]
 			if home ~= nil then
 				minetest.sound_play("dingdong",
 						{to_player=player_name, gain = 1.0})
@@ -59,7 +60,7 @@ unified_inventory.register_button("home_gui_set", {
 		else
 			minetest.chat_send_player(player_name,
 				S("You don't have the \"home\" privilege!"))
-			unified_inventory.set_inventory_formspec(player, unified_inventory.current_page[player_name])
+			ui.set_inventory_formspec(player, ui.current_page[player_name])
 		end
 	end,
 	condition = function(player)
@@ -67,7 +68,7 @@ unified_inventory.register_button("home_gui_set", {
 	end,
 })
 
-unified_inventory.register_button("home_gui_go", {
+ui.register_button("home_gui_go", {
 	type = "image",
 	image = "ui_gohome_icon.png",
 	tooltip = S("Go home"),
@@ -75,13 +76,13 @@ unified_inventory.register_button("home_gui_go", {
 	action = function(player)
 		local player_name = player:get_player_name()
 		if minetest.check_player_privs(player_name, {home=true}) then
-			if unified_inventory.go_home(player) then
+			if ui.go_home(player) then
 				minetest.sound_play("teleport", {to_player = player_name})
 			end
 		else
 			minetest.chat_send_player(player_name,
 				S("You don't have the \"home\" privilege!"))
-			unified_inventory.set_inventory_formspec(player, unified_inventory.current_page[player_name])
+			ui.set_inventory_formspec(player, ui.current_page[player_name])
 		end
 	end,
 	condition = function(player)
@@ -89,7 +90,7 @@ unified_inventory.register_button("home_gui_go", {
 	end,
 })
 
-unified_inventory.register_button("misc_set_day", {
+ui.register_button("misc_set_day", {
 	type = "image",
 	image = "ui_sun_icon.png",
 	tooltip = S("Set time to day"),
@@ -105,7 +106,7 @@ unified_inventory.register_button("misc_set_day", {
 		else
 			minetest.chat_send_player(player_name,
 				S("You don't have the settime privilege!"))
-			unified_inventory.set_inventory_formspec(player, unified_inventory.current_page[player_name])
+			ui.set_inventory_formspec(player, ui.current_page[player_name])
 		end
 	end,
 	condition = function(player)
@@ -113,7 +114,7 @@ unified_inventory.register_button("misc_set_day", {
 	end,
 })
 
-unified_inventory.register_button("misc_set_night", {
+ui.register_button("misc_set_night", {
 	type = "image",
 	image = "ui_moon_icon.png",
 	tooltip = S("Set time to night"),
@@ -129,7 +130,7 @@ unified_inventory.register_button("misc_set_night", {
 		else
 			minetest.chat_send_player(player_name,
 					S("You don't have the settime privilege!"))
-			unified_inventory.set_inventory_formspec(player, unified_inventory.current_page[player_name])
+			ui.set_inventory_formspec(player, ui.current_page[player_name])
 		end
 	end,
 	condition = function(player)
@@ -137,19 +138,19 @@ unified_inventory.register_button("misc_set_night", {
 	end,
 })
 
-unified_inventory.register_button("clear_inv", {
+ui.register_button("clear_inv", {
 	type = "image",
 	image = "ui_trash_icon.png",
 	tooltip = S("Clear inventory"),
 	action = function(player)
 		local player_name = player:get_player_name()
-		if not unified_inventory.is_creative(player_name) then
+		if not ui.is_creative(player_name) then
 			minetest.chat_send_player(player_name,
 					S("This button has been disabled outside"
 					.." of creative mode to prevent"
 					.." accidental inventory trashing."
 					.."\nUse the trash slot instead."))
-			unified_inventory.set_inventory_formspec(player, unified_inventory.current_page[player_name])
+			ui.set_inventory_formspec(player, ui.current_page[player_name])
 			return
 		end
 		player:get_inventory():set_list("main", {})
@@ -158,11 +159,11 @@ unified_inventory.register_button("clear_inv", {
 				{to_player=player_name, gain = 1.0})
 	end,
 	condition = function(player)
-		return unified_inventory.is_creative(player:get_player_name())
+		return ui.is_creative(player:get_player_name())
 	end,
 })
 
-unified_inventory.register_page("craft", {
+ui.register_page("craft", {
 	get_formspec = function(player, perplayer_formspec)
 
 		local formheaderx = perplayer_formspec.form_header_x
@@ -172,20 +173,20 @@ unified_inventory.register_page("craft", {
 		local craftresultx = craftx + 5
 
 		local player_name = player:get_player_name()
-		local formspec = "image["..craftx..","..crafty..";"..(unified_inventory.imgscale*6)..","..(unified_inventory.imgscale*3)..";ui_crafting_form.png]"
+		local formspec = "image["..craftx..","..crafty..";"..(ui.imgscale*6)..","..(ui.imgscale*3)..";ui_crafting_form.png]"
 		formspec = formspec..perplayer_formspec.standard_inv_bg
 		formspec = formspec.."label["..formheaderx..","..formheadery..";" ..F(S("Crafting")).."]"
 		formspec = formspec.."listcolors[#00000000;#00000000]"
 		formspec = formspec.."list[current_player;craftpreview;"..(craftresultx+0.15)..","..(crafty+0.15)..";1,1;]"
 		formspec = formspec.."list[current_player;craft;"..(craftx+0.15)..","..(crafty+0.15)..";3,3;]"
-		if unified_inventory.trash_enabled or unified_inventory.is_creative(player_name) or minetest.get_player_privs(player_name).give then
+		if ui.trash_enabled or ui.is_creative(player_name) or minetest.get_player_privs(player_name).give then
 			formspec = formspec.."label["..(craftx+6.45)..","..(crafty + 2.4)..";" .. F(S("Trash:")) .. "]"
-			formspec = formspec.."image["..(craftx+6.25)..","..(crafty + 2.5)..";"..unified_inventory.imgscale..","..unified_inventory.imgscale..";ui_trash_slot.png]"
+			formspec = formspec.."image["..(craftx+6.25)..","..(crafty + 2.5)..";"..ui.imgscale..","..ui.imgscale..";ui_trash_slot.png]"
 			formspec = formspec.."list[detached:trash;main;"..(craftx+6.4)..","..(crafty + 2.65)..";1,1;]"
 		end
 		formspec = formspec.."listring[current_name;craft]"
 		formspec = formspec.."listring[current_player;main]"
-		if unified_inventory.is_creative(player_name) then
+		if ui.is_creative(player_name) then
 			formspec = formspec.."label["..(craftx-2.3)..","..(crafty + 2.4)..";" .. F(S("Refill:")) .. "]"
 			formspec = formspec.."list[detached:"..F(player_name).."refill;main;"..(craftx-2.35)..","..(crafty + 2.65)..";1,1;]"
 		end
@@ -208,18 +209,18 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 	local selectitem = name
 	if name:sub(1, 6) == "group:" then
 		local group_name = name:sub(7)
-		local group_item = unified_inventory.get_group_item(group_name)
+		local group_item = ui.get_group_item(group_name)
 		show_is_group = not group_item.sole
 		displayitem = group_item.item or "unknown"
 		selectitem = group_item.sole and displayitem or name
 	end
 	local label = show_is_group and "G" or ""
-	local buttonname = F(buttonname_prefix..unified_inventory.mangle_for_formspec(selectitem))
+	local buttonname = F(buttonname_prefix..ui.mangle_for_formspec(selectitem))
 	local button = string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",
 			x, y, w, h,
 			F(displayitem), buttonname, label)
 	if show_is_group then
-		local groupstring, andcount = unified_inventory.extract_groupnames(name)
+		local groupstring, andcount = ui.extract_groupnames(name)
 		local grouptip
 		if andcount == 1 then
 			grouptip = S("Any item belonging to the @1 group", groupstring)
@@ -259,7 +260,7 @@ local other_dir = {
 	usage = "recipe",
 }
 
-unified_inventory.register_page("craftguide", {
+ui.register_page("craftguide", {
 	get_formspec = function(player, perplayer_formspec)
 
 		local craftx =       perplayer_formspec.craft_x
@@ -277,7 +278,7 @@ unified_inventory.register_page("craftguide", {
 			"label["..formheaderx..","..formheadery..";" .. F(S("Crafting Guide")) .. "]",
 			"listcolors[#00000000;#00000000]"
 		}
-		local item_name = unified_inventory.current_item[player_name]
+		local item_name = ui.current_item[player_name]
 		if not item_name then
 			return { formspec = table.concat(fs) }
 		end
@@ -291,17 +292,17 @@ unified_inventory.register_page("craftguide", {
 			item_name_shown = item_name
 		end
 
-		local dir = unified_inventory.current_craft_direction[player_name]
+		local dir = ui.current_craft_direction[player_name]
 		local rdir = dir == "recipe" and "usage" or "recipe"
 
-		local crafts = unified_inventory.crafts_for[dir][item_name]
-		local alternate = unified_inventory.alternate[player_name]
+		local crafts = ui.crafts_for[dir][item_name]
+		local alternate = ui.alternate[player_name]
 		local alternates, craft
 		if crafts and #crafts > 0 then
 			alternates = #crafts
 			craft = crafts[alternate]
 		end
-		local has_give = player_privs.give or unified_inventory.is_creative(player_name)
+		local has_give = player_privs.give or ui.is_creative(player_name)
 
 		fs[#fs + 1] = "image["..craftarrowx..","..crafty..";1.25,1.25;ui_crafting_arrow.png]"
 		fs[#fs + 1] = string.format("textarea[%f,%f;10,1;;%s: %s;]",
@@ -334,8 +335,8 @@ unified_inventory.register_page("craftguide", {
 					"item_button_usage_", ItemStack(item_name))
 		end
 
-		local craft_type = unified_inventory.registered_craft_types[craft.type] or
-				unified_inventory.craft_type_defaults(craft.type, {})
+		local craft_type = ui.registered_craft_types[craft.type] or
+				ui.craft_type_defaults(craft.type, {})
 		if craft_type.icon then
 			fs[#fs + 1] = string.format("image[%f,%f;%f,%f;%s]",
 					craftarrowx+0.1, crafty + 0.95, 1, 1, craft_type.icon)
@@ -426,7 +427,7 @@ local function craftguide_giveme(player, formname, fields)
 	local player_name = player:get_player_name()
 	local player_privs = minetest.get_player_privs(player_name)
 	if not player_privs.give and
-			not unified_inventory.is_creative(player_name) then
+			not ui.is_creative(player_name) then
 		minetest.log("action", "[unified_inventory] Denied give action to player " ..
 			player_name)
 		return
@@ -441,7 +442,7 @@ local function craftguide_giveme(player, formname, fields)
 	amount = tonumber(amount) or 0
 	if amount == 0 then return end
 
-	local output = unified_inventory.current_item[player_name]
+	local output = ui.current_item[player_name]
 	if (not output) or (output == "") then return end
 
 	local player_inv = player:get_inventory()
@@ -462,21 +463,21 @@ local function craftguide_craft(player, formname, fields)
 
 	local player_name = player:get_player_name()
 
-	local output = unified_inventory.current_item[player_name] or ""
+	local output = ui.current_item[player_name] or ""
 	if output == "" then return end
 
-	local crafts = unified_inventory.crafts_for[
-		unified_inventory.current_craft_direction[player_name]][output] or {}
+	local crafts = ui.crafts_for[
+		ui.current_craft_direction[player_name]][output] or {}
 	if #crafts == 0 then return end
 
-	local alternate = unified_inventory.alternate[player_name]
+	local alternate = ui.alternate[player_name]
 
 	local craft = crafts[alternate]
 	if craft.width > 3 then return end
 
-	unified_inventory.craftguide_match_craft(player, "main", "craft", craft, amount)
+	ui.craftguide_match_craft(player, "main", "craft", craft, amount)
 
-	unified_inventory.set_inventory_formspec(player, "craft")
+	ui.set_inventory_formspec(player, "craft")
 end
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)

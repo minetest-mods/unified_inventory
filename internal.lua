@@ -1,5 +1,6 @@
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
+local ui = unified_inventory
 
 -- This pair of encoding functions is used where variable text must go in
 -- button names, where the text might contain formspec metacharacters.
@@ -10,44 +11,44 @@ local F = minetest.formspec_escape
 -- fixed some day we don't want to rely on it.  So for safety we apply
 -- an encoding that avoids all formspec metacharacters.
 
-function unified_inventory.mangle_for_formspec(str)
+function ui.mangle_for_formspec(str)
 	return string.gsub(str, "([^A-Za-z0-9])", function (c) return string.format("_%d_", string.byte(c)) end)
 end
-function unified_inventory.demangle_for_formspec(str)
+function ui.demangle_for_formspec(str)
 	return string.gsub(str, "_([0-9]+)_", function (v) return string.char(v) end)
 end
 
 
-function unified_inventory.get_per_player_formspec(player_name)
-	local lite = unified_inventory.lite_mode and not minetest.check_player_privs(player_name, {ui_full=true})
+function ui.get_per_player_formspec(player_name)
+	local lite = ui.lite_mode and not minetest.check_player_privs(player_name, {ui_full=true})
 
-	local ui = unified_inventory.style_full
+	local style = ui.style_full
 
 	if lite then
-		ui = unified_inventory.style_lite
+		style = ui.style_lite
 	end
 
-	ui.items_per_page = ui.pagecols * ui.pagerows
-	ui.standard_inv =     string.format("list[current_player;main;%f,%f;8,4;]",
-                                     ui.std_inv_x+0.15, ui.std_inv_y+0.15)
+	style.items_per_page =  style.pagecols * style.pagerows
+	style.standard_inv =    string.format("list[current_player;main;%f,%f;8,4;]",
+                              style.std_inv_x+0.15, style.std_inv_y+0.15)
 
-	ui.standard_inv_bg =  string.format("image[%f,%f;%f,%f;ui_main_inventory.png]",
-                                     ui.std_inv_x, ui.std_inv_y,
-                                     unified_inventory.imgscale*8, unified_inventory.imgscale*4)
-	return ui, lite
+	style.standard_inv_bg = string.format("image[%f,%f;%f,%f;ui_main_inventory.png]",
+                              style.std_inv_x, style.std_inv_y,
+                              ui.imgscale*8, ui.imgscale*4)
+	return style, lite
 end
 
-function unified_inventory.get_formspec(player, page)
+function ui.get_formspec(player, page)
 
 	if not player then
 		return ""
 	end
 
 	local player_name = player:get_player_name()
-	local ui_peruser,draw_lite_mode = unified_inventory.get_per_player_formspec(player_name)
+	local ui_peruser,draw_lite_mode = ui.get_per_player_formspec(player_name)
 
-	unified_inventory.current_page[player_name] = page
-	local pagedef = unified_inventory.pages[page]
+	ui.current_page[player_name] = page
+	local pagedef = ui.pages[page]
 
 	if not pagedef then
 		return "" -- Invalid page name
@@ -56,22 +57,22 @@ function unified_inventory.get_formspec(player, page)
 	local formspec = {
 		"formspec_version[4]size[17.75,12.25]",
 		pagedef.formspec_prepend and "" or "no_prepend[]",
-		unified_inventory.standard_background -- Background
+		ui.standard_background -- Background
 	}
 	local n = 4
 
 	if draw_lite_mode then
 		formspec[1] = "formspec_version[4]size[14,9.75]"
-		formspec[3] = unified_inventory.standard_background
+		formspec[3] = ui.standard_background
 	end
 
-	if unified_inventory.is_creative(player_name)
+	if ui.is_creative(player_name)
 	and page == "craft" then -- add the "Refill" slot.
-		formspec[n] = "image["..(ui_peruser.craft_x-2.5)..","..(ui_peruser.craft_y+2.5)..";"..unified_inventory.imgscale..","..unified_inventory.imgscale..";ui_single_slot.png]"
+		formspec[n] = "image["..(ui_peruser.craft_x-2.5)..","..(ui_peruser.craft_y+2.5)..";"..ui.imgscale..","..ui.imgscale..";ui_single_slot.png]"
 		n = n+1
 	end
 
-	local perplayer_formspec = unified_inventory.get_per_player_formspec(player_name)
+	local perplayer_formspec = ui.get_per_player_formspec(player_name)
 	local fsdata = pagedef.get_formspec(player, perplayer_formspec)
 
 	formspec[n] = fsdata.formspec
@@ -84,7 +85,7 @@ function unified_inventory.get_formspec(player, page)
 
 	local filtered_inv_buttons = {}
 
-	for i, def in pairs(unified_inventory.buttons) do
+	for i, def in pairs(ui.buttons) do
 		if not (draw_lite_mode and def.hide_lite) then
 			table.insert(filtered_inv_buttons, def)
 		end
@@ -136,7 +137,7 @@ function unified_inventory.get_formspec(player, page)
 		ui_peruser.page_buttons_y..";"..
 		(ui_peruser.searchwidth - 0.1)..","..
 		ui_peruser.btn_size..";searchbox;;"..
-		F(unified_inventory.current_searchbox[player_name]) .. "]"
+		F(ui.current_searchbox[player_name]) .. "]"
 	formspec[n+2] = "image_button["..(ui_peruser.page_buttons_x + ui_peruser.searchwidth)..","..
 		ui_peruser.page_buttons_y..";"..
 		ui_peruser.btn_size..","..ui_peruser.btn_size..
@@ -185,23 +186,23 @@ function unified_inventory.get_formspec(player, page)
 	end
 
 	-- Items list
-	if #unified_inventory.filtered_items_list[player_name] == 0 then
+	if #ui.filtered_items_list[player_name] == 0 then
 		formspec[n] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y+0.15)..";" .. F(no_matches) .. "]"
 	else
-		local dir = unified_inventory.active_search_direction[player_name]
-		local list_index = unified_inventory.current_index[player_name]
+		local dir = ui.active_search_direction[player_name]
+		local list_index = ui.current_index[player_name]
 		local page2 = math.floor(list_index / (ui_peruser.items_per_page) + 1)
 		local pagemax = math.floor(
-			(#unified_inventory.filtered_items_list[player_name] - 1)
+			(#ui.filtered_items_list[player_name] - 1)
 				/ (ui_peruser.items_per_page) + 1)
 		for y = 0, ui_peruser.pagerows - 1 do
 			for x = 0, ui_peruser.pagecols - 1 do
-				local name = unified_inventory.filtered_items_list[player_name][list_index]
+				local name = ui.filtered_items_list[player_name][list_index]
 				local item = minetest.registered_items[name]
 				if item then
 					-- Clicked on current item: Flip crafting direction
-					if name == unified_inventory.current_item[player_name] then
-						local cdir = unified_inventory.current_craft_direction[player_name]
+					if name == ui.current_item[player_name] then
+						local cdir = ui.current_craft_direction[player_name]
 						if cdir == "recipe" then
 							dir = "usage"
 						elseif cdir == "usage" then
@@ -209,11 +210,11 @@ function unified_inventory.get_formspec(player, page)
 						end
 					else
 					-- Default: use active search direction by default
-						dir = unified_inventory.active_search_direction[player_name]
+						dir = ui.active_search_direction[player_name]
 					end
 
 					local button_name = "item_button_" .. dir .. "_"
-						.. unified_inventory.mangle_for_formspec(name)
+						.. ui.mangle_for_formspec(name)
 					formspec[n] = ("item_image_button[%f,%f;%f,%f;%s;%s;]"):format(
 						ui_peruser.page_x + x * ui_peruser.btn_spc,
 						ui_peruser.page_y + y * ui_peruser.btn_spc,
@@ -234,21 +235,21 @@ function unified_inventory.get_formspec(player, page)
 	end
 	n= n+1
 
-	if unified_inventory.activefilter[player_name] ~= "" then
+	if ui.activefilter[player_name] ~= "" then
 		formspec[n] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.65)..";" .. F(S("Filter")) .. ":]"
-		formspec[n+1] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.25)..";"..F(unified_inventory.activefilter[player_name]).."]"
+		formspec[n+1] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.25)..";"..F(ui.activefilter[player_name]).."]"
 	end
 	return table.concat(formspec, "")
 end
 
-function unified_inventory.set_inventory_formspec(player, page)
+function ui.set_inventory_formspec(player, page)
 	if player then
-		player:set_inventory_formspec(unified_inventory.get_formspec(player, page))
+		player:set_inventory_formspec(ui.get_formspec(player, page))
 	end
 end
 
 --apply filter to the inventory list (create filtered copy of full one)
-function unified_inventory.apply_filter(player, filter, search_dir)
+function ui.apply_filter(player, filter, search_dir)
 	if not player then
 		return false
 	end
@@ -277,26 +278,26 @@ function unified_inventory.apply_filter(player, filter, search_dir)
 				or llocaldesc and string.find(llocaldesc, lfilter, 1, true)
 		end
 	end
-	unified_inventory.filtered_items_list[player_name]={}
+	ui.filtered_items_list[player_name]={}
 	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory
 			or def.groups.not_in_creative_inventory == 0)
 		and def.description
 		and def.description ~= ""
 		and ffilter(name, def) then
-			table.insert(unified_inventory.filtered_items_list[player_name], name)
+			table.insert(ui.filtered_items_list[player_name], name)
 		end
 	end
-	table.sort(unified_inventory.filtered_items_list[player_name])
-	unified_inventory.filtered_items_list_size[player_name] = #unified_inventory.filtered_items_list[player_name]
-	unified_inventory.current_index[player_name] = 1
-	unified_inventory.activefilter[player_name] = filter
-	unified_inventory.active_search_direction[player_name] = search_dir
-	unified_inventory.set_inventory_formspec(player,
-	unified_inventory.current_page[player_name])
+	table.sort(ui.filtered_items_list[player_name])
+	ui.filtered_items_list_size[player_name] = #ui.filtered_items_list[player_name]
+	ui.current_index[player_name] = 1
+	ui.activefilter[player_name] = filter
+	ui.active_search_direction[player_name] = search_dir
+	ui.set_inventory_formspec(player,
+	ui.current_page[player_name])
 end
 
-function unified_inventory.items_in_group(groups)
+function ui.items_in_group(groups)
 	local items = {}
 	for name, item in pairs(minetest.registered_items) do
 		for _, group in pairs(groups:split(',')) do
@@ -308,7 +309,7 @@ function unified_inventory.items_in_group(groups)
 	return items
 end
 
-function unified_inventory.sort_inventory(inv)
+function ui.sort_inventory(inv)
 	local inlist = inv:get_list("main")
 	local typecnt = {}
 	local typekeys = {}

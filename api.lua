@@ -1,5 +1,6 @@
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
+local ui = unified_inventory
 
 -- Create detached creative inventory after loading all mods
 minetest.after(0.01, function()
@@ -8,12 +9,12 @@ minetest.after(0.01, function()
 		if not rev_aliases[target] then rev_aliases[target] = {} end
 		table.insert(rev_aliases[target], source)
 	end
-	unified_inventory.items_list = {}
+	ui.items_list = {}
 	for name, def in pairs(minetest.registered_items) do
 		if (not def.groups.not_in_creative_inventory or
 		   def.groups.not_in_creative_inventory == 0) and
 		   def.description and def.description ~= "" then
-			table.insert(unified_inventory.items_list, name)
+			table.insert(ui.items_list, name)
 			local all_names = rev_aliases[name] or {}
 			table.insert(all_names, name)
 			for _, player_name in ipairs(all_names) do
@@ -26,30 +27,30 @@ minetest.after(0.01, function()
 						for _,chk in pairs(recipe.items) do
 							local groupchk = string.find(chk, "group:")
 							if (not groupchk and not minetest.registered_items[chk])
-							  or (groupchk and not unified_inventory.get_group_item(string.gsub(chk, "group:", "")).item)
+							  or (groupchk and not ui.get_group_item(string.gsub(chk, "group:", "")).item)
 							  or minetest.get_item_group(chk, "not_in_craft_guide") ~= 0 then
 								unknowns = true
 							end
 						end
 
 						if not unknowns then
-							unified_inventory.register_craft(recipe)
+							ui.register_craft(recipe)
 						end
 					end
 				end
 			end
 		end
 	end
-	table.sort(unified_inventory.items_list)
-	unified_inventory.items_list_size = #unified_inventory.items_list
-	print("Unified Inventory. inventory size: "..unified_inventory.items_list_size)
-	for _, name in ipairs(unified_inventory.items_list) do
+	table.sort(ui.items_list)
+	ui.items_list_size = #ui.items_list
+	print("Unified Inventory. inventory size: "..ui.items_list_size)
+	for _, name in ipairs(ui.items_list) do
 		local def = minetest.registered_items[name]
 		-- Simple drops
 		if type(def.drop) == "string" then
 			local dstack = ItemStack(def.drop)
 			if not dstack:is_empty() and dstack:get_name() ~= name then
-				unified_inventory.register_craft({
+				ui.register_craft({
 					type = "digging",
 					items = {name},
 					output = def.drop,
@@ -115,7 +116,7 @@ minetest.after(0.01, function()
 				end
 			end
 			for itemstring, count in pairs(drop_guaranteed) do
-				unified_inventory.register_craft({
+				ui.register_craft({
 					type = "digging",
 					items = {name},
 					output = itemstring .. " " .. count,
@@ -123,7 +124,7 @@ minetest.after(0.01, function()
 				})
 			end
 			for itemstring, count in pairs(drop_maybe) do
-				unified_inventory.register_craft({
+				ui.register_craft({
 					type = "digging_chance",
 					items = {name},
 					output = itemstring .. " " .. count,
@@ -132,22 +133,22 @@ minetest.after(0.01, function()
 			end
 		end
 	end
-	for _, recipes in pairs(unified_inventory.crafts_for.recipe) do
+	for _, recipes in pairs(ui.crafts_for.recipe) do
 		for _, recipe in ipairs(recipes) do
 			local ingredient_items = {}
 			for _, spec in pairs(recipe.items) do
-				local matches_spec = unified_inventory.canonical_item_spec_matcher(spec)
-				for _, name in ipairs(unified_inventory.items_list) do
+				local matches_spec = ui.canonical_item_spec_matcher(spec)
+				for _, name in ipairs(ui.items_list) do
 					if matches_spec(name) then
 						ingredient_items[name] = true
 					end
 				end
 			end
 			for name, _ in pairs(ingredient_items) do
-				if unified_inventory.crafts_for.usage[name] == nil then
-					unified_inventory.crafts_for.usage[name] = {}
+				if ui.crafts_for.usage[name] == nil then
+					ui.crafts_for.usage[name] = {}
 				end
-				table.insert(unified_inventory.crafts_for.usage[name], recipe)
+				table.insert(ui.crafts_for.usage[name], recipe)
 			end
 		end
 	end
@@ -156,9 +157,9 @@ end)
 
 -- load_home
 local function load_home()
-	local input = io.open(unified_inventory.home_filename, "r")
+	local input = io.open(ui.home_filename, "r")
 	if not input then
-		unified_inventory.home_pos = {}
+		ui.home_pos = {}
 		return
 	end
 	while true do
@@ -167,25 +168,25 @@ local function load_home()
 		local y = input:read("*n")
 		local z = input:read("*n")
 		local name = input:read("*l")
-		unified_inventory.home_pos[name:sub(2)] = {x = x, y = y, z = z}
+		ui.home_pos[name:sub(2)] = {x = x, y = y, z = z}
 	end
 	io.close(input)
 end
 load_home()
 
-function unified_inventory.set_home(player, pos)
+function ui.set_home(player, pos)
 	local player_name = player:get_player_name()
-	unified_inventory.home_pos[player_name] = vector.round(pos)
+	ui.home_pos[player_name] = vector.round(pos)
 	-- save the home data from the table to the file
-	local output = io.open(unified_inventory.home_filename, "w")
-	for k, v in pairs(unified_inventory.home_pos) do
+	local output = io.open(ui.home_filename, "w")
+	for k, v in pairs(ui.home_pos) do
 		output:write(v.x.." "..v.y.." "..v.z.." "..k.."\n")
 	end
 	io.close(output)
 end
 
-function unified_inventory.go_home(player)
-	local pos = unified_inventory.home_pos[player:get_player_name()]
+function ui.go_home(player)
+	local pos = ui.home_pos[player:get_player_name()]
 	if pos then
 		player:set_pos(pos)
 		return true
@@ -194,7 +195,7 @@ function unified_inventory.go_home(player)
 end
 
 -- register_craft
-function unified_inventory.register_craft(options)
+function ui.register_craft(options)
 	if not options.output then
 		return
 	end
@@ -205,10 +206,10 @@ function unified_inventory.register_craft(options)
 	if options.type == "normal" and options.width == 0 then
 		options = { type = "shapeless", items = options.items, output = options.output, width = 0 }
 	end
-	if not unified_inventory.crafts_for.recipe[itemstack:get_name()] then
-		unified_inventory.crafts_for.recipe[itemstack:get_name()] = {}
+	if not ui.crafts_for.recipe[itemstack:get_name()] then
+		ui.crafts_for.recipe[itemstack:get_name()] = {}
 	end
-	table.insert(unified_inventory.crafts_for.recipe[itemstack:get_name()],options)
+	table.insert(ui.crafts_for.recipe[itemstack:get_name()],options)
 end
 
 
@@ -219,7 +220,7 @@ local craft_type_defaults = {
 }
 
 
-function unified_inventory.craft_type_defaults(name, options)
+function ui.craft_type_defaults(name, options)
 	if not options.description then
 		options.description = name
 	end
@@ -228,13 +229,13 @@ function unified_inventory.craft_type_defaults(name, options)
 end
 
 
-function unified_inventory.register_craft_type(name, options)
-	unified_inventory.registered_craft_types[name] =
-			unified_inventory.craft_type_defaults(name, options)
+function ui.register_craft_type(name, options)
+	ui.registered_craft_types[name] =
+			ui.craft_type_defaults(name, options)
 end
 
 
-unified_inventory.register_craft_type("normal", {
+ui.register_craft_type("normal", {
 	description = F(S("Crafting")),
 	icon = "ui_craftgrid_icon.png",
 	width = 3,
@@ -250,7 +251,7 @@ unified_inventory.register_craft_type("normal", {
 })
 
 
-unified_inventory.register_craft_type("shapeless", {
+ui.register_craft_type("shapeless", {
 	description = F(S("Mixing")),
 	icon = "ui_craftgrid_icon.png",
 	width = 3,
@@ -265,7 +266,7 @@ unified_inventory.register_craft_type("shapeless", {
 })
 
 
-unified_inventory.register_craft_type("cooking", {
+ui.register_craft_type("cooking", {
 	description = F(S("Cooking")),
 	icon = "default_furnace_front.png",
 	width = 1,
@@ -273,37 +274,37 @@ unified_inventory.register_craft_type("cooking", {
 })
 
 
-unified_inventory.register_craft_type("digging", {
+ui.register_craft_type("digging", {
 	description = F(S("Digging")),
 	icon = "default_tool_steelpick.png",
 	width = 1,
 	height = 1,
 })
 
-unified_inventory.register_craft_type("digging_chance", {
+ui.register_craft_type("digging_chance", {
 	description = "Digging (by chance)",
 	icon = "default_tool_steelpick.png^[transformFY.png",
 	width = 1,
 	height = 1,
 })
 
-function unified_inventory.register_page(name, def)
-	unified_inventory.pages[name] = def
+function ui.register_page(name, def)
+	ui.pages[name] = def
 end
 
 
-function unified_inventory.register_button(name, def)
+function ui.register_button(name, def)
 	if not def.action then
 		def.action = function(player)
-			unified_inventory.set_inventory_formspec(player, name)
+			ui.set_inventory_formspec(player, name)
 		end
 	end
 	def.name = name
-	table.insert(unified_inventory.buttons, def)
+	table.insert(ui.buttons, def)
 end
 
 
-function unified_inventory.is_creative(playername)
+function ui.is_creative(playername)
 	return minetest.check_player_privs(playername, {creative=true})
 		or minetest.settings:get_bool("creative_mode")
 end
