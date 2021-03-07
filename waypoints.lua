@@ -17,27 +17,27 @@ local waypoints_temp = {}
 unified_inventory.register_page("waypoints", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
-		local wp_info_x = unified_inventory.form_header_x + 1.25
-		local wp_info_y = unified_inventory.form_header_y + 0.5
-		local wp_bottom_row = unified_inventory.std_inv_y - 1
-		local wp_buttons_rj = unified_inventory.std_inv_x + 10.1 - unified_inventory.btn_spc
-		local wp_edit_w = unified_inventory.btn_spc * 4 - 0.1
+		local wp_info_x = unified_inventory.style_full.form_header_x + 1.25
+		local wp_info_y = unified_inventory.style_full.form_header_y + 0.5
+		local wp_bottom_row = unified_inventory.style_full.std_inv_y - 1
+		local wp_buttons_rj = unified_inventory.style_full.std_inv_x + 10.1 - unified_inventory.style_full.btn_spc
+		local wp_edit_w = unified_inventory.style_full.btn_spc * 4 - 0.1
 
 		-- build a "fake" temp entry if the server took too long
 		-- during sign-on and returned an empty entry
 		if not waypoints_temp[player_name] then waypoints_temp[player_name] = {hud = 1} end
 
 		local waypoints = datastorage.get(player_name, "waypoints")
-		local formspec = unified_inventory.standard_inv_bg..
-			"label["..unified_inventory.form_header_x..","..unified_inventory.form_header_y..";" .. F(S("Waypoints")) .. "]"..
+		local formspec = unified_inventory.style_full.standard_inv_bg..
+			"label["..unified_inventory.style_full.form_header_x..","..unified_inventory.style_full.form_header_y..";" .. F(S("Waypoints")) .. "]"..
 			"image["..wp_info_x..","..wp_info_y..";1,1;ui_waypoints_icon.png]"
 
 		-- Tabs buttons:
 		for i = 1, 5 do
 			formspec = formspec ..
-				"image_button["..unified_inventory.main_button_x..","..
-				(wp_bottom_row - (5-i) * unified_inventory.btn_spc)..";"..
-				unified_inventory.btn_size..","..unified_inventory.btn_size..";" ..
+				"image_button["..unified_inventory.style_full.main_button_x..","..
+				(wp_bottom_row - (5-i) * unified_inventory.style_full.btn_spc)..";"..
+				unified_inventory.style_full.btn_size..","..unified_inventory.style_full.btn_size..";" ..
 				(i == waypoints.selected and "ui_blue_icon_background.png^" or "") ..
 				"ui_" .. i .. "_icon.png;" ..
 				"select_waypoint" .. i .. ";]" ..
@@ -63,9 +63,9 @@ unified_inventory.register_page("waypoints", {
 		local x = 4
 		for _, b in pairs(btnlist) do
 			formspec = formspec ..
-				"image_button["..(wp_buttons_rj - unified_inventory.btn_spc * x)..","..
+				"image_button["..(wp_buttons_rj - unified_inventory.style_full.btn_spc * x)..","..
 				wp_bottom_row..";"..
-				unified_inventory.btn_size..","..unified_inventory.btn_size..";"..
+				unified_inventory.style_full.btn_size..","..unified_inventory.style_full.btn_size..";"..
 				b[1]..";"..
 				b[2]..i..";]"..
 				"tooltip["..b[2]..i..";"..F(S(b[3], b[4] or "")).."]"
@@ -82,11 +82,11 @@ unified_inventory.register_page("waypoints", {
 
 		if temp.edit then
 			formspec = formspec ..
-				"field["..(wp_buttons_rj - wp_edit_w - 0.1)..","..(wp_bottom_row - unified_inventory.btn_spc)..";"..
-				wp_edit_w..","..unified_inventory.btn_size..";rename_box" .. i .. ";;"..
+				"field["..(wp_buttons_rj - wp_edit_w - 0.1)..","..(wp_bottom_row - unified_inventory.style_full.btn_spc)..";"..
+				wp_edit_w..","..unified_inventory.style_full.btn_size..";rename_box" .. i .. ";;"..
 				(waypoint.name or default_name).."]" ..
-				"image_button["..wp_buttons_rj..","..(wp_bottom_row - unified_inventory.btn_spc)..";"..
-				unified_inventory.btn_size..","..unified_inventory.btn_size..";"..
+				"image_button["..wp_buttons_rj..","..(wp_bottom_row - unified_inventory.style_full.btn_spc)..";"..
+				unified_inventory.style_full.btn_size..","..unified_inventory.style_full.btn_size..";"..
 				"ui_ok_icon.png;"..
 				"confirm_rename"..i.. ";]"..
 				"tooltip[confirm_rename" .. i .. ";"
