@@ -53,15 +53,15 @@ function unified_inventory.get_per_player_formspec(player_name)
 		ui.pagecols = 4
 		ui.pagerows = 6
 		ui.page_x = 10.5
-		ui.page_y = 1.1
+		ui.page_y = 1.25
 		ui.craft_x = 2.6
 		ui.craft_y = 0.75
 		ui.resultstr_y = 0.35
 		ui.give_btn_x = 0.15
 		ui.main_button_x = ui.page_x
-		ui.main_button_y = 7.8
+		ui.main_button_y = 7.9
 		ui.page_buttons_x = ui.page_x
-		ui.page_buttons_y = 6.2
+		ui.page_buttons_y = 6.3
 		ui.searchwidth = 1.6
 		ui.form_header_x =  0.2
 		ui.form_header_y =  0.2
@@ -276,8 +276,8 @@ function unified_inventory.get_formspec(player, page)
 	n= n+1
 
 	if unified_inventory.activefilter[player_name] ~= "" then
-		formspec[n] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.55)..";" .. F(S("Filter")) .. ":]"
-		formspec[n+1] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.2)..";"..F(unified_inventory.activefilter[player_name]).."]"
+		formspec[n] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.65)..";" .. F(S("Filter")) .. ":]"
+		formspec[n+1] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.25)..";"..F(unified_inventory.activefilter[player_name]).."]"
 	end
 	return table.concat(formspec, "")
 end
