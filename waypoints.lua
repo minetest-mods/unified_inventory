@@ -55,13 +55,12 @@ ui.register_page("waypoints", {
 		local default_name = S("Waypoint @1", i)
 
 		-- Main buttons:
-		-- note:  the @1's in the set, arrow, and pencil tooltips are dummies.
 		local btnlist = {
-			{ "ui_waypoint_set_icon.png", "set_waypoint", "Set waypoint to current location@1" },
-			{ waypoint.active and "ui_on_icon.png" or "ui_off_icon.png", "toggle_waypoint", "Make waypoint @1", waypoint.active and "invisible" or "visible" },
-			{ waypoint.display_pos and "ui_green_icon_background.png" or "ui_red_icon_background.png", "toggle_display_pos", "@1 display of waypoint coordinates", waypoint.display_pos and "Disable" or "Enable" },
-			{ "ui_circular_arrows_icon.png", "toggle_color", "Change color of waypoint display@1" },
-			{ "ui_pencil_icon.png", "rename_waypoint", "Edit waypoint name@1" }
+			{ "ui_waypoint_set_icon.png", "set_waypoint", S("Set waypoint to current location") },
+			{ waypoint.active and "ui_on_icon.png" or "ui_off_icon.png", "toggle_waypoint", S("Make waypoint @1", waypoint.active and "invisible" or "visible") },
+			{ waypoint.display_pos and "ui_green_icon_background.png" or "ui_red_icon_background.png", "toggle_display_pos", S("@1 display of waypoint coordinates", waypoint.display_pos and "Disable" or "Enable") },
+			{ "ui_circular_arrows_icon.png", "toggle_color", S("Change color of waypoint display") },
+			{ "ui_pencil_icon.png", "rename_waypoint", S("Edit waypoint name") }
 		}
 
 		local x = 4
@@ -70,7 +69,7 @@ ui.register_page("waypoints", {
 				wp_buttons_rj - ui.style_full.btn_spc * x, wp_bottom_row,
 				ui.style_full.btn_size, ui.style_full.btn_size,
 				b[1], b[2], i)
-			formspec[n+1] = "tooltip["..b[2]..i..";"..F(S(b[3], b[4] or "")).."]"
+			formspec[n+1] = "tooltip["..b[2]..i..";"..F(b[3]).."]"
 			x = x - 1
 			n = n + 2
 		end
