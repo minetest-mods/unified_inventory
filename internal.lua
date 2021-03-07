@@ -91,8 +91,6 @@ function unified_inventory.get_formspec(player, page)
 	local player_name = player:get_player_name()
 	local ui_peruser,draw_lite_mode = unified_inventory.get_per_player_formspec(player_name)
 
-		local formheadery =  ui_peruser.form_header_y
-
 	unified_inventory.current_page[player_name] = page
 	local pagedef = unified_inventory.pages[page]
 
@@ -274,7 +272,7 @@ function unified_inventory.get_formspec(player, page)
 				end
 			end
 		end
-		formspec[n] = "label["..ui_peruser.page_x..","..formheadery..";"..F(S("Page")) .. ": "
+		formspec[n] = "label["..ui_peruser.page_x..","..ui_peruser.form_header_y..";"..F(S("Page")) .. ": "
 			.. S("@1 of @2",page2,pagemax).."]"
 	end
 	n= n+1
