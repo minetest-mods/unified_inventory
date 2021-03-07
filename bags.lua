@@ -14,7 +14,7 @@ unified_inventory.register_page("bags", {
 		local player_name = player:get_player_name()
 		return { formspec = table.concat({
 			unified_inventory.standard_inv_bg,
-			bags_inv_bg_prefix..uninv.imgscale..";ui_bags_header.png]",
+			bags_inv_bg_prefix..unified_inventory.imgscale..";ui_bags_header.png]",
 			"label["..unified_inventory.form_header_x..","..unified_inventory.form_header_y..";" .. F(S("Bags")) .. "]",
 			"button[0.6125,2.75;1.875,0.75;bag1;" .. F(S("Bag @1", 1)) .. "]",
 			"button[3.1125,2.75;1.875,0.75;bag2;" .. F(S("Bag @1", 2)) .. "]",
@@ -57,11 +57,11 @@ for bag_i = 1, 4 do
 			}
 			local slots = stack:get_definition().groups.bagslots
 			if slots == 8 then
-					fs[#fs + 1] = bags_inv_bg_prefix..uninv.imgscale..";ui_bags_inv_small.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix..unified_inventory.imgscale..";ui_bags_inv_small.png]"
 			elseif slots == 16 then
-					fs[#fs + 1] = bags_inv_bg_prefix..(uninv.imgscale*2)..";ui_bags_inv_medium.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix..(unified_inventory.imgscale*2)..";ui_bags_inv_medium.png]"
 			elseif slots == 24 then
-					fs[#fs + 1] = bags_inv_bg_prefix..(uninv.imgscale*3)..";ui_bags_inv_large.png]"
+					fs[#fs + 1] = bags_inv_bg_prefix..(unified_inventory.imgscale*3)..";ui_bags_inv_large.png]"
 			end
 			fs[#fs + 1] = "list[current_player;bag" .. bag_i .. "contents;0.45,1.65;8,3;]"
 			fs[#fs + 1] = "listring[current_name;bag" .. bag_i .. "contents]"
@@ -70,7 +70,7 @@ for bag_i = 1, 4 do
 			if unified_inventory.trash_enabled
 					or unified_inventory.is_creative(player_name)
 					or minetest.get_player_privs(player_name).give then
-				fs[#fs + 1] = "image[7.8,0.25;"..uninv.imgscale..","..uninv.imgscale..";ui_trash_slot.png]"
+				fs[#fs + 1] = "image[7.8,0.25;"..unified_inventory.imgscale..","..unified_inventory.imgscale..";ui_trash_slot.png]"
 						.. "list[detached:trash;main;7.95,0.25;1,1;]"
 			end
 			local inv = player:get_inventory()

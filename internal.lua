@@ -110,7 +110,7 @@ function unified_inventory.get_formspec(player, page)
 
 	if unified_inventory.is_creative(player_name)
 	and page == "craft" then -- add the "Refill" slot.
-		formspec[n] = "image["..(ui_peruser.craft_x-2.5)..","..(ui_peruser.craft_y+2.5)..";"..uninv.imgscale..","..uninv.imgscale..";ui_single_slot.png]"
+		formspec[n] = "image["..(ui_peruser.craft_x-2.5)..","..(ui_peruser.craft_y+2.5)..";"..unified_inventory.imgscale..","..unified_inventory.imgscale..";ui_single_slot.png]"
 		n = n+1
 	end
 

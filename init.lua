@@ -61,11 +61,9 @@ unified_inventory = {
 	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
 }
 
-uninv = unified_inventory
-
-uninv.standard_inv =       "list[current_player;main;"..(uninv.std_inv_x+0.15)..","..(uninv.std_inv_y+0.15)..";8,4;]"
-uninv.standard_inv_bg =    "image["..uninv.std_inv_x..","..uninv.std_inv_y..";"..(uninv.imgscale*8)..
-                              ","..(uninv.imgscale*4)..";ui_main_inventory.png]"
+unified_inventory.standard_inv =       "list[current_player;main;"..(unified_inventory.std_inv_x+0.15)..","..(unified_inventory.std_inv_y+0.15)..";8,4;]"
+unified_inventory.standard_inv_bg =    "image["..unified_inventory.std_inv_x..","..unified_inventory.std_inv_y..";"..(unified_inventory.imgscale*8)..
+                              ","..(unified_inventory.imgscale*4)..";ui_main_inventory.png]"
 
 -- Disable default creative inventory
 local creative = rawget(_G, "creative") or rawget(_G, "creative_inventory")

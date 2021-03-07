@@ -172,7 +172,7 @@ unified_inventory.register_page("craft", {
 		local craftresultx = craftx + 5
 
 		local player_name = player:get_player_name()
-		local formspec = "image["..craftx..","..crafty..";"..(uninv.imgscale*6)..","..(uninv.imgscale*3)..";ui_crafting_form.png]"
+		local formspec = "image["..craftx..","..crafty..";"..(unified_inventory.imgscale*6)..","..(unified_inventory.imgscale*3)..";ui_crafting_form.png]"
 		formspec = formspec..perplayer_formspec.standard_inv_bg
 		formspec = formspec.."label["..formheaderx..","..formheadery..";" ..F(S("Crafting")).."]"
 		formspec = formspec.."listcolors[#00000000;#00000000]"
@@ -180,7 +180,7 @@ unified_inventory.register_page("craft", {
 		formspec = formspec.."list[current_player;craft;"..(craftx+0.15)..","..(crafty+0.15)..";3,3;]"
 		if unified_inventory.trash_enabled or unified_inventory.is_creative(player_name) or minetest.get_player_privs(player_name).give then
 			formspec = formspec.."label["..(craftx+6.45)..","..(crafty + 2.4)..";" .. F(S("Trash:")) .. "]"
-			formspec = formspec.."image["..(craftx+6.25)..","..(crafty + 2.5)..";"..uninv.imgscale..","..uninv.imgscale..";ui_trash_slot.png]"
+			formspec = formspec.."image["..(craftx+6.25)..","..(crafty + 2.5)..";"..unified_inventory.imgscale..","..unified_inventory.imgscale..";ui_trash_slot.png]"
 			formspec = formspec.."list[detached:trash;main;"..(craftx+6.4)..","..(crafty + 2.65)..";1,1;]"
 		end
 		formspec = formspec.."listring[current_name;craft]"
