@@ -8,14 +8,14 @@ License: GPLv3
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
 local ui = unified_inventory
-local bags_inv_bg_prefix = "image[0.3,1.5;"..(ui.imgscale*8)..","
+local bags_inv_bg = "image[0.3,1.5;"..(ui.imgscale*8)..",%f;%s]"
 
 ui.register_page("bags", {
 	get_formspec = function(player)
 		local player_name = player:get_player_name()
 		return { formspec = table.concat({
 			ui.style_full.standard_inv_bg,
-			bags_inv_bg_prefix..ui.imgscale..";ui_bags_header.png]",
+			string.format(bags_inv_bg, ui.imgscale, "ui_bags_header.png"),
 			"label["..ui.style_full.form_header_x..","..ui.style_full.form_header_y..";" .. F(S("Bags")) .. "]",
 			"button[0.6125,2.75;1.875,0.75;bag1;" .. F(S("Bag @1", 1)) .. "]",
 			"button[3.1125,2.75;1.875,0.75;bag2;" .. F(S("Bag @1", 2)) .. "]",
@@ -49,30 +49,34 @@ for bag_i = 1, 4 do
 		get_formspec = function(player)
 			local stack = get_player_bag_stack(player, bag_i)
 			local image = stack:get_definition().inventory_image
-			local fs = {
+			local formspec = {
 				ui.style_full.standard_inv_bg,
 				"image[9.2,0.4;1,1;" .. image .. "]",
 				"label[0.3,0.65;" .. F(S("Bag @1", bag_i)) .. "]",
 				"listcolors[#00000000;#00000000]",
 				"listring[current_player;main]",
 			}
+			local n = 6
+
 			local slots = stack:get_definition().groups.bagslots
 			if slots == 8 then
-					fs[#fs + 1] = bags_inv_bg_prefix..ui.imgscale..";ui_bags_inv_small.png]"
+					formspec[n] = string.format(bags_inv_bg, ui.imgscale, "ui_bags_inv_small.png")
 			elseif slots == 16 then
-					fs[#fs + 1] = bags_inv_bg_prefix..(ui.imgscale*2)..";ui_bags_inv_medium.png]"
+					formspec[n] = string.format(bags_inv_bg, ui.imgscale*2, "ui_bags_inv_medium.png")
 			elseif slots == 24 then
-					fs[#fs + 1] = bags_inv_bg_prefix..(ui.imgscale*3)..";ui_bags_inv_large.png]"
+					formspec[n] = string.format(bags_inv_bg, ui.imgscale*3, "ui_bags_inv_large.png")
 			end
-			fs[#fs + 1] = "list[current_player;bag" .. bag_i .. "contents;0.45,1.65;8,3;]"
-			fs[#fs + 1] = "listring[current_name;bag" .. bag_i .. "contents]"
+			formspec[n+1] = "list[current_player;bag" .. bag_i .. "contents;0.45,1.65;8,3;]"
+			formspec[n+2] = "listring[current_name;bag" .. bag_i .. "contents]"
+			n = n + 3
 
 			local player_name = player:get_player_name() -- For if statement.
 			if ui.trash_enabled
 					or ui.is_creative(player_name)
 					or minetest.get_player_privs(player_name).give then
-				fs[#fs + 1] = "image[7.8,0.25;"..ui.imgscale..","..ui.imgscale..";ui_trash_slot.png]"
+				formspec[n] = "image[7.8,0.25;"..ui.imgscale..","..ui.imgscale..";ui_trash_slot.png]"
 						.. "list[detached:trash;main;7.95,0.25;1,1;]"
+				n = n + 1
 			end
 			local inv = player:get_inventory()
 			for i = 1, 4 do
@@ -89,11 +93,12 @@ for bag_i = 1, 4 do
 					end
 					local img = def.inventory_image
 					local label = F(S("Bag @1", i)) .. "\n" .. used .. "/" .. size
-					fs[#fs + 1] = string.format("image_button[%f,0.4;1,1;%s;bag%i;%s]",
+					formspec[n] = string.format("image_button[%f,0.4;1,1;%s;bag%i;%s]",
 							(i + 1.35)*1.25, img, i, label)
+					n = n + 1
 				end
 			end
-			return { formspec = table.concat(fs) }
+			return { formspec = table.concat(formspec) }
 		end,
 	})
 end

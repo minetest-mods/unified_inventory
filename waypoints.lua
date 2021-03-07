@@ -29,21 +29,24 @@ ui.register_page("waypoints", {
 		if not waypoints_temp[player_name] then waypoints_temp[player_name] = {hud = 1} end
 
 		local waypoints = datastorage.get(player_name, "waypoints")
-		local formspec = ui.style_full.standard_inv_bg..
-			"label["..ui.style_full.form_header_x..","..ui.style_full.form_header_y..";" .. F(S("Waypoints")) .. "]"..
+		local formspec = { ui.style_full.standard_inv_bg,
+			string.format("label[%f,%f;%s]",
+				ui.style_full.form_header_x, ui.style_full.form_header_y,
+				F(S("Waypoints"))),
 			"image["..wp_info_x..","..wp_info_y..";1,1;ui_waypoints_icon.png]"
+		}
+		local n=4
 
 		-- Tabs buttons:
 		for i = 1, 5 do
-			formspec = formspec ..
-				"image_button["..ui.style_full.main_button_x..","..
-				(wp_bottom_row - (5-i) * ui.style_full.btn_spc)..";"..
-				ui.style_full.btn_size..","..ui.style_full.btn_size..";" ..
-				(i == waypoints.selected and "ui_blue_icon_background.png^" or "") ..
-				"ui_" .. i .. "_icon.png;" ..
-				"select_waypoint" .. i .. ";]" ..
-				"tooltip[select_waypoint" .. i .. ";"
-					.. S("Select Waypoint #@1", i).."]"
+			local sw="select_waypoint"..i
+			formspec[n] = string.format("image_button[%f,%f;%f,%f;%sui_%i_icon.png;%s;]",
+				ui.style_full.main_button_x, wp_bottom_row - (5-i) * ui.style_full.btn_spc,
+				ui.style_full.btn_size, ui.style_full.btn_size,
+				(i == waypoints.selected) and "ui_blue_icon_background.png^" or "",
+				i, sw)
+			formspec[n+1] = "tooltip["..sw..";"..S("Select Waypoint #@1", i).."]"
+			n = n + 2
 		end
 
 		local i = waypoints.selected or 1
@@ -63,44 +66,44 @@ ui.register_page("waypoints", {
 
 		local x = 4
 		for _, b in pairs(btnlist) do
-			formspec = formspec ..
-				"image_button["..(wp_buttons_rj - ui.style_full.btn_spc * x)..","..
-				wp_bottom_row..";"..
-				ui.style_full.btn_size..","..ui.style_full.btn_size..";"..
-				b[1]..";"..
-				b[2]..i..";]"..
-				"tooltip["..b[2]..i..";"..F(S(b[3], b[4] or "")).."]"
+			formspec[n] = string.format("image_button[%f,%f;%f,%f;%s;%s%i;]",
+				wp_buttons_rj - ui.style_full.btn_spc * x, wp_bottom_row,
+				ui.style_full.btn_size, ui.style_full.btn_size,
+				b[1], b[2], i)
+			formspec[n+1] = "tooltip["..b[2]..i..";"..F(S(b[3], b[4] or "")).."]"
 			x = x - 1
+			n = n + 2
 		end
 
 		-- Waypoint's info:
-		formspec = formspec.."label["..wp_info_x..","..(wp_info_y+1.1)..";"
+		formspec[n] = "label["..wp_info_x..","..(wp_info_y+1.1)..";"
 		if waypoint.active then
-			formspec = formspec ..F(S("Waypoint active")).."]"
+			formspec[n+1] = F(S("Waypoint active")).."]"
 		else
-			formspec = formspec ..F(S("Waypoint inactive")).."]"
+			formspec[n+1] = F(S("Waypoint inactive")).."]"
 		end
+		n = n + 2
 
 		if temp.edit then
-			formspec = formspec ..
-				"field["..(wp_buttons_rj - wp_edit_w - 0.1)..","..(wp_bottom_row - ui.style_full.btn_spc)..";"..
-				wp_edit_w..","..ui.style_full.btn_size..";rename_box" .. i .. ";;"..
-				(waypoint.name or default_name).."]" ..
-				"image_button["..wp_buttons_rj..","..(wp_bottom_row - ui.style_full.btn_spc)..";"..
-				ui.style_full.btn_size..","..ui.style_full.btn_size..";"..
-				"ui_ok_icon.png;"..
-				"confirm_rename"..i.. ";]"..
-				"tooltip[confirm_rename" .. i .. ";"
-					.. F(S("Finish editing")).."]"
+			formspec[n] = string.format("field[%f,%f;%f,%f;rename_box%i;;%s]",
+				wp_buttons_rj - wp_edit_w - 0.1, wp_bottom_row - ui.style_full.btn_spc,
+				wp_edit_w, ui.style_full.btn_size, i, (waypoint.name or default_name))
+			formspec[n+1] = string.format("image_button[%f,%f;%f,%f;ui_ok_icon.png;confirm_rename%i;]",
+				wp_buttons_rj, wp_bottom_row - ui.style_full.btn_spc,
+				ui.style_full.btn_size, ui.style_full.btn_size, i)
+			formspec[n+2] = "tooltip[confirm_rename"..i..";"..F(S("Finish editing")).."]"
+			n = n + 3
 		end
 
-		formspec = formspec .. "label["..wp_info_x..","..(wp_info_y+1.6)..";"..F(S("World position"))..": " ..
-			minetest.pos_to_string(waypoint.world_pos or vector.new()) .. "]" ..
-			"label["..wp_info_x..","..(wp_info_y+2.10)..";"..F(S("Name"))..": ".. (waypoint.name or default_name) .. "]" ..
-			"label["..wp_info_x..","..(wp_info_y+2.60)..";"..F(S("HUD text color"))..": " ..
-			hud_colors[waypoint.color or 1][3] .. "]"
+		formspec[n] = string.format("label[%f,%f;%s: %s]",
+			wp_info_x, wp_info_y+1.6, F(S("World position")),
+			minetest.pos_to_string(waypoint.world_pos or vector.new()))
+		formspec[n+1] = string.format("label[%f,%f;%s: %s]",
+			wp_info_x, wp_info_y+2.10, F(S("Name")), (waypoint.name or default_name))
+		formspec[n+2] = string.format("label[%f,%f;%s: %s]",
+			wp_info_x, wp_info_y+2.60, F(S("HUD text color")), hud_colors[waypoint.color or 1][3])
 
-		return {formspec=formspec}
+		return {formspec=table.concat(formspec)}
 	end,
 })
 

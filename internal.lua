@@ -68,7 +68,9 @@ function ui.get_formspec(player, page)
 
 	if ui.is_creative(player_name)
 	and page == "craft" then -- add the "Refill" slot.
-		formspec[n] = "image["..(ui_peruser.craft_x-2.5)..","..(ui_peruser.craft_y+2.5)..";"..ui.imgscale..","..ui.imgscale..";ui_single_slot.png]"
+		formspec[n] = string.format("image[%f,%f;%f,%f;ui_single_slot.png]",
+			ui_peruser.craft_x - 2.5, ui_peruser.craft_y + 2.5,
+			ui.imgscale, ui.imgscale)
 		n = n+1
 	end
 
@@ -100,21 +102,20 @@ function ui.get_formspec(player, page)
 
 		if def.type == "image" then
 			if (def.condition == nil or def.condition(player) == true) then
-				formspec[n] = "image_button["
-				formspec[n+1] = ( ui_peruser.main_button_x + ui_peruser.btn_spc * (i - 1) - button_col * ui_peruser.btn_spc * 4)
-				formspec[n+2] = ","..(ui_peruser.main_button_y + button_row * ui_peruser.btn_spc)..";"..ui_peruser.btn_size..","..ui_peruser.btn_size..";"
-				formspec[n+3] = F(def.image)..";"
-				formspec[n+4] = F(def.name)..";]"
-				formspec[n+5] = "tooltip["..F(def.name)
-				formspec[n+6] = ";"..(def.tooltip or "").."]"
-				n = n+7
+				formspec[n] = string.format("image_button[%f,%f;%f,%f;%s;%s;]",
+					ui_peruser.main_button_x + ui_peruser.btn_spc * (i - 1) - button_col * ui_peruser.btn_spc * 4,
+					ui_peruser.main_button_y + button_row * ui_peruser.btn_spc,
+					ui_peruser.btn_size,ui_peruser.btn_size,
+					F(def.image),
+					F(def.name))
+				formspec[n+1] = "tooltip["..F(def.name)..";"..(def.tooltip or "").."]"
+				n = n+2
 			else
-				formspec[n] = "image["
-				formspec[n+1] = ( ui_peruser.main_button_x + ui_peruser.btn_spc * (i - 1) - button_col * ui_peruser.btn_spc * 4)
-				formspec[n+2] = ","..(ui_peruser.main_button_y + button_row * ui_peruser.btn_spc)..";"..ui_peruser.btn_size..","..ui_peruser.btn_size..";"
-				formspec[n+3] = F(def.image).."^[colorize:#808080:alpha]"
-				n = n+4
-
+				formspec[n] = string.format("image[%f,%f;%f,%f;%s^[colorize:#808080:alpha]",
+				ui_peruser.main_button_x + ui_peruser.btn_spc * (i - 1) - button_col * ui_peruser.btn_spc * 4,
+				ui_peruser.main_button_y + button_row * ui_peruser.btn_spc,
+				ui_peruser.btn_size,ui_peruser.btn_size,def.image)
+				n = n+1
 			end
 		end
 	end
@@ -133,23 +134,21 @@ function ui.get_formspec(player, page)
 	-- Search box
 	formspec[n] = "field_close_on_enter[searchbox;false]"
 
-	formspec[n+1] = "field["..ui_peruser.page_buttons_x..","..
-		ui_peruser.page_buttons_y..";"..
-		(ui_peruser.searchwidth - 0.1)..","..
-		ui_peruser.btn_size..";searchbox;;"..
-		F(ui.current_searchbox[player_name]) .. "]"
-	formspec[n+2] = "image_button["..(ui_peruser.page_buttons_x + ui_peruser.searchwidth)..","..
-		ui_peruser.page_buttons_y..";"..
-		ui_peruser.btn_size..","..ui_peruser.btn_size..
-		";ui_search_icon.png;searchbutton;]"..
-		"tooltip[searchbutton;" ..F(S("Search")) .. "]"
-	formspec[n+3] = "image_button["..(ui_peruser.page_buttons_x + ui_peruser.searchwidth + ui_peruser.btn_spc)..","..
-		ui_peruser.page_buttons_y..";"..
-		ui_peruser.btn_size..","..ui_peruser.btn_size..
-		";ui_reset_icon.png;searchresetbutton;]"..
-		"tooltip[searchresetbutton;" ..F(S("Reset search and display everything")) .. "]"
+	formspec[n+1] = string.format("field[%f,%f;%f,%f;searchbox;;%s]",
+		ui_peruser.page_buttons_x, ui_peruser.page_buttons_y,
+		ui_peruser.searchwidth - 0.1, ui_peruser.btn_size,
+		F(ui.current_searchbox[player_name]))
+	formspec[n+2] = string.format("image_button[%f,%f;%f,%f;ui_search_icon.png;searchbutton;]",
+		ui_peruser.page_buttons_x + ui_peruser.searchwidth, ui_peruser.page_buttons_y,
+		ui_peruser.btn_size,ui_peruser.btn_size)
+	formspec[n+3] = "tooltip[searchbutton;" ..F(S("Search")) .. "]"
+	formspec[n+4] = string.format("image_button[%f,%f;%f,%f;ui_reset_icon.png;searchresetbutton;]",
+		ui_peruser.page_buttons_x + ui_peruser.searchwidth + ui_peruser.btn_spc,
+		ui_peruser.page_buttons_y,
+		ui_peruser.btn_size, ui_peruser.btn_size)
+	formspec[n+5] = "tooltip[searchresetbutton;"..F(S("Reset search and display everything")).."]"
 
-	n = n + 4
+	n = n + 6
 
 	-- Controls to flip items pages
 
@@ -169,15 +168,14 @@ function ui.get_formspec(player, page)
 
 	local bn = 0
 	for _, b in pairs(btnlist) do
-		formspec[n] =  "image_button["..
-			(ui_peruser.page_buttons_x + ui_peruser.btn_spc*bn)..","..
-			(ui_peruser.page_buttons_y + ui_peruser.btn_spc)..";"..
-			ui_peruser.btn_size..","..
-			ui_peruser.btn_size..";"..
-			b[1]..";"..b[2]..";]"..
-			"tooltip["..b[2]..";"..F(S(b[3])).."]"
+		formspec[n] =  string.format("image_button[%f,%f;%f,%f;%s;%s;]",
+			ui_peruser.page_buttons_x + ui_peruser.btn_spc*bn,
+			ui_peruser.page_buttons_y + ui_peruser.btn_spc,
+			ui_peruser.btn_size, ui_peruser.btn_size,
+			b[1],b[2])
+		formspec[n+1] = "tooltip["..b[2]..";"..F(S(b[3])).."]"
 		bn = bn + 1
-		n = n + 1
+		n = n + 2
 	end
 
 	local no_matches = S("No matching items")
@@ -230,14 +228,17 @@ function ui.get_formspec(player, page)
 				end
 			end
 		end
-		formspec[n] = "label["..ui_peruser.page_x..","..ui_peruser.form_header_y..";"..F(S("Page")) .. ": "
-			.. S("@1 of @2",page2,pagemax).."]"
+		formspec[n] = string.format("label[%f,%f;%s: %s]",
+			ui_peruser.page_x, ui_peruser.form_header_y,
+			F(S("Page")), S("@1 of @2",page2,pagemax))
 	end
 	n= n+1
 
 	if ui.activefilter[player_name] ~= "" then
-		formspec[n] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.65)..";" .. F(S("Filter")) .. ":]"
-		formspec[n+1] = "label["..ui_peruser.page_x..","..(ui_peruser.page_y - 0.25)..";"..F(ui.activefilter[player_name]).."]"
+		formspec[n] = string.format("label[%f,%f;%s:]",
+			ui_peruser.page_x, ui_peruser.page_y - 0.65, F(S("Filter")))
+		formspec[n+1] = string.format("label[%f,%f;%s]",
+			ui_peruser.page_x, ui_peruser.page_y - 0.25, F(ui.activefilter[player_name]))
 	end
 	return table.concat(formspec, "")
 end
