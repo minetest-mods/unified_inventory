@@ -54,8 +54,8 @@ function unified_inventory.get_per_player_formspec(player_name)
 		ui.page_x = 10.5
 		ui.page_y = 1.1
 		ui.craft_x = 2.6
-		ui.craft_y = 0.65
-		ui.resultstr_y = 0.3
+		ui.craft_y = 0.75
+		ui.resultstr_y = 0.35
 		ui.main_button_x = ui.page_x
 		ui.main_button_y = 7.8
 		ui.page_buttons_x = ui.page_x

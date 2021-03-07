@@ -43,7 +43,7 @@ unified_inventory = {
 	page_x = 10.75,
 	page_y = 1.25,
 	craft_x = 2.8,
-	craft_y = 1,
+	craft_y = 1.15,
 	resultstr_y = 0.6,
 	main_button_x = 0.4,
 	main_button_y = 11.0,
@@ -56,7 +56,7 @@ unified_inventory = {
 	btn_size = 0.75,
 	imgscale = 1.25,
 	std_inv_x = 0.3,
-	std_inv_y = 5.5,
+	std_inv_y = 5.75,
 	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
 }
 
