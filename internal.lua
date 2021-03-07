@@ -69,12 +69,16 @@ function unified_inventory.get_per_player_formspec(player_name)
 		ui.btn_size = 0.7
 		ui.std_inv_x = 0.1
 		ui.std_inv_y = 4.6
-		ui.standard_inv =    "list[current_player;main;"..(ui.std_inv_x+0.15)..","..(ui.std_inv_y+0.15)..";8,4;]"
-		ui.standard_inv_bg = "image["..ui.std_inv_x..","..ui.std_inv_y..";"..(unified_inventory.imgscale*8)..
-                                 ","..(unified_inventory.imgscale*4)..";ui_main_inventory.png]"
+
 	end
 
 	ui.items_per_page = ui.pagecols * ui.pagerows
+	ui.standard_inv =     string.format("list[current_player;main;%f,%f;8,4;]", 
+                                     ui.std_inv_x+0.15, ui.std_inv_y+0.15)
+
+	ui.standard_inv_bg =  string.format("image[%f,%f;%f,%f;ui_main_inventory.png]",
+                                     ui.std_inv_x, ui.std_inv_y,
+                                     unified_inventory.imgscale*8, unified_inventory.imgscale*4)
 	return ui, lite
 end
 
