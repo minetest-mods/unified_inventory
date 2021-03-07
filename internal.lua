@@ -21,55 +21,10 @@ end
 function unified_inventory.get_per_player_formspec(player_name)
 	local lite = unified_inventory.lite_mode and not minetest.check_player_privs(player_name, {ui_full=true})
 
-	local ui = {}
-	ui.formspec_x = unified_inventory.formspec_x
-	ui.formspec_y = unified_inventory.formspec_y
-	ui.pagecols = unified_inventory.pagecols
-	ui.pagerows = unified_inventory.pagerows
-	ui.page_x = unified_inventory.page_x
-	ui.page_y = unified_inventory.page_y
-	ui.craft_x = unified_inventory.craft_x
-	ui.craft_y = unified_inventory.craft_y
-	ui.resultstr_y = unified_inventory.resultstr_y
-	ui.give_btn_x = unified_inventory.give_btn_x
-	ui.main_button_x = unified_inventory.main_button_x
-	ui.main_button_y = unified_inventory.main_button_y
-	ui.page_buttons_x = unified_inventory.page_buttons_x
-	ui.page_buttons_y = unified_inventory.page_buttons_y
-	ui.searchwidth = unified_inventory.searchwidth
-	ui.form_header_x = unified_inventory.form_header_x
-	ui.form_header_y = unified_inventory.form_header_y
-	ui.btn_spc = unified_inventory.btn_spc
-	ui.btn_size = unified_inventory.btn_size
-	ui.std_inv_x = unified_inventory.std_inv_x
-	ui.std_inv_y = unified_inventory.std_inv_y
-	ui.standard_inv = unified_inventory.standard_inv
-	ui.standard_inv_bg = unified_inventory.standard_inv_bg
+	local ui = unified_inventory.style_full
 
 	if lite then
-
-		ui.formspec_x =  0.6
-		ui.formspec_y =  0.6
-		ui.pagecols = 4
-		ui.pagerows = 6
-		ui.page_x = 10.5
-		ui.page_y = 1.25
-		ui.craft_x = 2.6
-		ui.craft_y = 0.75
-		ui.resultstr_y = 0.35
-		ui.give_btn_x = 0.15
-		ui.main_button_x = ui.page_x
-		ui.main_button_y = 7.9
-		ui.page_buttons_x = ui.page_x
-		ui.page_buttons_y = 6.3
-		ui.searchwidth = 1.6
-		ui.form_header_x =  0.2
-		ui.form_header_y =  0.2
-		ui.btn_spc = 0.8
-		ui.btn_size = 0.7
-		ui.std_inv_x = 0.1
-		ui.std_inv_y = 4.6
-
+		ui = unified_inventory.style_lite
 	end
 
 	ui.items_per_page = ui.pagecols * ui.pagerows

@@ -35,9 +35,15 @@ unified_inventory = {
 
 	-- Trash enabled
 	trash_enabled = (minetest.settings:get_bool("unified_inventory_trash") ~= false),
+	imgscale = 1.25,
+	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",}
 
-	formspec_x = 1,  -- UI doesn't use these first two anymore, but other mods
-	formspec_y = 1,  -- may need them.
+-- These tables establish position and layout for the two UI styles.
+-- UI doesn't use formspec_[xy] anymore, but other mods may need them.
+
+unified_inventory.style_full = {
+	formspec_x = 1,
+	formspec_y = 1,
 	pagecols = 8,
 	pagerows = 10,
 	page_x = 10.75,
@@ -55,10 +61,32 @@ unified_inventory = {
 	form_header_y = 0.4,
 	btn_spc = 0.85,
 	btn_size = 0.75,
-	imgscale = 1.25,
 	std_inv_x = 0.3,
 	std_inv_y = 5.75,
-	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
+}
+
+unified_inventory.style_lite = {
+	formspec_x =  0.6,
+	formspec_y =  0.6,
+	pagecols = 4,
+	pagerows = 6,
+	page_x = 10.5,
+	page_y = 1.25,
+	craft_x = 2.6,
+	craft_y = 0.75,
+	resultstr_y = 0.35,
+	give_btn_x = 0.15,
+	main_button_x = 10.5,
+	main_button_y = 7.9,
+	page_buttons_x = 10.5,
+	page_buttons_y = 6.3,
+	searchwidth = 1.6,
+	form_header_x =  0.2,
+	form_header_y =  0.2,
+	btn_spc = 0.8,
+	btn_size = 0.7,
+	std_inv_x = 0.1,
+	std_inv_y = 4.6,
 }
 
 -- Disable default creative inventory
