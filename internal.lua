@@ -31,6 +31,7 @@ function unified_inventory.get_per_player_formspec(player_name)
 	ui.craft_x = unified_inventory.craft_x
 	ui.craft_y = unified_inventory.craft_y
 	ui.resultstr_y = unified_inventory.resultstr_y
+	ui.give_btn_x = unified_inventory.give_btn_x
 	ui.main_button_x = unified_inventory.main_button_x
 	ui.main_button_y = unified_inventory.main_button_y
 	ui.page_buttons_x = unified_inventory.page_buttons_x
@@ -56,6 +57,7 @@ function unified_inventory.get_per_player_formspec(player_name)
 		ui.craft_x = 2.6
 		ui.craft_y = 0.75
 		ui.resultstr_y = 0.35
+		ui.give_btn_x = 0.15
 		ui.main_button_x = ui.page_x
 		ui.main_button_y = 7.8
 		ui.page_buttons_x = ui.page_x

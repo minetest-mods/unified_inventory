@@ -45,6 +45,7 @@ unified_inventory = {
 	craft_x = 2.8,
 	craft_y = 1.15,
 	resultstr_y = 0.6,
+	give_btn_x = 0.25,
 	main_button_x = 0.4,
 	main_button_y = 11.0,
 	page_buttons_x = 11.60,

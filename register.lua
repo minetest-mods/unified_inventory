@@ -268,6 +268,7 @@ unified_inventory.register_page("craftguide", {
 		local craftresultx = craftx + 5
 		local formheaderx =  perplayer_formspec.form_header_x
 		local formheadery =  perplayer_formspec.form_header_y
+		local give_x =       perplayer_formspec.give_btn_x
 
 		local player_name = player:get_player_name()
 		local player_privs = minetest.get_player_privs(player_name)
@@ -307,10 +308,10 @@ unified_inventory.register_page("craftguide", {
 				craftx-2.3, perplayer_formspec.resultstr_y, F(role_text[dir]), item_name_shown)
 
 		local giveme_form = table.concat({
-			"label[".. (craftx-2.3)..","  .. (crafty + 2.7) .. ";" .. F(S("Give me:")) .. "]",
-			"button["..(craftx-2.4)..","  .. (crafty + 2.9) .. ";0.5,0.5;craftguide_giveme_1;1]",
-			"button["..(craftx-1.85).."," .. (crafty + 2.9) .. ";0.5,0.5;craftguide_giveme_10;10]",
-			"button["..(craftx-1.3).."," ..  (crafty + 2.9) .. ";0.5,0.5;craftguide_giveme_99;99]"
+			"label[".. (give_x+0.1)..",".. (crafty + 2.7) .. ";" .. F(S("Give me:")) .. "]",
+			"button["..(give_x)..","..     (crafty + 2.9) .. ";0.75,0.5;craftguide_giveme_1;1]",
+			"button["..(give_x+0.8)..",".. (crafty + 2.9) .. ";0.75,0.5;craftguide_giveme_10;10]",
+			"button["..(give_x+1.6)..",".. (crafty + 2.9) .. ";0.75,0.5;craftguide_giveme_99;99]"
 		})
 
 		if not craft then
@@ -400,10 +401,10 @@ unified_inventory.register_page("craftguide", {
 		end
 
 		if craft_type.uses_crafting_grid and display_size.width <= 3 then
-			fs[#fs + 1] = "label["..(craftx-2.3).."," .. (crafty + 1.7) .. ";" .. F(S("To craft grid:")) .. "]"
-					.. "button["..  (craftx-2.4).."," .. (crafty + 1.9) .. ";0.5,0.5;craftguide_craft_1;1]"
-					.. "button["..  (craftx-1.85)..",".. (crafty + 1.9) .. ";0.5,0.5;craftguide_craft_10;10]"
-					.. "button["..  (craftx-1.3).."," .. (crafty + 1.9) .. ";0.5,0.5;craftguide_craft_max;" .. F(S("All")) .. "]"
+			fs[#fs + 1] = "label["..(give_x+0.1)..",".. (crafty + 1.7) .. ";" .. F(S("To craft grid:")) .. "]"
+					.. "button["..  (give_x)..","..     (crafty + 1.9) .. ";0.75,0.5;craftguide_craft_1;1]"
+					.. "button["..  (give_x+0.8)..",".. (crafty + 1.9) .. ";0.75,0.5;craftguide_craft_10;10]"
+					.. "button["..  (give_x+1.6)..",".. (crafty + 1.9) .. ";0.75,0.5;craftguide_craft_max;" .. F(S("All")) .. "]"
 		end
 		if has_give then
 			fs[#fs + 1] = giveme_form
