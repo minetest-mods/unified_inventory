@@ -57,7 +57,7 @@ unified_inventory = {
 	imgscale = 1.25,
 	std_inv_x = 0.3,
 	std_inv_y = 5.5,
-	standard_background = "background[0,0;1,1;ui_form_bg.png;true]",
+	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
 }
 
 uninv = unified_inventory
