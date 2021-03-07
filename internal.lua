@@ -213,7 +213,7 @@ function unified_inventory.get_formspec(player, page)
 
 	local bn = 0
 	for _, b in pairs(btnlist) do
-			formspec[n] =  "image_button["..
+		formspec[n] =  "image_button["..
 			(ui_peruser.page_buttons_x + ui_peruser.btn_spc*bn)..","..
 			(ui_peruser.page_buttons_y + ui_peruser.btn_spc)..";"..
 			ui_peruser.btn_size..","..
