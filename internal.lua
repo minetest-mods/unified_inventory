@@ -20,13 +20,9 @@ end
 
 
 function ui.get_per_player_formspec(player_name)
-	local lite = ui.lite_mode and not minetest.check_player_privs(player_name, {ui_full=true})
+	local draw_lite_mode = ui.lite_mode and not minetest.check_player_privs(player_name, {ui_full=true})
 
-	local style = ui.style_full
-
-	if lite then
-		style = ui.style_lite
-	end
+	local style = table.copy(draw_lite_mode and ui.style_lite or ui.style_full)
 
 	style.items_per_page =  style.pagecols * style.pagerows
 	style.standard_inv =    string.format("list[current_player;main;%f,%f;8,4;]",
@@ -35,7 +31,7 @@ function ui.get_per_player_formspec(player_name)
 	style.standard_inv_bg = string.format("image[%f,%f;%f,%f;ui_main_inventory.png]",
                               style.std_inv_x, style.std_inv_y,
                               ui.imgscale*8, ui.imgscale*4)
-	return style, lite
+	return style, draw_lite_mode
 end
 
 function ui.get_formspec(player, page)
