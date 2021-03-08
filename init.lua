@@ -89,6 +89,16 @@ unified_inventory.style_lite = {
 	std_inv_y = 4.6,
 }
 
+for _, style in ipairs({unified_inventory.style_full, unified_inventory.style_lite}) do
+	style.items_per_page =  style.pagecols * style.pagerows
+	style.standard_inv =    string.format("list[current_player;main;%f,%f;8,4;]",
+                              style.std_inv_x+0.15, style.std_inv_y+0.15)
+
+	style.standard_inv_bg = string.format("image[%f,%f;%f,%f;ui_main_inventory.png]",
+                              style.std_inv_x, style.std_inv_y,
+                              unified_inventory.imgscale*8, unified_inventory.imgscale*4)
+end
+
 -- Disable default creative inventory
 local creative = rawget(_G, "creative") or rawget(_G, "creative_inventory")
 if creative then
