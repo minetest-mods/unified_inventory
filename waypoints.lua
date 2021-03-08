@@ -58,7 +58,7 @@ ui.register_page("waypoints", {
 		local btnlist = {
 			{ "ui_waypoint_set_icon.png", "set_waypoint", S("Set waypoint to current location") },
 			{ waypoint.active and "ui_on_icon.png" or "ui_off_icon.png", "toggle_waypoint", S("Make waypoint @1", waypoint.active and "invisible" or "visible") },
-			{ waypoint.display_pos and "ui_green_icon_background.png" or "ui_red_icon_background.png", "toggle_display_pos", S("@1 display of waypoint coordinates", waypoint.display_pos and "Disable" or "Enable") },
+			{ waypoint.display_pos and "ui_green_icon_background.png^ui_xyz_icon.png" or "ui_red_icon_background.png^ui_xyz_icon.png^(ui_no.png^[transformR90)", "toggle_display_pos", S("@1 display of waypoint coordinates", waypoint.display_pos and "Disable" or "Enable") },
 			{ "ui_circular_arrows_icon.png", "toggle_color", S("Change color of waypoint display") },
 			{ "ui_pencil_icon.png", "rename_waypoint", S("Edit waypoint name") }
 		}
@@ -73,6 +73,7 @@ ui.register_page("waypoints", {
 			x = x - 1
 			n = n + 2
 		end
+		
 
 		-- Waypoint's info:
 		formspec[n] = "label["..wp_info_x..","..(wp_info_y+1.1)..";"
