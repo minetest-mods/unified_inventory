@@ -342,9 +342,7 @@ ui.register_page("craftguide", {
 		else
 			formspec[n] = stack_image_button(craftguideresultx, craftguidey, 1.2, 1.2,
 					"item_button_" .. rdir .. "_", ItemStack(craft.output))
-			formspec[n+1] = stack_image_button(craftguidex-2.3, craftguidey, 1.2, 1.2,
-					"item_button_usage_", ItemStack(item_name))
-			n = n + 2
+			n = n + 1
 		end
 
 		local craft_type = ui.registered_craft_types[craft.type] or
