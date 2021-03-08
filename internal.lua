@@ -53,14 +53,6 @@ function ui.get_formspec(player, page)
 		formspec[3] = ui.standard_background
 	end
 
-	if ui.is_creative(player_name)
-	and page == "craft" then -- add the "Refill" slot.
-		formspec[n] = string.format("image[%f,%f;%f,%f;ui_single_slot.png]",
-			ui_peruser.craft_x - 2.5, ui_peruser.craft_y + 2.5,
-			ui.imgscale, ui.imgscale)
-		n = n+1
-	end
-
 	local perplayer_formspec = ui.get_per_player_formspec(player_name)
 	local fsdata = pagedef.get_formspec(player, perplayer_formspec)
 
