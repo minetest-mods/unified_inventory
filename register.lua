@@ -347,10 +347,10 @@ ui.register_page("craftguide", {
 				ui.craft_type_defaults(craft.type, {})
 		if craft_type.icon then
 			formspec[n] = string.format("image[%f,%f;%f,%f;%s]",
-					craftarrowx+0.1, crafty + 0.95, 1, 1, craft_type.icon)
+					craftarrowx+0.35, crafty, 0.5, 0.5, craft_type.icon)
 			n = n + 1
 		end
-		formspec[n] = string.format("label[%f,%f;%s]", craftarrowx+0.15, crafty+0.2, F(craft_type.description))
+		formspec[n] = string.format("label[%f,%f;%s]", craftarrowx + 0.15, crafty + 1.4, F(craft_type.description))
 		n = n + 1
 
 		local display_size = craft_type.dynamic_display_size
