@@ -36,6 +36,7 @@ unified_inventory = {
 	-- Trash enabled
 	trash_enabled = (minetest.settings:get_bool("unified_inventory_trash") ~= false),
 	imgscale = 1.25,
+	list_img_offset = 0.13,
 	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
 }
 
@@ -92,18 +93,30 @@ ui.style_lite = {
 	std_inv_y = 4.6,
 }
 
+dofile(modpath.."/api.lua")
+
 for _, style in ipairs({ui.style_full, ui.style_lite}) do
 	style.items_per_page =  style.pagecols * style.pagerows
 	style.standard_inv =    string.format("list[current_player;main;%f,%f;8,4;]",
-                              style.std_inv_x+0.15, style.std_inv_y+0.15)
+                              style.std_inv_x+0.13, style.std_inv_y+0.13)
 
-	style.standard_inv_bg = string.format("image[%f,%f;%f,%f;ui_main_inventory.png]",
-                              style.std_inv_x, style.std_inv_y,
-                              ui.imgscale*8, ui.imgscale*4)
+	style.standard_inv_bg = ui.make_inv_img_grid(style.std_inv_x, style.std_inv_y, 8, 1, true)..
+	                        ui.make_inv_img_grid(style.std_inv_x, style.std_inv_y + ui.imgscale, 8, 3)
+
+	style.craftarrow_x =    style.craft_x + 3.75
+	style.craftarrow =      string.format("image[%f,%f;%f,%f;ui_crafting_arrow.png]",
+	                            style.craftarrow_x, style.craft_y, ui.imgscale, ui.imgscale)
+	style.craftresult_x =   style.craft_x + 5
+	style.craft_grid =      table.concat({
+	                            ui.make_inv_img_grid(style.craft_x, style.craft_y, 3, 3),
+	                            ui.single_slot(style.craft_x + ui.imgscale*4, style.craft_y), -- the craft result slot
+	                            style.craftarrow,
+	                            string.format("list[current_player;craft;%f,%f;3,3;]",
+                                    style.craft_x + ui.list_img_offset, style.craft_y + ui.list_img_offset),
+	                            string.format("list[current_player;craftpreview;%f,%f;1,1;]",
+                                    style.craftresult_x + ui.list_img_offset, style.craft_y + ui.list_img_offset)
+	                        })
 end
-
-ui.trash_slot_img =         string.format("%f,%f;ui_single_slot.png^(ui_trash_slot_icon.png^[opacity:95)",
-                              ui.imgscale, ui.imgscale)
 
 -- Disable default creative inventory
 local creative = rawget(_G, "creative") or rawget(_G, "creative_inventory")
@@ -120,7 +133,6 @@ if sfinv then
 end
 
 dofile(modpath.."/group.lua")
-dofile(modpath.."/api.lua")
 dofile(modpath.."/internal.lua")
 dofile(modpath.."/callbacks.lua")
 dofile(modpath.."/match_craft.lua")

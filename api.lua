@@ -303,8 +303,31 @@ function ui.register_button(name, def)
 	table.insert(ui.buttons, def)
 end
 
-
 function ui.is_creative(playername)
 	return minetest.check_player_privs(playername, {creative=true})
 		or minetest.settings:get_bool("creative_mode")
+end
+
+function ui.single_slot(xpos, ypos, bright)
+	return string.format("background9[%f,%f;%f,%f;ui_single_slot%s.png;false;16]",
+	xpos, ypos, ui.imgscale, ui.imgscale, (bright and "_bright" or "") )
+end
+
+function ui.make_trash_slot(xpos, ypos)
+	return
+		ui.single_slot(xpos, ypos)..
+		"image["..xpos..","..ypos..";1.25,1.25;ui_trash_slot_icon.png^[opacity:95]"..
+		"list[detached:trash;main;"..xpos..","..ypos..";1,1;]"
+end
+
+function ui.make_inv_img_grid(xpos, ypos, width, height, bright)
+	local tiled = {}
+	local n=1
+	for y = 0, (height - 1) do
+		for x = 0, (width -1) do
+			tiled[n] = ui.single_slot(xpos + (ui.imgscale * x), ypos + (ui.imgscale * y), bright)
+			n = n + 1
+		end
+	end
+	return table.concat(tiled)
 end

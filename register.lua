@@ -174,12 +174,10 @@ ui.register_page("craft", {
 
 		local player_name = player:get_player_name()
 		local formspec = {
-			string.format("image[%f,%f;%f,%f;ui_crafting_form.png]", craftx, crafty, ui.imgscale*6, ui.imgscale*3),
 			perplayer_formspec.standard_inv_bg,
+			perplayer_formspec.craft_grid,
 			"label["..formheaderx..","..formheadery..";" ..F(S("Crafting")).."]",
 			"listcolors[#00000000;#00000000]",
-			"list[current_player;craftpreview;"..(craftresultx+0.15)..","..(crafty+0.15)..";1,1;]",
-			"list[current_player;craft;"..(craftx+0.15)..","..(crafty+0.15)..";3,3;]",
 			"listring[current_name;craft]",
 			"listring[current_player;main]"
 		}
@@ -187,18 +185,15 @@ ui.register_page("craft", {
 
 		if ui.trash_enabled or ui.is_creative(player_name) or minetest.get_player_privs(player_name).give then
 			formspec[n] = string.format("label[%f,%f;%s]", craftx + 6.45, crafty + 2.4, F(S("Trash:")))
-			formspec[n+1] = string.format("image[%f,%f;%s]", craftx+6.25, crafty + 2.5, ui.trash_slot_img)
-			formspec[n+2] = string.format("list[detached:trash;main;%f,%f;1,1;]", craftx + 6.4, crafty + 2.65)
-			n=n+3
+			formspec[n+1] = ui.make_trash_slot(craftx + 6.25, crafty + 2.5)
+			n=n + 2
 		end
 
 		if ui.is_creative(player_name) then
-			formspec[n] =   string.format("image[%f,%f;%f,%f;ui_single_slot.png]",
-				perplayer_formspec.craft_x - 2.5, perplayer_formspec.craft_y + 2.5,
-				ui.imgscale, ui.imgscale)
+			formspec[n] = ui.single_slot(craftx - 2.5, crafty + 2.5)
 			formspec[n+1] = string.format("label[%f,%f;%s]", craftx - 2.3, crafty + 2.4,F(S("Refill:")))
 			formspec[n+2] = string.format("list[detached:%srefill;main;%f,%f;1,1;]",
-				F(player_name), craftx - 2.35, crafty + 2.65)
+				F(player_name), craftx - 2.2 - ui.list_img_offset, crafty + 2.5 + ui.list_img_offset)
 		end
 		return {formspec=table.concat(formspec)}
 	end,
@@ -275,8 +270,8 @@ ui.register_page("craftguide", {
 
 		local craftx =       perplayer_formspec.craft_x
 		local crafty =       perplayer_formspec.craft_y
-		local craftarrowx =  craftx + 3.75
-		local craftresultx = craftx + 5
+		local craftarrowx =  perplayer_formspec.craftarrow_x
+		local craftresultx = perplayer_formspec.craftresult_x
 		local formheaderx =  perplayer_formspec.form_header_x
 		local formheadery =  perplayer_formspec.form_header_y
 		local give_x =       perplayer_formspec.give_btn_x
@@ -317,7 +312,7 @@ ui.register_page("craftguide", {
 		end
 		local has_give = player_privs.give or ui.is_creative(player_name)
 
-		formspec[n] = "image["..craftarrowx..","..crafty..";1.25,1.25;ui_crafting_arrow.png]"
+		formspec[n] = perplayer_formspec.craftarrow
 		formspec[n+1] = string.format("textarea[%f,%f;10,1;;%s: %s;]",
 				craftx-2.3, perplayer_formspec.resultstr_y, F(role_text[dir]), item_name_shown)
 		n = n + 2
