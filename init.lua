@@ -36,12 +36,15 @@ unified_inventory = {
 	-- Trash enabled
 	trash_enabled = (minetest.settings:get_bool("unified_inventory_trash") ~= false),
 	imgscale = 1.25,
-	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",}
+	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
+}
+
+local ui = unified_inventory
 
 -- These tables establish position and layout for the two UI styles.
 -- UI doesn't use formspec_[xy] anymore, but other mods may need them.
 
-unified_inventory.style_full = {
+ui.style_full = {
 	formspec_x = 1,
 	formspec_y = 1,
 	pagecols = 8,
@@ -65,7 +68,7 @@ unified_inventory.style_full = {
 	std_inv_y = 5.75,
 }
 
-unified_inventory.style_lite = {
+ui.style_lite = {
 	formspec_x =  0.6,
 	formspec_y =  0.6,
 	pagecols = 4,
@@ -89,14 +92,14 @@ unified_inventory.style_lite = {
 	std_inv_y = 4.6,
 }
 
-for _, style in ipairs({unified_inventory.style_full, unified_inventory.style_lite}) do
+for _, style in ipairs({ui.style_full, ui.style_lite}) do
 	style.items_per_page =  style.pagecols * style.pagerows
 	style.standard_inv =    string.format("list[current_player;main;%f,%f;8,4;]",
                               style.std_inv_x+0.15, style.std_inv_y+0.15)
 
 	style.standard_inv_bg = string.format("image[%f,%f;%f,%f;ui_main_inventory.png]",
                               style.std_inv_x, style.std_inv_y,
-                              unified_inventory.imgscale*8, unified_inventory.imgscale*4)
+                              ui.imgscale*8, ui.imgscale*4)
 end
 
 -- Disable default creative inventory
