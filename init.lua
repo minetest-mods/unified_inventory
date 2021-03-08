@@ -54,7 +54,14 @@ ui.style_full = {
 	page_y = 1.45,
 	craft_x = 2.8,
 	craft_y = 1.15,
-	resultstr_y = 0.6,
+	craftresult_x = 7.8,
+	craft_arrow_x = 6.55,
+	craft_guide_x = 3.3,
+	craft_guide_y = 1.15,
+	craft_guide_arrow_x = 7.05,
+	craft_guide_result_x = 8.3,
+	craft_guide_resultstr_x = 0.3,
+	craft_guide_resultstr_y = 0.6,
 	give_btn_x = 0.25,
 	main_button_x = 0.4,
 	main_button_y = 11.0,
@@ -78,7 +85,14 @@ ui.style_lite = {
 	page_y = 1.25,
 	craft_x = 2.6,
 	craft_y = 0.75,
-	resultstr_y = 0.35,
+	craftresult_x = 5.75,
+	craft_arrow_x = 6.35,
+	craft_guide_x = 3.1,
+	craft_guide_y = 0.75,
+	craft_guide_arrow_x = 7.05,
+	craft_guide_result_x = 8.3,
+	craft_guide_resultstr_x = 0.15,
+	craft_guide_resultstr_y = 0.35,
 	give_btn_x = 0.15,
 	main_button_x = 10.5,
 	main_button_y = 7.9,
@@ -103,14 +117,11 @@ for _, style in ipairs({ui.style_full, ui.style_lite}) do
 	style.standard_inv_bg = ui.make_inv_img_grid(style.std_inv_x, style.std_inv_y, 8, 1, true)..
 	                        ui.make_inv_img_grid(style.std_inv_x, style.std_inv_y + ui.imgscale, 8, 3)
 
-	style.craftarrow_x =    style.craft_x + 3.75
-	style.craftarrow =      string.format("image[%f,%f;%f,%f;ui_crafting_arrow.png]",
-	                            style.craftarrow_x, style.craft_y, ui.imgscale, ui.imgscale)
-	style.craftresult_x =   style.craft_x + 5
 	style.craft_grid =      table.concat({
 	                            ui.make_inv_img_grid(style.craft_x, style.craft_y, 3, 3),
 	                            ui.single_slot(style.craft_x + ui.imgscale*4, style.craft_y), -- the craft result slot
-	                            style.craftarrow,
+	                            string.format("image[%f,%f;%f,%f;ui_crafting_arrow.png]",
+	                            style.craft_arrow_x, style.craft_y, ui.imgscale, ui.imgscale),
 	                            string.format("list[current_player;craft;%f,%f;3,3;]",
                                     style.craft_x + ui.list_img_offset, style.craft_y + ui.list_img_offset),
 	                            string.format("list[current_player;craftpreview;%f,%f;1,1;]",

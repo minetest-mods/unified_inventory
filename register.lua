@@ -267,16 +267,17 @@ local other_dir = {
 ui.register_page("craftguide", {
 	get_formspec = function(player, perplayer_formspec)
 
-		local craftx =       perplayer_formspec.craft_x
-		local crafty =       perplayer_formspec.craft_y
-		local craftarrowx =  perplayer_formspec.craftarrow_x
-		local craftresultx = perplayer_formspec.craftresult_x
-		local formheaderx =  perplayer_formspec.form_header_x
-		local formheadery =  perplayer_formspec.form_header_y
-		local give_x =       perplayer_formspec.give_btn_x
+		local craftguidex =       perplayer_formspec.craft_guide_x
+		local craftguidey =       perplayer_formspec.craft_guide_y
+		local craftguidearrowx =  perplayer_formspec.craft_guide_arrow_x
+		local craftguideresultx = perplayer_formspec.craft_guide_result_x
+		local formheaderx =       perplayer_formspec.form_header_x
+		local formheadery =       perplayer_formspec.form_header_y
+		local give_x =            perplayer_formspec.give_btn_x
 
 		local player_name = player:get_player_name()
 		local player_privs = minetest.get_player_privs(player_name)
+
 		local formspec = {
 			perplayer_formspec.standard_inv_bg,
 			"label["..formheaderx..","..formheadery..";" .. F(S("Crafting Guide")) .. "]",
@@ -311,34 +312,37 @@ ui.register_page("craftguide", {
 		end
 		local has_give = player_privs.give or ui.is_creative(player_name)
 
-		formspec[n] = perplayer_formspec.craftarrow
+		formspec[n] = string.format("image[%f,%f;%f,%f;ui_crafting_arrow.png]",
+	                            craftguidearrowx, craftguidey, ui.imgscale, ui.imgscale)
+
 		formspec[n+1] = string.format("textarea[%f,%f;10,1;;%s: %s;]",
-				craftx-2.3, perplayer_formspec.resultstr_y, F(role_text[dir]), item_name_shown)
+				perplayer_formspec.craft_guide_resultstr_x, perplayer_formspec.craft_guide_resultstr_y,
+				F(role_text[dir]), item_name_shown)
 		n = n + 2
 
 		local giveme_form = table.concat({
-			"label[".. (give_x+0.1)..",".. (crafty + 2.7) .. ";" .. F(S("Give me:")) .. "]",
-			"button["..(give_x)..","..     (crafty + 2.9) .. ";0.75,0.5;craftguide_giveme_1;1]",
-			"button["..(give_x+0.8)..",".. (crafty + 2.9) .. ";0.75,0.5;craftguide_giveme_10;10]",
-			"button["..(give_x+1.6)..",".. (crafty + 2.9) .. ";0.75,0.5;craftguide_giveme_99;99]"
+			"label[".. (give_x+0.1)..",".. (craftguidey + 2.7) .. ";" .. F(S("Give me:")) .. "]",
+			"button["..(give_x)..","..     (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_1;1]",
+			"button["..(give_x+0.8)..",".. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_10;10]",
+			"button["..(give_x+1.6)..",".. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_99;99]"
 		})
 
 		if not craft then
 			-- No craft recipes available for this item.
-			formspec[n] = string.format("label[%f,%f;%s]", craftx+2.5, crafty+1.5, F(no_recipe_text[dir]))
-			local no_pos = dir == "recipe" and (craftx+2.5) or craftresultx
-			local item_pos = dir == "recipe" and craftresultx or (craftx+2.5)
-			formspec[n+1] = "image["..no_pos..","..crafty..";1.2,1.2;ui_no.png]"
-			formspec[n+2] = stack_image_button(item_pos, crafty, 1.2, 1.2,
+			formspec[n] = string.format("label[%f,%f;%s]", craftguidex+2.5, craftguidey+1.5, F(no_recipe_text[dir]))
+			local no_pos = dir == "recipe" and (craftguidex+2.5) or craftguideresultx
+			local item_pos = dir == "recipe" and craftguideresultx or (craftguidex+2.5)
+			formspec[n+1] = "image["..no_pos..","..craftguidey..";1.2,1.2;ui_no.png]"
+			formspec[n+2] = stack_image_button(item_pos, craftguidey, 1.2, 1.2,
 				"item_button_" .. other_dir[dir] .. "_", ItemStack(item_name))
 			if has_give then
 				formspec[n+3] = giveme_form
 			end
 			return { formspec = table.concat(formspec) }
 		else
-			formspec[n] = stack_image_button(craftresultx, crafty, 1.2, 1.2,
+			formspec[n] = stack_image_button(craftguideresultx, craftguidey, 1.2, 1.2,
 					"item_button_" .. rdir .. "_", ItemStack(craft.output))
-			formspec[n+1] = stack_image_button(craftx-2.3, crafty, 1.2, 1.2,
+			formspec[n+1] = stack_image_button(craftguidex-2.3, craftguidey, 1.2, 1.2,
 					"item_button_usage_", ItemStack(item_name))
 			n = n + 2
 		end
@@ -347,10 +351,10 @@ ui.register_page("craftguide", {
 				ui.craft_type_defaults(craft.type, {})
 		if craft_type.icon then
 			formspec[n] = string.format("image[%f,%f;%f,%f;%s]",
-					craftarrowx+0.35, crafty, 0.5, 0.5, craft_type.icon)
+					craftguidearrowx+0.35, craftguidey, 0.5, 0.5, craft_type.icon)
 			n = n + 1
 		end
-		formspec[n] = string.format("label[%f,%f;%s]", craftarrowx + 0.15, crafty + 1.4, F(craft_type.description))
+		formspec[n] = string.format("label[%f,%f;%s]", craftguidearrowx + 0.15, craftguidey + 1.4, F(craft_type.description))
 		n = n + 1
 
 		local display_size = craft_type.dynamic_display_size
@@ -362,7 +366,7 @@ ui.register_page("craftguide", {
 
 		-- This keeps recipes aligned to the right,
 		-- so that they're close to the arrow.
-		local xoffset = craftx+3.75
+		local xoffset = craftguidex+3.75
 		local bspc = 1.25
 		-- Offset factor for crafting grids with side length > 4
 		local of = (3/math.max(3, math.max(display_size.width, display_size.height)))
@@ -395,13 +399,13 @@ ui.register_page("craftguide", {
 			local yof = ((y-1) * of + 1) * bspc
 			if item then
 				formspec[n] = stack_image_button(
-						xoffset - xof, crafty - 1.25 + yof, bsize, bsize,
+						xoffset - xof, craftguidey - 1.25 + yof, bsize, bsize,
 						"item_button_recipe_",
 						ItemStack(item))
 			else
 				-- Fake buttons just to make grid
 				formspec[n] = string.format("image_button[%f,%f;%f,%f;ui_blank_image.png;;]",
-						xoffset - xof, crafty - 1.25 + yof, bsize, bsize)
+						xoffset - xof, craftguidey - 1.25 + yof, bsize, bsize)
 			end
 			n = n + 1
 		end
@@ -409,15 +413,15 @@ ui.register_page("craftguide", {
 		else
 			-- Error
 			formspec[n] = string.format("label[2,%f;%s]",
-				crafty, F(S("This recipe is too@nlarge to be displayed.")))
+				craftguidey, F(S("This recipe is too@nlarge to be displayed.")))
 			n = n + 1
 		end
 
 		if craft_type.uses_crafting_grid and display_size.width <= 3 then
-			formspec[n]   = "label["..(give_x+0.1)..",".. (crafty + 1.7) .. ";" .. F(S("To craft grid:")) .. "]"
-			formspec[n+1] = "button["..  (give_x)..","..     (crafty + 1.9) .. ";0.75,0.5;craftguide_craft_1;1]"
-			formspec[n+2] = "button["..  (give_x+0.8)..",".. (crafty + 1.9) .. ";0.75,0.5;craftguide_craft_10;10]"
-			formspec[n+3] = "button["..  (give_x+1.6)..",".. (crafty + 1.9) .. ";0.75,0.5;craftguide_craft_max;" .. F(S("All")) .. "]"
+			formspec[n]   = "label["..(give_x+0.1)..","..    (craftguidey + 1.7) .. ";" .. F(S("To craft grid:")) .. "]"
+			formspec[n+1] = "button["..  (give_x)..","..     (craftguidey + 1.9) .. ";0.75,0.5;craftguide_craft_1;1]"
+			formspec[n+2] = "button["..  (give_x+0.8)..",".. (craftguidey + 1.9) .. ";0.75,0.5;craftguide_craft_10;10]"
+			formspec[n+3] = "button["..  (give_x+1.6)..",".. (craftguidey + 1.9) .. ";0.75,0.5;craftguide_craft_max;" .. F(S("All")) .. "]"
 			n = n + 4
 		end
 
@@ -428,11 +432,11 @@ ui.register_page("craftguide", {
 
 		if alternates and alternates > 1 then
 			formspec[n] = string.format("label[%f,%f;%s]",
-						craftx+4, crafty + 2.3, F(S(recipe_text[dir], alternate, alternates)))
+						craftguidex+4, craftguidey + 2.3, F(S(recipe_text[dir], alternate, alternates)))
 			formspec[n+1] = string.format("image_button[%f,%f;1.1,1.1;ui_left_icon.png;alternate_prev;]",
-						craftarrowx+0.2, crafty + 2.6)
+						craftguidearrowx+0.2, craftguidey + 2.6)
 			formspec[n+2] = string.format("image_button[%f,%f;1.1,1.1;ui_right_icon.png;alternate;]",
-						craftarrowx+1.35, crafty + 2.6)
+						craftguidearrowx+1.35, craftguidey + 2.6)
 			formspec[n+3] = "tooltip[alternate_prev;" .. F(prev_alt_text[dir]) .. "]"
 			formspec[n+4] = "tooltip[alternate;" .. F(next_alt_text[dir]) .. "]"
 		end
