@@ -102,6 +102,9 @@ for _, style in ipairs({ui.style_full, ui.style_lite}) do
                               ui.imgscale*8, ui.imgscale*4)
 end
 
+ui.trash_slot_img =         string.format("%f,%f;ui_single_slot.png^(ui_trash_slot_icon.png^[opacity:95)",
+                              ui.imgscale, ui.imgscale)
+
 -- Disable default creative inventory
 local creative = rawget(_G, "creative") or rawget(_G, "creative_inventory")
 if creative then

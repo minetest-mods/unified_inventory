@@ -187,8 +187,7 @@ ui.register_page("craft", {
 
 		if ui.trash_enabled or ui.is_creative(player_name) or minetest.get_player_privs(player_name).give then
 			formspec[n] = string.format("label[%f,%f;%s]", craftx + 6.45, crafty + 2.4, F(S("Trash:")))
-			formspec[n+1] = string.format("image[%f,%f;%f,%f;ui_trash_slot.png]",
-				craftx+6.25, crafty + 2.5, ui.imgscale, ui.imgscale)
+			formspec[n+1] = string.format("image[%f,%f;%s]", craftx+6.25, crafty + 2.5, ui.trash_slot_img)
 			formspec[n+2] = string.format("list[detached:trash;main;%f,%f;1,1;]", craftx + 6.4, crafty + 2.65)
 			n=n+3
 		end

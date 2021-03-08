@@ -74,9 +74,9 @@ for bag_i = 1, 4 do
 			if ui.trash_enabled
 					or ui.is_creative(player_name)
 					or minetest.get_player_privs(player_name).give then
-				formspec[n] = "image[7.8,0.25;"..ui.imgscale..","..ui.imgscale..";ui_trash_slot.png]"
-						.. "list[detached:trash;main;7.95,0.25;1,1;]"
-				n = n + 1
+					formspec[n] = "image[7.8,0.25;"..ui.trash_slot_img.."]"
+					formspec[n+1] = "list[detached:trash;main;7.95,0.25;1,1;]"
+				n = n + 2
 			end
 			local inv = player:get_inventory()
 			for i = 1, 4 do
