@@ -73,7 +73,6 @@ ui.register_page("waypoints", {
 			x = x - 1
 			n = n + 2
 		end
-		
 
 		-- Waypoint's info:
 		formspec[n] = "label["..wp_info_x..","..(wp_info_y+1.1)..";"

@@ -170,7 +170,6 @@ ui.register_page("craft", {
 		local formheadery = perplayer_formspec.form_header_y
 		local craftx = perplayer_formspec.craft_x
 		local crafty = perplayer_formspec.craft_y
-		local craftresultx = craftx + 5
 
 		local player_name = player:get_player_name()
 		local formspec = {
