@@ -38,6 +38,7 @@ unified_inventory = {
 	imgscale = 1.25,
 	list_img_offset = 0.13,
 	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
+	version = 2
 }
 
 local ui = unified_inventory
