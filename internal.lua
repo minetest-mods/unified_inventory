@@ -132,12 +132,12 @@ function ui.get_formspec(player, page)
 	-- Controls to flip items pages
 
 	local btnlist = {
-		{ "ui_skip_backward_icon.png", "start_list", "First page" },
-		{ "ui_doubleleft_icon.png",    "rewind3",    "Back three pages" },
-		{ "ui_left_icon.png",          "rewind1",    "Back one page" },
-		{ "ui_right_icon.png",         "forward1",   "Forward one page" },
-		{ "ui_doubleright_icon.png",   "forward3",   "Forward three pages" },
-		{ "ui_skip_forward_icon.png",  "end_list",   "Last page" },
+		{ "ui_skip_backward_icon.png", "start_list", S("First page") },
+		{ "ui_doubleleft_icon.png",    "rewind3",    S("Back three pages") },
+		{ "ui_left_icon.png",          "rewind1",    S("Back one page") },
+		{ "ui_right_icon.png",         "forward1",   S("Forward one page") },
+		{ "ui_doubleright_icon.png",   "forward3",   S("Forward three pages") },
+		{ "ui_skip_forward_icon.png",  "end_list",   S("Last page") },
 	}
 
 	if draw_lite_mode then
@@ -152,7 +152,7 @@ function ui.get_formspec(player, page)
 			ui_peruser.page_buttons_y + ui_peruser.btn_spc,
 			ui_peruser.btn_size, ui_peruser.btn_size,
 			b[1],b[2])
-		formspec[n+1] = "tooltip["..b[2]..";"..F(S(b[3])).."]"
+		formspec[n+1] = "tooltip["..b[2]..";"..F(b[3]).."]"
 		bn = bn + 1
 		n = n + 2
 	end
