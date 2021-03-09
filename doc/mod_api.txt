@@ -3,6 +3,14 @@ unified_inventory API
 
 This file provides information about the API of unified_inventory.
 
+API revisions within unified_inventory can be checked using:
+
+	(unified_inventory.version or 1)
+
+**Revision history**
+
+* Version `1`: Classic formspec layout (no real_coordinates)
+* Version `2`: Force formspec version 4 (includes real_coordinates)
 
 Misc functions
 --------------
