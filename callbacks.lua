@@ -19,6 +19,8 @@ minetest.register_on_joinplayer(function(player)
 	unified_inventory.active_search_direction[player_name] = "nochange"
 	unified_inventory.apply_filter(player, "", "nochange")
 	unified_inventory.current_searchbox[player_name] = ""
+	unified_inventory.current_category[player_name] = "all"
+	unified_inventory.current_category_scroll[player_name] = 0
 	unified_inventory.alternate[player_name] = 1
 	unified_inventory.current_item[player_name] = nil
 	unified_inventory.current_craft_direction[player_name] = "recipe"
@@ -67,6 +69,39 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if fields.searchbox
 	and fields.searchbox ~= unified_inventory.current_searchbox[player_name] then
 		unified_inventory.current_searchbox[player_name] = fields.searchbox
+	end
+
+
+	local clicked_category
+	for name, value in pairs(fields) do
+		local category_name = string.match(name, "^category_(.+)$")
+		if category_name then
+			clicked_category = category_name
+			break
+		end
+	end
+
+
+	if clicked_category
+	and clicked_category ~= unified_inventory.current_category[player_name] then
+		unified_inventory.current_category[player_name] = clicked_category
+
+		unified_inventory.apply_filter(player, unified_inventory.current_searchbox[player_name], "nochange")
+		unified_inventory.set_inventory_formspec(player,
+				unified_inventory.current_page[player_name])
+	end
+
+	if fields.next_category then
+		local scroll = unified_inventory.current_category_scroll[player_name] + 1
+		unified_inventory.current_category_scroll[player_name] = math.min(#unified_inventory.category_list-ui_peruser.pagecols, scroll)
+		unified_inventory.set_inventory_formspec(player,
+				unified_inventory.current_page[player_name])
+	end
+	if fields.prev_category then
+		local scroll = unified_inventory.current_category_scroll[player_name] - 1
+		unified_inventory.current_category_scroll[player_name] = math.max(0, scroll)
+		unified_inventory.set_inventory_formspec(player,
+				unified_inventory.current_page[player_name])
 	end
 
 	for i, def in pairs(unified_inventory.buttons) do
