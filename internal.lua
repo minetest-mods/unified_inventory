@@ -257,9 +257,9 @@ function ui.get_formspec(player, page)
 
 	if ui.activefilter[player_name] ~= "" then
 		formspec[n] = string.format("label[%f,%f;%s:]",
-			ui_peruser.page_x, ui_peruser.page_y - 1.65, F(S("Filter")))
+			ui_peruser.page_x, ui_peruser.page_y - 0.65 - ui_peruser.btn_spc, F(S("Filter")))
 		formspec[n+1] = string.format("label[%f,%f;%s]",
-			ui_peruser.page_x, ui_peruser.page_y - 1.25, F(ui.activefilter[player_name]))
+			ui_peruser.page_x, ui_peruser.page_y - 0.25 - ui_peruser.btn_spc, F(ui.activefilter[player_name]))
 	end
 	return table.concat(formspec, "")
 end
