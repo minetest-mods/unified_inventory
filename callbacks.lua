@@ -161,6 +161,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			clicked_item = unified_inventory.demangle_for_formspec(mangled_item)
 			if string.sub(clicked_item, 1, 6) == "group:" then
 				-- Change search filter to this group
+				unified_inventory.current_category[player_name] = "all"
 				apply_new_filter(player, clicked_item, new_dir)
 				return
 			end
