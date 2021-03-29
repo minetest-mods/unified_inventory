@@ -618,14 +618,15 @@ unified_inventory.add_category_items('lighting', {
 	"unified_inventory:bag_small",
 ]]
 
--- LIST UNCATEGORISED AFTER LOAD
--- minetest.after(5, function ( )
--- 	local l = {}
--- 	for name,_ in pairs(minetest.registered_items) do
--- 		if not unified_inventory.find_category(name) then
--- 			table.insert(l, name)
--- 		end
--- 	end
--- 	table.sort(l)
--- 	minetest.log(table.concat(l, '",'.."\n"..'"'))
--- end)
+--[[ LIST UNCATEGORIZED AFTER LOAD
+minetest.after(5, function ( )
+	local l = {}
+	for name,_ in pairs(minetest.registered_items) do
+		if not unified_inventory.find_category(name) then
+			table.insert(l, name)
+		end
+	end
+	table.sort(l)
+	minetest.log(table.concat(l, '",'.."\n"..'"'))
+end)
+]]

@@ -81,27 +81,29 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 
-
 	if clicked_category
 	and clicked_category ~= unified_inventory.current_category[player_name] then
 		unified_inventory.current_category[player_name] = clicked_category
-
 		unified_inventory.apply_filter(player, unified_inventory.current_searchbox[player_name], "nochange")
 		unified_inventory.set_inventory_formspec(player,
 				unified_inventory.current_page[player_name])
 	end
 
 	if fields.next_category then
-		local scroll = unified_inventory.current_category_scroll[player_name] + 1
-		unified_inventory.current_category_scroll[player_name] = math.min(#unified_inventory.category_list-ui_peruser.pagecols, scroll)
-		unified_inventory.set_inventory_formspec(player,
-				unified_inventory.current_page[player_name])
+		local scroll = math.min(#unified_inventory.category_list-ui_peruser.pagecols, unified_inventory.current_category_scroll[player_name] + 1)
+		if scroll ~= unified_inventory.current_category_scroll[player_name] then
+			unified_inventory.current_category_scroll[player_name] = scroll
+			unified_inventory.set_inventory_formspec(player,
+					unified_inventory.current_page[player_name])
+		end
 	end
 	if fields.prev_category then
-		local scroll = unified_inventory.current_category_scroll[player_name] - 1
-		unified_inventory.current_category_scroll[player_name] = math.max(0, scroll)
-		unified_inventory.set_inventory_formspec(player,
-				unified_inventory.current_page[player_name])
+		local scroll = math.max(0, unified_inventory.current_category_scroll[player_name] - 1)
+		if scroll ~= unified_inventory.current_category_scroll[player_name] then
+			unified_inventory.current_category_scroll[player_name] = scroll
+			unified_inventory.set_inventory_formspec(player,
+					unified_inventory.current_page[player_name])
+		end
 	end
 
 	for i, def in pairs(unified_inventory.buttons) do

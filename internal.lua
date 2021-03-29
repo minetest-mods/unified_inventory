@@ -312,7 +312,7 @@ function ui.apply_filter(player, filter, search_dir)
 				table.insert(ui.filtered_items_list[player_name], name)
 			end
 		end
-	elseif category == 'uncategorised' then
+	elseif category == 'uncategorized' then
 		for name, def in pairs(minetest.registered_items) do
 			if (not ui.find_category(name))
 			and (not def.groups.not_in_creative_inventory

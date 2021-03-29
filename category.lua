@@ -12,7 +12,7 @@ function update_category_list()
 		index = -2,
 	})
 	table.insert(category_list, {
-		name = "uncategorised",
+		name = "uncategorized",
 		label = "Misc.",
 		symbol = "ui_no.png",
 		index = -1,
@@ -23,9 +23,8 @@ function update_category_list()
 			name = category,
 			label = def.label or category,
 			symbol = def.symbol,
-			index =
-				def.index or                    -- sortby defined order
-				((b1-64)*0.01)+((b2-64)*0.0001) -- or do a rhudimentary alphabetical sort
+			index = def.index or                    -- sortby defined order
+					((b1-64)*0.01)+((b2-64)*0.0001) -- or do a rudimentary alphabetical sort
 		})
 	end
 	table.sort(category_list, function (a,b)
