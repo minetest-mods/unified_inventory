@@ -79,7 +79,6 @@ unified_inventory.add_category_items('plants', {
 	"default:blueberry_bush_leaves",
 	"default:pine_bush_sapling",
 
-
 	"farming:cotton",
 	"farming:cotton_1",
 	"farming:cotton_2",
@@ -102,7 +101,6 @@ unified_inventory.add_category_items('plants', {
 	"farming:wheat_6",
 	"farming:wheat_7",
 	"farming:wheat_8",
-
 
 	"flowers:chrysanthemum_green",
 	"flowers:dandelion_white",
@@ -144,14 +142,12 @@ unified_inventory.add_category_items('tools', {
 	"default:pick_wood",
 	"default:pick_steel",
 
-
 	"farming:hoe_bronze",
 	"farming:hoe_diamond",
 	"farming:hoe_mese",
 	"farming:hoe_steel",
 	"farming:hoe_stone",
 	"farming:hoe_wood",
-
 
 	"fire:flint_and_steel",
 	"map:mapping_kit",
@@ -194,7 +190,6 @@ unified_inventory.add_category_items('minerals', {
 	"default:bronzeblock",
 	"default:goldblock",
 
-
 	"stairs:slab_bronzeblock",
 	"stairs:slab_copperblock",
 	"stairs:slab_steelblock",
@@ -212,6 +207,7 @@ unified_inventory.add_category_items('minerals', {
 	"stairs:stair_steelblock",
 	"stairs:stair_tinblock",
 })
+
 unified_inventory.add_category_items('building', {
 	"default:fence_rail_aspen_wood",
 	"default:fence_rail_acacia_wood",
@@ -251,7 +247,6 @@ unified_inventory.add_category_items('building', {
 	"default:cobble",
 	"default:mossycobble",
 
-
 	"doors:door_glass",
 	"doors:door_glass_a",
 	"doors:door_glass_b",
@@ -288,7 +283,6 @@ unified_inventory.add_category_items('building', {
 	"doors:trapdoor_steel",
 	"doors:trapdoor_steel_open",
 
-
 	"stairs:slab_bronzeblock",
 	"stairs:slab_copperblock",
 	"stairs:slab_steelblock",
@@ -305,7 +299,6 @@ unified_inventory.add_category_items('building', {
 	"stairs:stair_outer_tinblock",
 	"stairs:stair_steelblock",
 	"stairs:stair_tinblock",
-
 
 	"stairs:slab_acacia_wood",
 	"stairs:slab_aspen_wood",
@@ -440,7 +433,6 @@ unified_inventory.add_category_items('building', {
 	"stairs:stair_straw",
 	"stairs:stair_wood",
 
-
 	"xpanes:bar",
 	"xpanes:bar_flat",
 	"xpanes:door_steel_bar",
@@ -499,8 +491,8 @@ unified_inventory.add_category_items('environment', {
 	"farming:dry_soil_wet",
 	"farming:soil",
 	"farming:soil_wet",
-
 })
+
 unified_inventory.add_category_items('lighting', {
 	"default:mese_post_light_junglewood",
 	"default:torch_ceiling",
@@ -512,7 +504,6 @@ unified_inventory.add_category_items('lighting', {
 	"default:mese_post_light_pine_wood",
 	"default:mese_post_light_aspen_wood"
 })
-
 
 --[[ UNCATEGORISED
 
@@ -590,7 +581,6 @@ unified_inventory.add_category_items('lighting', {
 	"vessels:shelf",
 	"vessels:steel_bottle",
 
-	
 	"dye:black",
 	"dye:blue",
 	"dye:brown",
@@ -626,7 +616,6 @@ unified_inventory.add_category_items('lighting', {
 	"unified_inventory:bag_large",
 	"unified_inventory:bag_medium",
 	"unified_inventory:bag_small",
-
 ]]
 
 -- LIST UNCATEGORISED AFTER LOAD
