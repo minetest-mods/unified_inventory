@@ -8,13 +8,13 @@ function update_category_list()
 	table.insert(category_list, {
 		name = "all",
 		label = "All",
-		symbol = "ui_reset_icon.png",
+		symbol = "ui_category_all.png",
 		index = -2,
 	})
 	table.insert(category_list, {
 		name = "uncategorized",
 		label = "Misc.",
-		symbol = "ui_no.png",
+		symbol = "ui_category_none.png",
 		index = -1,
 	})
 	for category, def in pairs(unified_inventory.registered_categories) do

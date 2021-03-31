@@ -125,31 +125,35 @@ function ui.get_formspec(player, page)
 	end
 
 	-- Category filters
-	local categories_pos = { ui_peruser.page_x, ui_peruser.page_y-ui_peruser.btn_spc }
+	local categories_pos = { ui_peruser.page_x, ui_peruser.page_y-ui_peruser.btn_spc-0.7 }
+	local categories_scroll_pos = { ui_peruser.page_x, ui_peruser.page_y-(ui_peruser.btn_spc*0.15)-0.7 }
 
 	local scroll_offset = 0
 	local category_count = #unified_inventory.category_list
 	if category_count > ui_peruser.pagecols then
 		scroll_offset = unified_inventory.current_category_scroll[player_name]
 	end
+
 	for index, category in ipairs(unified_inventory.category_list) do
 		local column = index - scroll_offset
 		if column > 0 and column <= ui_peruser.pagecols then
-			if category_count > ui_peruser.pagecols and scroll_offset > 0 and column == 1 then
-				-- prev
-				formspec[n] = formspec_button(ui_peruser, "prev_category", "ui_left_icon.png", categories_pos, {0, 0}, 0.9, "Prev")
-			elseif category_count > ui_peruser.pagecols and column == ui_peruser.pagecols and category_count - scroll_offset > ui_peruser.pagecols then
-				-- next
-				formspec[n] = formspec_button(ui_peruser, "next_category", "ui_right_icon.png", categories_pos, {ui_peruser.pagecols - 1, 0}, 0.9, "Next")
-			else
-				local scale = 0.8
-				if unified_inventory.current_category[player_name] == category.name then
-					scale = 1
-				end
-				formspec[n] = formspec_button(ui_peruser, "category_"..category.name, category.symbol, categories_pos, {column-1, 0}, scale, category.label)
+			local scale = 0.8
+			if unified_inventory.current_category[player_name] == category.name then
+				scale = 1
 			end
+			formspec[n] = formspec_button(ui_peruser, "category_"..category.name, category.symbol, categories_pos, {column-1, 0}, scale, category.label)
 			n = n + 1
 		end
+	end
+	if category_count > ui_peruser.pagecols and scroll_offset > 0 then
+		-- prev
+		formspec[n] = formspec_button(ui_peruser, "prev_category", "ui_left_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 2, 0}, 0.8, "Prev")
+		n = n + 1
+	end
+	if category_count > ui_peruser.pagecols and category_count - scroll_offset > ui_peruser.pagecols then
+		-- next
+		formspec[n] = formspec_button(ui_peruser, "next_category", "ui_right_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 1, 0}, 0.8, "Next")
+		n = n + 1
 	end
 
 	-- Search box
@@ -256,10 +260,9 @@ function ui.get_formspec(player, page)
 	n= n+1
 
 	if ui.activefilter[player_name] ~= "" then
-		formspec[n] = string.format("label[%f,%f;%s:]",
-			ui_peruser.page_x, ui_peruser.page_y - 0.65 - ui_peruser.btn_spc, F(S("Filter")))
-		formspec[n+1] = string.format("label[%f,%f;%s]",
-			ui_peruser.page_x, ui_peruser.page_y - 0.25 - ui_peruser.btn_spc, F(ui.activefilter[player_name]))
+		formspec[n] = string.format("label[%f,%f;%s: %s]",
+			ui_peruser.page_x, ui_peruser.page_y - 0.4,
+			F(S("Filter")), F(ui.activefilter[player_name]))
 	end
 	return table.concat(formspec, "")
 end

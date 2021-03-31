@@ -12,7 +12,7 @@ unified_inventory.register_category('tools', {
 	label = "Tools"
 })
 unified_inventory.register_category('minerals', {
-	symbol = "default:mese_crystal",
+	symbol = "default:iron_lump",
 	label = "Minerals and Metals"
 })
 unified_inventory.register_category('environment', {
