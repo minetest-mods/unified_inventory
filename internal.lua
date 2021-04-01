@@ -127,15 +127,15 @@ function ui.get_formspec(player, page)
 	-- Category filters
 
 	local categories_pos = { ui_peruser.page_x, ui_peruser.page_y-ui_peruser.btn_spc-0.5 }
-	local categories_scroll_pos = { ui_peruser.page_x, ui_peruser.form_header_y-(draw_lite_mode and 0.1 or 0.2) }
+	local categories_scroll_pos = { ui_peruser.page_x, ui_peruser.form_header_y-(draw_lite_mode and 0 or 0.2) }
 
 	formspec[n] = string.format("background9[%f,%f;%f,%f;%s;false;3]",
-		ui_peruser.page_x-0.1, ui_peruser.form_header_y-0.2,
-		(ui_peruser.btn_spc * ui_peruser.pagecols) + 0.16, 1.6,
+		ui_peruser.page_x-0.1, categories_scroll_pos[1],
+		(ui_peruser.btn_spc * ui_peruser.pagecols) + 0.13, 1.4+(draw_lite_mode and 0 or 0.2),
 		"ui_smallbg_9_sliced.png")
 	n = n + 1
 
-	formspec[n] = string.format("label[%f,%f;%s]", ui_peruser.page_x, ui_peruser.form_header_y+0.2, "Category:")
+	formspec[n] = string.format("label[%f,%f;%s]", ui_peruser.page_x, ui_peruser.form_header_y+(draw_lite_mode and 0.3 or 0.2), "Category:")
 	n = n + 1
 
 	local scroll_offset = 0
