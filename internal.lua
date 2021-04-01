@@ -125,8 +125,12 @@ function ui.get_formspec(player, page)
 	end
 
 	-- Category filters
-	local categories_pos = { ui_peruser.page_x, ui_peruser.page_y-ui_peruser.btn_spc-0.7 }
-	local categories_scroll_pos = { ui_peruser.page_x, ui_peruser.page_y-(ui_peruser.btn_spc*0.15)-0.7 }
+
+	local categories_pos = { ui_peruser.page_x, ui_peruser.page_y-ui_peruser.btn_spc-0.5 }
+	local categories_scroll_pos = { ui_peruser.page_x, ui_peruser.form_header_y-(draw_lite_mode and 0.1 or 0.2) }
+
+	formspec[n] = string.format("label[%f,%f;%s]", ui_peruser.page_x, ui_peruser.form_header_y+0.2, "Category:")
+	n = n + 1
 
 	local scroll_offset = 0
 	local category_count = #unified_inventory.category_list
@@ -147,12 +151,12 @@ function ui.get_formspec(player, page)
 	end
 	if category_count > ui_peruser.pagecols and scroll_offset > 0 then
 		-- prev
-		formspec[n] = formspec_button(ui_peruser, "prev_category", "ui_left_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 2, 0}, 0.8, "Prev")
+		formspec[n] = formspec_button(ui_peruser, "prev_category", "ui_left_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 2, 0}, 0.8, "Scroll Categories Left")
 		n = n + 1
 	end
 	if category_count > ui_peruser.pagecols and category_count - scroll_offset > ui_peruser.pagecols then
 		-- next
-		formspec[n] = formspec_button(ui_peruser, "next_category", "ui_right_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 1, 0}, 0.8, "Next")
+		formspec[n] = formspec_button(ui_peruser, "next_category", "ui_right_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 1, 0}, 0.8, "Scroll Categories Right")
 		n = n + 1
 	end
 
@@ -254,14 +258,15 @@ function ui.get_formspec(player, page)
 			end
 		end
 		formspec[n] = string.format("label[%f,%f;%s: %s]",
-			ui_peruser.page_x, ui_peruser.form_header_y,
+			ui_peruser.page_buttons_x + ui_peruser.btn_spc * (draw_lite_mode and 1 or 2),
+			ui_peruser.page_buttons_y + 0.1 + ui_peruser.btn_spc * 2,
 			F(S("Page")), S("@1 of @2",page2,pagemax))
 	end
 	n= n+1
 
 	if ui.activefilter[player_name] ~= "" then
 		formspec[n] = string.format("label[%f,%f;%s: %s]",
-			ui_peruser.page_x, ui_peruser.page_y - 0.4,
+			ui_peruser.page_x, ui_peruser.page_y - 0.3,
 			F(S("Filter")), F(ui.activefilter[player_name]))
 	end
 	return table.concat(formspec, "")
