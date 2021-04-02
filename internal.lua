@@ -130,7 +130,7 @@ function ui.get_formspec(player, page)
 	local categories_scroll_pos = { ui_peruser.page_x, ui_peruser.form_header_y-(draw_lite_mode and 0 or 0.2) }
 
 	formspec[n] = string.format("background9[%f,%f;%f,%f;%s;false;3]",
-		ui_peruser.page_x-0.1, categories_scroll_pos[1],
+		ui_peruser.page_x-0.1, categories_scroll_pos[2],
 		(ui_peruser.btn_spc * ui_peruser.pagecols) + 0.13, 1.4+(draw_lite_mode and 0 or 0.2),
 		"ui_smallbg_9_sliced.png")
 	n = n + 1
