@@ -101,3 +101,72 @@ Register a non-standard craft recipe:
 		-- ^ Same as `minetest.register_recipe`
 	})
 
+
+Categories
+----------
+
+Register a new category:
+	The config table (second argument) is optional, and all its members are optional
+	See the unified_inventory.set_category_* functions for more details on the members of the config table
+
+	unified_inventory.register_category("category_name", {
+		symbol = "mod_name:item_name" or "texture.png",
+		label = "Human Readable Label",
+		index = 5,
+		items = {
+			"mod_name:item_name",
+			"another_mod:different_item"
+		}
+	})
+
+Add / override the symbol for a category:
+	The category does not need to exist first
+	The symbol can be an item name or a texture image
+	If unset this will default to "default:stick"
+
+	unified_inventory.set_category_symbol("category_name", "mod_name:item_name" or "texture.png")
+
+Add / override the human readable label for a category:
+	If unset this will default to the category name
+
+	unified_inventory.set_category_label("category_name", "Human Readable Label")
+
+Add / override the sorting index of the category:
+	Must be a number, can also be negative (-5) or fractional (2.345)
+	This determines the position the category appears in the list of categories
+	The "all" meta-category has index -2, the "misc"/"uncategorized" meta-category has index -1, use a negative number smaller than these to make a category appear before these in the list
+	By default categories are sorted alphabetically with an index between 0.0101(AA) and 0.2626(ZZ)
+
+	unified_inventory.set_category_index("category_name", 5)
+
+Add a single item to a category:
+
+	unified_inventory.add_category_item("category_name", "mod_name:item_name")
+
+Add multiple items to a category:
+
+	unified_inventory.add_category_items("category_name", {
+		"mod_name:item_name",
+		"another_mod:different_item"
+	})
+
+Remove an item from a category:
+
+	unified_inventory.remove_category_item("category_name", "mod_name:item_name")
+
+Remove a category entirely:
+
+	unified_inventory.remove_category("category_name")
+
+Finding existing items in categories:
+	This will find the first category an item exists in
+	It should be used for checking if an item is catgorised
+	Returns "category_name" or nil
+
+	unified_inventory.find_category("mod_name:item_name")
+
+
+	This will find all the categories an item exists in
+	Returns a number indexed table (list) of category names
+
+	unified_inventory.find_categories("mod_name:item_name")
