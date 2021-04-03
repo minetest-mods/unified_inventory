@@ -24,6 +24,69 @@ unified_inventory.register_category('lighting', {
 	label = "Lighting"
 })
 
+
+if unified_inventory.automatic_categorization then
+	minetest.register_on_mods_loaded(function()
+
+		-- Add biome nodes to environment category
+		for _,def in pairs(minetest.registered_biomes) do
+			local env_nodes = {
+				def.node_riverbed, def.node_top, def.node_filler, def.node_dust,
+			}
+			for i,node in pairs(env_nodes) do
+				if node then
+					unified_inventory.add_category_item('environment', node)
+				end
+			end
+		end
+
+		-- Add minable ores to minerals and everything else (pockets of stone & sand variations) to environment
+		for _,item in  pairs(minetest.registered_ores) do
+			if item.ore_type == "scatter" then
+				local drop = minetest.registered_nodes[item.ore].drop
+				if drop and drop ~= "" then
+					unified_inventory.add_category_item('minerals', item.ore)
+					unified_inventory.add_category_item('minerals', drop)
+				else
+					unified_inventory.add_category_item('environment', item.ore)
+				end
+			else
+				unified_inventory.add_category_item('environment', item.ore)
+			end
+		end
+
+		-- Add items by item definition
+		for name, def in pairs(minetest.registered_items) do
+			local group = def.groups or {}
+			if not group.not_in_creative_inventory then
+				if group.stair or
+				   group.slab or
+				   group.wall or
+				   group.fence then
+					unified_inventory.add_category_item('building', name)
+				elseif group.flora or
+					   group.flower or
+					   group.seed or
+					   group.leaves or
+					   group.sapling or
+					   group.tree then
+					unified_inventory.add_category_item('plants', name)
+				elseif def.type == 'tool' then
+					unified_inventory.add_category_item('tools', name)
+				elseif def.liquidtype == 'source' then
+					unified_inventory.add_category_item('environment', name)
+				elseif def.light_source and def.light_source > 0 then
+					unified_inventory.add_category_item('lighting', name)
+				elseif doors and doors.registered_doors and doors.registered_doors[name..'_a'] or
+				       doors and doors.registered_trapdoors and doors.registered_trapdoors[name] then
+					unified_inventory.add_category_item('building', name)
+				end
+			end
+		end
+	end)
+end
+
+-- [[
 unified_inventory.add_category_items('plants', {
 	"default:dry_grass_5",
 	"default:acacia_sapling",
@@ -504,6 +567,8 @@ unified_inventory.add_category_items('lighting', {
 	"default:mese_post_light_pine_wood",
 	"default:mese_post_light_aspen_wood"
 })
+--]]
+
 
 --[[ UNCATEGORISED
 
@@ -616,17 +681,20 @@ unified_inventory.add_category_items('lighting', {
 	"unified_inventory:bag_large",
 	"unified_inventory:bag_medium",
 	"unified_inventory:bag_small",
-]]
+--]]
 
 --[[ LIST UNCATEGORIZED AFTER LOAD
-minetest.after(5, function ( )
-	local l = {}
-	for name,_ in pairs(minetest.registered_items) do
-		if not unified_inventory.find_category(name) then
-			table.insert(l, name)
+minetest.register_on_mods_loaded(function()
+	minetest.after(1, function ( )
+		local l = {}
+		for name,_ in pairs(minetest.registered_items) do
+			if not unified_inventory.find_category(name) then
+				-- minetest.log("error", minetest.serialize(minetest.registered_items[name]))
+				table.insert(l, name)
+			end
 		end
-	end
-	table.sort(l)
-	minetest.log(table.concat(l, '",'.."\n"..'"'))
+		table.sort(l)
+		minetest.log(table.concat(l, '",'.."\n"..'"'))
+	end)
 end)
-]]
+--]]

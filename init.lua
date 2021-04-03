@@ -35,6 +35,9 @@ unified_inventory = {
 	-- "Lite" mode
 	lite_mode = minetest.settings:get_bool("unified_inventory_lite"),
 
+	-- Items automatically added to categories based on item definitions
+	automatic_categorization = (minetest.settings:get_bool("unified_inventory_automatic_categorization") ~= false),
+
 	-- Trash enabled
 	trash_enabled = (minetest.settings:get_bool("unified_inventory_trash") ~= false),
 	imgscale = 1.25,
