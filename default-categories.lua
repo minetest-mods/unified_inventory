@@ -77,8 +77,11 @@ if unified_inventory.automatic_categorization then
 					unified_inventory.add_category_item('environment', name)
 				elseif def.light_source and def.light_source > 0 then
 					unified_inventory.add_category_item('lighting', name)
-				elseif doors and doors.registered_doors and doors.registered_doors[name..'_a'] or
-				       doors and doors.registered_trapdoors and doors.registered_trapdoors[name] then
+				elseif group.door or
+					   minetest.global_exists("doors") and (
+					     doors.registered_doors and doors.registered_doors[name..'_a'] or
+					     doors.registered_trapdoors and doors.registered_trapdoors[name] then
+					   )
 					unified_inventory.add_category_item('building', name)
 				end
 			end

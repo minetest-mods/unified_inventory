@@ -14,6 +14,7 @@ read_globals = {
 	"ItemStack", "datastorage",
 
 	"hb",
+	"doors",
 }
 
 files["callbacks.lua"].ignore = { "player", "draw_lite_mode" }
