@@ -284,6 +284,13 @@ function ui.set_inventory_formspec(player, page)
 	end
 end
 
+local function valid_def(def)
+	return (not def.groups.not_in_creative_inventory
+			or def.groups.not_in_creative_inventory == 0)
+		and def.description
+		and def.description ~= ""
+end
+
 --apply filter to the inventory list (create filtered copy of full one)
 function ui.apply_filter(player, filter, search_dir)
 	if not player then
@@ -318,10 +325,7 @@ function ui.apply_filter(player, filter, search_dir)
 	local category = ui.current_category[player_name] or 'all'
 	if category == 'all' then
 		for name, def in pairs(minetest.registered_items) do
-			if (not def.groups.not_in_creative_inventory
-				or def.groups.not_in_creative_inventory == 0)
-			and def.description
-			and def.description ~= ""
+			if valid_def(def)
 			and ffilter(name, def) then
 				table.insert(ui.filtered_items_list[player_name], name)
 			end
@@ -329,10 +333,7 @@ function ui.apply_filter(player, filter, search_dir)
 	elseif category == 'uncategorized' then
 		for name, def in pairs(minetest.registered_items) do
 			if (not ui.find_category(name))
-			and (not def.groups.not_in_creative_inventory
-				or def.groups.not_in_creative_inventory == 0)
-			and def.description
-			and def.description ~= ""
+			and valid_def(def)
 			and ffilter(name, def) then
 				table.insert(ui.filtered_items_list[player_name], name)
 			end
@@ -341,10 +342,7 @@ function ui.apply_filter(player, filter, search_dir)
 		for name,exists in pairs(ui.registered_category_items[category]) do
 			local def = minetest.registered_items[name]
 			if exists and def
-			and (not def.groups.not_in_creative_inventory
-				or def.groups.not_in_creative_inventory == 0)
-			and def.description
-			and def.description ~= ""
+			and valid_def(def)
 			and ffilter(name, def) then
 				table.insert(ui.filtered_items_list[player_name], name)
 			end
