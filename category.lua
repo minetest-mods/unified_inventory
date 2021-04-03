@@ -4,6 +4,40 @@ unified_inventory.registered_categories = {}
 unified_inventory.registered_category_items = {}
 unified_inventory.category_list = {}
 
+local function char_to_sort_index(char_code)
+	if char_code <= 32 then
+		-- Command codes, no thanks
+		return 0
+	end
+	if char_code <= 64 then
+		-- Sorts numbers, and some punctuation, after letters
+		return char_code
+	end
+	if char_code >= 158 then
+		-- Out of sortable range
+		return 0
+	end
+	if char_code > 122 then
+		-- Avoids overlap with {, |, } and ~
+		return char_code - 58
+	end
+	if char_code > 96 then
+		-- Normalises lowercase with uppercase
+		return char_code - 96
+	end
+	return char_code - 64
+end
+
+local function string_to_sort_index(str)
+	local max_chars = 5
+	local power = 100
+	local index = 0
+	for i=1,math.min(#str, max_chars) do
+		index = index + (char_to_sort_index(string.byte(str, i))/(power^i))
+	end
+	return index
+end
+
 function update_category_list()
 	local category_list = {}
 	table.insert(category_list, {
@@ -19,13 +53,12 @@ function update_category_list()
 		index = -1,
 	})
 	for category, def in pairs(unified_inventory.registered_categories) do
-		local b1,b2 = string.byte(string.upper(category), 1, 2)
 		table.insert(category_list, {
 			name = category,
 			label = def.label or category,
 			symbol = def.symbol,
 			index = def.index or                    -- sortby defined order
-					((b1-64)*0.01)+((b2-64)*0.0001) -- or do a rudimentary alphabetical sort
+					string_to_sort_index(category)  -- or do a rudimentary alphabetical sort
 		})
 	end
 	table.sort(category_list, function (a,b)
