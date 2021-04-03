@@ -1,27 +1,28 @@
+local S = minetest.get_translator("unified_inventory")
 
 unified_inventory.register_category('plants', {
 	symbol = "flowers:tulip",
-	label = "Plant Life"
+	label = S("Plant Life")
 })
 unified_inventory.register_category('building', {
 	symbol = "default:brick",
-	label = "Building Materials"
+	label = S("Building Materials")
 })
 unified_inventory.register_category('tools', {
 	symbol = "default:pick_diamond",
-	label = "Tools"
+	label = S("Tools")
 })
 unified_inventory.register_category('minerals', {
 	symbol = "default:iron_lump",
-	label = "Minerals and Metals"
+	label = S("Minerals and Metals")
 })
 unified_inventory.register_category('environment', {
 	symbol = "default:dirt_with_grass",
-	label = "Environment and Worldgen"
+	label = S("Environment and Worldgen")
 })
 unified_inventory.register_category('lighting', {
 	symbol = "default:torch",
-	label = "Lighting"
+	label = S("Lighting")
 })
 
 

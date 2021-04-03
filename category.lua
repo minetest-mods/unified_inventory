@@ -1,3 +1,4 @@
+local S = minetest.get_translator("unified_inventory")
 
 unified_inventory.registered_categories = {}
 unified_inventory.registered_category_items = {}
@@ -7,13 +8,13 @@ function update_category_list()
 	local category_list = {}
 	table.insert(category_list, {
 		name = "all",
-		label = "All Items",
+		label = S("All Items"),
 		symbol = "ui_category_all.png",
 		index = -2,
 	})
 	table.insert(category_list, {
 		name = "uncategorized",
-		label = "Misc. Items",
+		label = S("Misc. Items"),
 		symbol = "ui_category_none.png",
 		index = -1,
 	})

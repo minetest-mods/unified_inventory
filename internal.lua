@@ -36,7 +36,7 @@ local function formspec_button(ui_peruser, name, image, offset, pos, scale, labe
 		(offset.x or offset[1]) + ( ui_peruser.btn_spc * (pos.x or pos[1]) ) + spc,
 		(offset.y or offset[2]) + ( ui_peruser.btn_spc * (pos.y or pos[2]) ) + spc,
 		size, size, image, name) ..
-		string.format("tooltip[%s;%s]", name, F(S(label or name)))
+		string.format("tooltip[%s;%s]", name, F(label or name))
 end
 
 function ui.get_formspec(player, page)
@@ -157,12 +157,12 @@ function ui.get_formspec(player, page)
 	end
 	if category_count > ui_peruser.pagecols and scroll_offset > 0 then
 		-- prev
-		formspec[n] = formspec_button(ui_peruser, "prev_category", "ui_left_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 2, 0}, 0.8, "Scroll categories left")
+		formspec[n] = formspec_button(ui_peruser, "prev_category", "ui_left_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 2, 0}, 0.8, S("Scroll categories left"))
 		n = n + 1
 	end
 	if category_count > ui_peruser.pagecols and category_count - scroll_offset > ui_peruser.pagecols then
 		-- next
-		formspec[n] = formspec_button(ui_peruser, "next_category", "ui_right_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 1, 0}, 0.8, "Scroll categories right")
+		formspec[n] = formspec_button(ui_peruser, "next_category", "ui_right_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 1, 0}, 0.8, S("Scroll categories right"))
 		n = n + 1
 	end
 
