@@ -80,8 +80,8 @@ if unified_inventory.automatic_categorization then
 				elseif group.door or
 					   minetest.global_exists("doors") and (
 					     doors.registered_doors and doors.registered_doors[name..'_a'] or
-					     doors.registered_trapdoors and doors.registered_trapdoors[name] then
-					   )
+					     doors.registered_trapdoors and doors.registered_trapdoors[name]
+					   ) then
 					unified_inventory.add_category_item('building', name)
 				end
 			end
