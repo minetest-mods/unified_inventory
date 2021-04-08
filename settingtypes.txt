@@ -10,5 +10,7 @@ unified_inventory_bags (Enable bags) bool true
 #and the give privilege.
 unified_inventory_trash (Enable trash) bool true
 
+#If enabled, a dialog will ask for confirmation before clearing inventory
+unified_inventory_clear_inventory_confirm (Confirmation dialog) bool false
 
 unified_inventory_automatic_categorization (Items automatically added to categories) bool true
