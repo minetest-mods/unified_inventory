@@ -54,7 +54,7 @@ function ui.get_formspec(player, page)
 	if not pagedef then
 		return "" -- Invalid page name
 	end
-	
+
 	local formspec = {
 		"formspec_version[4]",
 		"size["..ui_peruser.formw..","..ui_peruser.formh.."]",
