@@ -138,31 +138,6 @@ ui.register_button("misc_set_night", {
 	end,
 })
 
-ui.register_button("clear_inv", {
-	type = "image",
-	image = "ui_trash_icon.png",
-	tooltip = S("Clear inventory"),
-	action = function(player)
-		local player_name = player:get_player_name()
-		if not ui.is_creative(player_name) then
-			minetest.chat_send_player(player_name,
-					S("This button has been disabled outside"
-					.." of creative mode to prevent"
-					.." accidental inventory trashing."
-					.."\nUse the trash slot instead."))
-			ui.set_inventory_formspec(player, ui.current_page[player_name])
-			return
-		end
-		player:get_inventory():set_list("main", {})
-		minetest.chat_send_player(player_name, S('Inventory cleared!'))
-		minetest.sound_play("trash_all",
-				{to_player=player_name, gain = 1.0})
-	end,
-	condition = function(player)
-		return ui.is_creative(player:get_player_name())
-	end,
-})
-
 ui.register_page("craft", {
 	get_formspec = function(player, perplayer_formspec)
 
