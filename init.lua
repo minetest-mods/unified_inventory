@@ -166,7 +166,4 @@ if minetest.settings:get_bool("unified_inventory_bags") ~= false then
 end
 
 dofile(modpath.."/item_names.lua")
-
-if minetest.get_modpath("datastorage") then
-	dofile(modpath.."/waypoints.lua")
-end
+dofile(modpath.."/waypoints.lua")
