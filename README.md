@@ -15,7 +15,8 @@ Unified Inventory replaces the default survival and creative inventory.
     * Recipe search function by ingredients
  * Up to four bags with up to 24 slots each
  * Home function to teleport
- * Trash slot
+ * Trash slot and refill slot for creative
+ * Waypoints to keep track of important locations
  * Lite mode: reduces the item browser width
     * `minetest.conf` setting `unified_inventory_lite = true`
  * Mod API for modders: see [mod_api.txt](doc/mod_api.txt)
@@ -27,7 +28,7 @@ Unified Inventory replaces the default survival and creative inventory.
  * Minetest 5.4.0+
  * Mod `default` for category filters (contained in Minetest Game)
  * Mod `farming` for craftable bags (contained in Minetest Game)
- * Mod `datastorage` for waypoints (deprecated)
+ * For waypoint migration: `datastorage`
 
 
 # Licenses
