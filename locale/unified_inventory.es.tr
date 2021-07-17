@@ -1,54 +1,57 @@
 # textdomain: unified_inventory
-
-# waypoints.lua
-
-White=Blanco
-Yellow=Amarillo
-Red=Rojo
-Green=Verde
-Blue=Azul
-Waypoints=Puntos
-Select Waypoint #@1=Seleccionar Punto #@1
-Waypoint @1=Punto @1
-Set waypoint to current location=Establecer el punto a la ubicación actual
-Make waypoint @1=Hacer punto @1
-invisible=invisible
-visible=visible
-@1 display of waypoint coordinates=Visualizar coordenadas del punto @1
-Disable=Deshabilitado
-Enable=Habilitado
-Change color of waypoint display=Cambiar el color del punto
-Edit waypoint name=Editar nombre del punto
-Waypoint active=Punto activo
-Waypoint inactive=Punto inactivo
-Finish editing=Terminar edición
-World position=Posición en el mundo
-Name=Nombre
-HUD text color=Color del texto de la Interfaz
-
+# api.lua
+Mixing=Mezclar
+Cooking=Hornear
+Digging=Recoger
+# bags.lua
+Bags=Bolsos
+Bag @1=Bolso @1
+Small Bag=Bolso Pequeño
+Medium Bag=Bolso Mediano
+Large Bag=Bolso Grande
+All Items=
+Misc. Items=
+Plant Life=
+Building Materials=
+Tools=
+Minerals and Metals=
+Environment and Worldgen=
+Lighting=
 # group.lua
-
  and = y
-
+Scroll categories left=
+Scroll categories right=
+Search=Buscar
+Reset search and display everything=Limpiar la busqueda y mostrar todo
+# internal.lua
+First page=Primera página
+Back three pages=Volver tres páginas
+Back one page=Volver una página
+Forward one page=Avanzar una página
+Forward three pages=Avanzar tres páginas
+Last page=Ultima Pagina
+No matching items=No se encontraron elementos
+No matches.=No hay resultados.
+Page=Página
+@1 of @2=@1 de @2
+Filter=Filtro
 # register.lua
-
 Can use the creative inventory=Puede usar el inventario creativo
 Forces Unified Inventory to be displayed in Full mode if Lite mode is configured globally=Obliga al Inventario Unificado a mostrarse en modo Completo si el modo Simple está configurado globalmente
 Crafting Grid=Cuadricula de Elaboración
 Crafting Guide=Guía de Elaboración
 Set home position=Establecer posición de la casa
 Home position set to: @1=Posición de la casa cambiada a: @1
-You don't have the \"home\" privilege!=¡No tienes el privilegio \"home\"!
+You don't have the "home" privilege!=
 Go home=Ir a casa
 Set time to day=Cambiar a dia
-Set time to night=Cambiar a noche
 Time of day set to 6am=Hora del día cambiada a 6 AM
-Time of day set to 9pm=Hora del día cambiada a 9 PM
 You don't have the settime privilege!=¡No tienes el privilegio "settime"!
+Set time to night=Cambiar a noche
+Time of day set to 9pm=Hora del día cambiada a 9 PM
 Clear inventory=Limpiar inventario
+This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=
 Inventory cleared!=¡Inventario limpio!
-This button has been disabled outside=Este botón ha sido deshabilitado
-Crafting=Elaboración
 Trash:=Basura:
 Refill:=Rellenar:
 Any item belonging to the @1 group=Cualquier elemento que pertenezca al grupo @1
@@ -65,36 +68,41 @@ Show previous recipe=Mostrar la receta anterior
 Show previous usage=Mostrar el uso anterior
 @1 (@2)=@1 (@2)
 Give me:=Dame:
-This recipe is too@nlarge to be displayed.=Esta receta es demasiado@ngrande para ser mostrada.
+This recipe is too@@large to be displayed.=
 To craft grid:=Construir:
 All=Todos
+Crafting=Elaboración
+White=Blanco
+Yellow=Amarillo
+Red=Rojo
+Green=Verde
+Blue=Azul
+Waypoints=Puntos
+Select Waypoint #@1=Seleccionar Punto #@1
+Waypoint @1=Punto @1
+Set waypoint to current location=Establecer el punto a la ubicación actual
+Hide waypoint=
+Show waypoint=
+Hide coordinates=
+Show coordinates=
+Change color of waypoint display=Cambiar el color del punto
+Edit waypoint name=Editar nombre del punto
+Waypoint active=Punto activo
+Waypoint inactive=Punto inactivo
+Finish editing=Terminar edición
+World position=Posición en el mundo
+Name=Nombre
+HUD text color=Color del texto de la Interfaz
 
-# api.lua
 
-Mixing=Mezclar
-Cooking=Hornear
-Digging=Recoger
+##### not used anymore #####
 
-# internal.lua
-
-First page=Primera página
-Back three pages=Volver tres páginas
-Back one page=Volver una página
-Forward one page=Avanzar una página
-Forward three pages=Avanzar tres páginas
-Last page=Ultima Pagina
-Search=Buscar
-Reset search and display everything=Limpiar la busqueda y mostrar todo
-No matching items=No se encontraron elementos
-No matches.=No hay resultados.
-Page=Página
-@1 of @2=@1 de @2
-Filter=Filtro
-
-# bags.lua
-
-Bags=Bolsos
-Bag @1=Bolso @1
-Small Bag=Bolso Pequeño
-Medium Bag=Bolso Mediano
-Large Bag=Bolso Grande
+Make waypoint @1=Hacer punto @1
+invisible=invisible
+visible=visible
+@1 display of waypoint coordinates=Visualizar coordenadas del punto @1
+Disable=Deshabilitado
+Enable=Habilitado
+You don't have the \"home\" privilege!=¡No tienes el privilegio \"home\"!
+This button has been disabled outside=Este botón ha sido deshabilitado
+This recipe is too@nlarge to be displayed.=Esta receta es demasiado@ngrande para ser mostrada.

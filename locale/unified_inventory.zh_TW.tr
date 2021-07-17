@@ -1,8 +1,4 @@
 # textdomain: unified_inventory
-# traslation by: IFRFSX(BingFengFSX)
-#Email: IFRFSX@Protonmail.com
-
-Crafting=合成
 Mixing=混合
 Cooking=烹飪
 Digging=挖出
@@ -11,20 +7,32 @@ Bag @1=揹包@1
 Small Bag=小揹包
 Medium Bag=中揹包
 Large Bag=大揹包
+All Items=
+Misc. Items=
+Plant Life=
+Building Materials=
+Tools=
+Minerals and Metals=
+Environment and Worldgen=
+Lighting=
  and = 和 
+Scroll categories left=
+Scroll categories right=
+Search=搜索
+Reset search and display everything=重置搜索並顯示所有物品
 First page=第一頁
 Back three pages=後退三頁
 Back one page=後退一頁
 Forward one page=前進一頁
 Forward three pages=前進三頁
 Last page=最後一頁
-Search=搜索
 No matching items=沒有匹配物品
 No matches.=沒有匹配
 Page=頁面
 @1 of @2=第@1頁，共@2頁
 Filter=過濾器
 Can use the creative inventory=可以使用創造揹包
+Forces Unified Inventory to be displayed in Full mode if Lite mode is configured globally=
 Crafting Grid=合成表
 Crafting Guide=合成指南
 Set home position=設置家的位置
@@ -36,21 +44,29 @@ Time of day set to 6am=時間設置到早晨6點
 You don't have the settime privilege!=你沒有“settime”權限！
 Set time to night=設置時間到晚上
 Time of day set to 9pm=時間設置到晚上9點
-
-Inventory cleared!=清空揹包
 Clear inventory=清空揹包
-
+This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=
+Inventory cleared!=清空揹包
 Trash:=丟棄：
 Refill:=填滿：
+Any item belonging to the @1 group=屬於@1組的任何項目
+Any item belonging to the groups @1=屬於組@1的任何項目
 Recipe @1 of @2=第@1配方，共@2個
 Usage @1 of @2=第@1用法，共@2個
 No recipes=沒有配方
 No usages=沒有用法
 Result=結果
 Ingredient=原料
+Show next recipe=
+Show next usage=
+Show previous recipe=
+Show previous usage=
+@1 (@2)=
 Give me:=給予：
+This recipe is too@@large to be displayed.=
 To craft grid:=填充物品到合成表
 All=全部
+Crafting=合成
 White=白
 Yellow=黃
 Red=紅
@@ -60,10 +76,10 @@ Waypoints=航路點
 Select Waypoint #@1=查詢航路點 #@1
 Waypoint @1=航路點 @1
 Set waypoint to current location=將航路點設置到當前位置
-invisible=不可見的
-visible=可見的
-Make waypoint @1=設置航路點 @1
-@1 display of waypoint coordinates=顯示航路點@1座標
+Hide waypoint=
+Show waypoint=
+Hide coordinates=
+Show coordinates=
 Change color of waypoint display=改變航路點顯示的顏色
 Edit waypoint name=編輯航路點名稱
 Waypoint active=航路點已激活
@@ -73,7 +89,10 @@ World position=世界位置
 Name=名稱
 HUD text color=HUD文本顏色
 
-Reset search and display everything=重置搜索並顯示所有物品
 
-Any item belonging to the @1 group=屬於@1組的任何項目
-Any item belonging to the groups @1=屬於組@1的任何項目
+##### not used anymore #####
+
+invisible=不可見的
+visible=可見的
+Make waypoint @1=設置航路點 @1
+@1 display of waypoint coordinates=顯示航路點@1座標
