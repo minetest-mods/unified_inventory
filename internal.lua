@@ -133,7 +133,6 @@ local function formspec_add_categories(player, formspec, ui_peruser)
 	if category_count > ui_peruser.pagecols and category_count - scroll_offset > ui_peruser.pagecols then
 		-- next
 		formspec[n] = formspec_button(ui_peruser, "next_category", "ui_right_icon.png", categories_scroll_pos, {ui_peruser.pagecols - 1, 0}, 0.8, S("Scroll categories right"))
-		n = n + 1
 	end
 end
 
@@ -270,39 +269,35 @@ function ui.get_formspec(player, page)
 		return "" -- Invalid page name
 	end
 
-	local formspec = {
+	local fs = {
 		"formspec_version[4]",
 		"size["..ui_peruser.formw..","..ui_peruser.formh.."]",
 		pagedef.formspec_prepend and "" or "no_prepend[]",
 		ui.standard_background
 	}
 
-	local n = 5
-
 	local perplayer_formspec = ui.get_per_player_formspec(player_name)
 	local fsdata = pagedef.get_formspec(player, perplayer_formspec)
 
-	formspec[n] = fsdata.formspec
+	fs[#fs + 1] = fsdata.formspec
 
-	formspec_add_filters(player, formspec, ui_peruser)
-	n = #formspec + 1
+	formspec_add_filters(player, fs, ui_peruser)
 
 	if fsdata.draw_inventory ~= false then
 		-- Player inventory
-		formspec[n] = "listcolors[#00000000;#00000000]"
-		formspec[n+1] = ui_peruser.standard_inv
-		n = n+2
+		fs[#fs + 1] = "listcolors[#00000000;#00000000]"
+		fs[#fs + 1] = ui_peruser.standard_inv
 	end
 
 	if fsdata.draw_item_list == false then
-		return table.concat(formspec, "")
+		return table.concat(fs, "")
 	end
 
-	formspec_add_categories(player, formspec, ui_peruser)
-	formspec_add_search_box(player, formspec, ui_peruser)
-	formspec_add_item_browser(player, formspec, ui_peruser)
+	formspec_add_categories(player, fs, ui_peruser)
+	formspec_add_search_box(player, fs, ui_peruser)
+	formspec_add_item_browser(player, fs, ui_peruser)
 
-	return table.concat(formspec)
+	return table.concat(fs)
 end
 
 function ui.set_inventory_formspec(player, page)
