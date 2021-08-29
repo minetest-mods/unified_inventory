@@ -319,7 +319,7 @@ function ui.register_craft_sorter(method, item_name)
 		error(("Craft sorter method must be a function, %s given."):format(type(method)))
 	end
 	if not item_name then item_name = "_default_" end
-	craft_sorters[item_name] = method
+	ui.craft_sorters[item_name] = method
 end
 
 function ui.is_creative(playername)
