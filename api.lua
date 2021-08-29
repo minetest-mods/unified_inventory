@@ -200,6 +200,36 @@ function ui.go_home(player)
 	return false
 end
 
+local function recipes_match(recipeA, recipeB)
+	-- Is recipeA the same as recipeB
+
+	-- Easy checks, early exit
+	if recipeA.type ~= recipeB.type then return end
+	if recipeA.width ~= recipeB.width then return end
+	if #recipeA.items ~= #recipeB.items then return end
+	if recipeA.output ~= recipeB.output then return end
+	-- Check B matches A
+	for i, item in pairs(recipeA.items) do
+		if item ~= recipeB.items[i] then return end
+	end
+	-- Also check A matches B
+	-- this is required if B has all of A and then some
+	for i, item in pairs(recipeB.items) do
+		if item ~= recipeA.items[i] then return end
+	end
+	return true
+end
+
+local function find_recipe(recipe, recipe_list)
+	-- Does recipe exist in recipe_list
+	for _,existing_recipe in ipairs(recipe_list) do
+		if recipes_match(existing_recipe, recipe) then
+			return true
+		end
+	end
+	return false
+end
+
 -- register_craft
 function ui.register_craft(options)
 	if not options.output then
@@ -212,12 +242,17 @@ function ui.register_craft(options)
 	if options.type == "normal" and options.width == 0 then
 		options = { type = "shapeless", items = options.items, output = options.output, width = 0 }
 	end
-	if not ui.crafts_for.recipe[itemstack:get_name()] then
-		ui.crafts_for.recipe[itemstack:get_name()] = {}
+	local item_name = itemstack:get_name()
+	if not ui.crafts_for.recipe[item_name] then
+		ui.crafts_for.recipe[item_name] = {}
 	end
-	table.insert(ui.crafts_for.recipe[itemstack:get_name()],options)
+	local has_duplicate = find_recipe(options, ui.crafts_for.recipe[item_name])
+	if has_duplicate then
+		minetest.log("warning", ("A duplicate craft was registered for %s. It has been ignored."):format(item_name))
+	else
+		table.insert(ui.crafts_for.recipe[item_name], options)
+	end
 end
-
 
 local craft_type_defaults = {
 	width = 3,
