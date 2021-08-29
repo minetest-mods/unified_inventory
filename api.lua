@@ -133,7 +133,11 @@ minetest.after(0.01, function()
 			end
 		end
 	end
-	for _, recipes in pairs(ui.crafts_for.recipe) do
+	for item_name, recipes in pairs(ui.crafts_for.recipe) do
+		local craft_sorter = ui.craft_sorters[item_name] or ui.craft_sorters._default_
+		if craft_sorter then
+			table.sort(recipes, craft_sorter)
+		end
 		for _, recipe in ipairs(recipes) do
 			local ingredient_items = {}
 			for _, spec in pairs(recipe.items) do
@@ -307,6 +311,15 @@ function ui.register_button(name, def)
 	end
 	def.name = name
 	table.insert(ui.buttons, def)
+end
+
+ui.craft_sorters = {}
+function ui.register_craft_sorter(method, item_name)
+	if type(method) ~= "function" then
+		error(("Craft sorter method must be a function, %s given."):format(type(method)))
+	end
+	if not item_name then item_name = "_default_" end
+	craft_sorters[item_name] = method
 end
 
 function ui.is_creative(playername)
