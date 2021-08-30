@@ -133,11 +133,7 @@ minetest.after(0.01, function()
 			end
 		end
 	end
-	for item_name, recipes in pairs(ui.crafts_for.recipe) do
-		local craft_sorter = ui.craft_sorters[item_name] or ui.craft_sorters._default_
-		if craft_sorter then
-			table.sort(recipes, craft_sorter)
-		end
+	for _, recipes in pairs(ui.crafts_for.recipe) do
 		for _, recipe in ipairs(recipes) do
 			local ingredient_items = {}
 			for _, spec in pairs(recipe.items) do
@@ -154,6 +150,12 @@ minetest.after(0.01, function()
 				end
 				table.insert(ui.crafts_for.usage[name], recipe)
 			end
+		end
+	end
+	for item_name, recipes in pairs(ui.crafts_for.recipe) do
+		local craft_sorter = ui.craft_sorters[item_name] or ui.craft_sorters._default_
+		if craft_sorter then
+			table.sort(recipes, craft_sorter)
 		end
 	end
 end)
