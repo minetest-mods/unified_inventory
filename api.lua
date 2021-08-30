@@ -158,6 +158,7 @@ minetest.after(0.01, function()
 			table.sort(recipes, craft_sorter)
 		end
 	end
+	ui.crafts_sorted = true
 end)
 
 
@@ -218,10 +219,18 @@ function ui.register_craft(options)
 	if options.type == "normal" and options.width == 0 then
 		options = { type = "shapeless", items = options.items, output = options.output, width = 0 }
 	end
-	if not ui.crafts_for.recipe[itemstack:get_name()] then
-		ui.crafts_for.recipe[itemstack:get_name()] = {}
+	local item_name = itemstack:get_name()
+	if not ui.crafts_for.recipe[item_name] then
+		ui.crafts_for.recipe[item_name] = {}
 	end
-	table.insert(ui.crafts_for.recipe[itemstack:get_name()],options)
+	table.insert(ui.crafts_for.recipe[item_name],options)
+
+	if ui.crafts_sorted then
+		local craft_sorter = ui.craft_sorters[item_name] or ui.craft_sorters._default_
+		if craft_sorter then
+			table.sort(ui.crafts_for.recipe[item_name], craft_sorter)
+		end
+	end
 end
 
 
@@ -315,6 +324,7 @@ function ui.register_button(name, def)
 	table.insert(ui.buttons, def)
 end
 
+ui.crafts_sorted = false
 ui.craft_sorters = {}
 function ui.register_craft_sorter(method, item_name)
 	if type(method) ~= "function" then
