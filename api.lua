@@ -330,7 +330,10 @@ function ui.register_craft_sorter(method, item_name)
 	if type(method) ~= "function" then
 		error(("Craft sorter method must be a function, %s given."):format(type(method)))
 	end
-	if not item_name then item_name = "_default_" end
+	if not (item_name == nil or type(item_name) == "string") then
+		error(("Craft sorter item name must be a string, %s given."):format(type(item_name)))
+	end
+	if item_name == nil then item_name = "_default_" end
 	ui.craft_sorters[item_name] = method
 end
 
