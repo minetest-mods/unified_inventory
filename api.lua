@@ -152,13 +152,10 @@ minetest.after(0.01, function()
 			end
 		end
 	end
-	for item_name, recipes in pairs(ui.crafts_for.recipe) do
-		local craft_sorter = ui.craft_sorters[item_name] or ui.craft_sorters._default_
-		if craft_sorter then
-			table.sort(recipes, craft_sorter)
-		end
+
+	for _, callback in ipairs(ui.initialized_callbacks) do
+		callback()
 	end
-	ui.crafts_sorted = true
 end)
 
 
@@ -225,11 +222,8 @@ function ui.register_craft(options)
 	end
 	table.insert(ui.crafts_for.recipe[item_name],options)
 
-	if ui.crafts_sorted then
-		local craft_sorter = ui.craft_sorters[item_name] or ui.craft_sorters._default_
-		if craft_sorter then
-			table.sort(ui.crafts_for.recipe[item_name], craft_sorter)
-		end
+	for _, callback in ipairs(ui.craft_registered_callbacks) do
+		callback(item_name)
 	end
 end
 
@@ -313,7 +307,6 @@ function ui.register_page(name, def)
 	ui.pages[name] = def
 end
 
-
 function ui.register_button(name, def)
 	if not def.action then
 		def.action = function(player)
@@ -324,8 +317,6 @@ function ui.register_button(name, def)
 	table.insert(ui.buttons, def)
 end
 
-ui.crafts_sorted = false
-ui.craft_sorters = {}
 function ui.register_craft_sorter(method, item_name)
 	if type(method) ~= "function" then
 		error(("Craft sorter method must be a function, %s given."):format(type(method)))
@@ -336,6 +327,54 @@ function ui.register_craft_sorter(method, item_name)
 	if item_name == nil then item_name = "_default_" end
 	ui.craft_sorters[item_name] = method
 end
+
+function ui.register_on_initialized(callback)
+	if type(callback) ~= "function" then
+		error(("Initialized callback must be a function, %s given."):format(type(callback)))
+	end
+	table.insert(ui.initialized_callbacks, callback)
+end
+
+function ui.register_on_craft_registered(callback)
+	if type(callback) ~= "function" then
+		error(("Craft registered callback must be a function, %s given."):format(type(callback)))
+	end
+	table.insert(ui.craft_registered_callbacks, callback)
+end
+
+function ui.get_recipe_list(output)
+	return ui.crafts_for.recipe[output]
+end
+
+function ui.get_registered_outputs()
+	local outputs = {}
+	for item_name, _ in pairs(ui.crafts_for.recipe) do
+		table.insert(outputs, item_name)
+	end
+	return outputs
+end
+
+ui.register_on_initialized(function ()
+	local outputs = ui.get_registered_outputs()
+	for _, item_name in ipairs(outputs) do
+		local craft_sorter = ui.craft_sorters[item_name] or ui.craft_sorters._default_
+		if craft_sorter then
+			local recipes = ui.get_recipe_list(item_name)
+			table.sort(recipes, craft_sorter)
+		end
+	end
+	ui.crafts_sorted = true
+end)
+
+ui.register_on_craft_registered(function (item_name)
+	if not ui.crafts_sorted then return end
+
+	local craft_sorter = ui.craft_sorters[item_name] or ui.craft_sorters._default_
+	if craft_sorter then
+		local recipes = ui.get_recipe_list(item_name)
+		table.sort(recipes, craft_sorter)
+	end
+end)
 
 function ui.is_creative(playername)
 	return minetest.check_player_privs(playername, {creative=true})
