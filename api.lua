@@ -307,6 +307,7 @@ function ui.register_page(name, def)
 	ui.pages[name] = def
 end
 
+
 function ui.register_button(name, def)
 	if not def.action then
 		def.action = function(player)

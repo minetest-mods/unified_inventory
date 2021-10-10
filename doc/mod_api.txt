@@ -20,6 +20,37 @@ Grouped by use-case, afterwards sorted alphabetically.
 	* Checks whether creative is enabled or the player has `creative`
 
 
+Callbacks
+---------
+
+Register a callback that will be run whenever a craft is registered via unified_inventory.register_craft:
+
+	unified_inventory.register_on_craft_registered(
+		callback = function(item_name, options) ... end
+			-- The first argument passed to the callback will be the name of the item with no count (e.g. "default:stone 10" > "default:stone")
+			-- The second argument will be the options passed in to the original unified_inventory.register_craft(options) function call
+	)
+
+Register a callback that will be run after all mods have loaded and after the unified_inventory mod has initialised all its internal structures:
+
+	unified_inventory.register_on_initialized(callback)
+		-- The callback is passed no arguments
+
+
+Accessing Data
+--------------
+
+These methods should be used instead of accessing the unified_inventory data structures directly - this will ensure your code survives any potential restructuring of the mod.
+
+Get a list of recipes for a particular output item:
+
+	unified_inventory.get_recipe_list(output_item)
+
+Get a list of all the output items crafts have been registered for:
+
+	unified_inventory.get_registered_outputs()
+
+
 Pages
 -----
 
