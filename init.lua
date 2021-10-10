@@ -24,8 +24,6 @@ unified_inventory = {
 	filtered_items_list = {},
 	pages = {},
 	buttons = {},
-	craft_sorters = {},
-	crafts_sorted = false,
 	initialized_callbacks = {},
 	craft_registered_callbacks = {},
 
