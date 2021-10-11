@@ -26,9 +26,10 @@ Callbacks
 Register a callback that will be run whenever a craft is registered via unified_inventory.register_craft:
 
 	unified_inventory.register_on_craft_registered(
-		callback = function(item_name, options) ... end
-			-- item_name (string): equivalent to `ItemStack:get_name()`
+		function (item_name, options)
+			-- item_name (string): name of the output item, equivalent to `ItemStack:get_name()`
 			-- options (table): definition table of crafts registered by `unified_inventory.register_craft`
+		end
 	)
 
 Register a callback that will be run after all mods have loaded and after the unified_inventory mod has initialised all its internal structures:
@@ -46,9 +47,35 @@ Get a list of recipes for a particular output item:
 
 	unified_inventory.get_recipe_list(output_item)
 
+	Returns a list of tables, each holding a recipe definition, like:
+	{
+		{
+			type = "normal",
+			items = { "default:stick", "default:stick", "default:stick", "default:stick" },
+			output = "default:wood",
+			width = 2
+		},
+		{
+			type = "shapeless",
+			items = { "default:tree" },
+			output = "default:wood 4",
+			width = 0
+		},
+		...
+	}
+
 Get a list of all the output items crafts have been registered for:
 
 	unified_inventory.get_registered_outputs()
+
+	Returns a list of item names, like:
+	{
+		"default:stone",
+		"default:chest",
+		"default:brick",
+		"doors:door_wood",
+		...
+	}
 
 
 Pages
