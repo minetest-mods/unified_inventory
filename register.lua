@@ -240,8 +240,10 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 end
 
 local recipe_text = {
-	recipe = S("Recipe @1 of @2"),
-	usage = S("Usage @1 of @2"),
+	recipe = "Recipe @1 of @2",
+	usage = "Usage @1 of @2",
+	-- Don't translate with S(...) yet:
+	-- * Later use S(...) to translate & do numbered substitutions.
 }
 local no_recipe_text = {
 	recipe = S("No recipes"),
