@@ -240,8 +240,8 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 end
 
 local recipe_text = {
-	recipe = NS("Recipe @1 of @2"),
-	usage = NS("Usage @1 of @2"),
+	recipe = S("Recipe @1 of @2"),
+	usage = S("Usage @1 of @2"),
 }
 local no_recipe_text = {
 	recipe = S("No recipes"),
