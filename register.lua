@@ -208,8 +208,10 @@ ui.register_page("craft", {
 local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 	local name = item:get_name()
 	local count = item:get_count()
+	local wear = item:get_wear()
+	local description = item:get_meta():get_string("description")
 	local show_is_group = false
-	local displayitem = name.." "..count
+	local displayitem = name.." "..count.." "..wear
 	local selectitem = name
 	if name:sub(1, 6) == "group:" then
 		local group_name = name:sub(7)
@@ -219,7 +221,9 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		selectitem = group_item.sole and displayitem or name
 	end
 	local label = show_is_group and "G" or ""
-	local buttonname = F(buttonname_prefix..ui.mangle_for_formspec(selectitem))
+	-- Unique id to prevent tooltip being overridden
+	local id = string.format("%i%i_", x*10, y*10)
+	local buttonname = F(id..buttonname_prefix..ui.mangle_for_formspec(selectitem))
 	local button = string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",
 			x, y, w, h,
 			F(displayitem), buttonname, label)
@@ -235,6 +239,8 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		if andcount >= 1 then
 			button = button  .. string.format("tooltip[%s;%s]", buttonname, grouptip)
 		end
+	elseif description ~= "" then
+		button = button  .. string.format("tooltip[%s;%s]", buttonname, F(description))
 	end
 	return button
 end
