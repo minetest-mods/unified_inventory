@@ -157,7 +157,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	-- Check clicked item image button
 	local clicked_item
 	for name, value in pairs(fields) do
-		local new_dir, mangled_item = string.match(name, "item_button_([a-z]+)_(.*)$")
+		local new_dir, mangled_item = string.match(name, "^[0-9]*_?item_button_([a-z]+)_(.*)$")
 		if new_dir and mangled_item then
 			clicked_item = unified_inventory.demangle_for_formspec(mangled_item)
 			if string.sub(clicked_item, 1, 6) == "group:" then
