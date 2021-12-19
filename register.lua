@@ -499,7 +499,7 @@ local function craftguide_craft(player, formname, fields)
 	local alternate = ui.alternate[player_name]
 
 	local craft = crafts[alternate]
-	if craft.width > 3 then return end
+	if not craft.width or craft.width > 3 then return end
 
 	ui.craftguide_match_craft(player, "main", "craft", craft, amount)
 

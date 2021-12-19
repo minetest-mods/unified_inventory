@@ -332,7 +332,9 @@ function ui.apply_filter(player, filter, search_dir)
 			return true
 		end
 	else
-		local lang = minetest.get_player_information(player_name).lang_code
+		local player_info = minetest.get_player_information(player_name)
+		local lang = player_info and player_info.lang_code or ""
+
 		ffilter = function(name, def)
 			local lname = string.lower(name)
 			local ldesc = string.lower(def.description)
