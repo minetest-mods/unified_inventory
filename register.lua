@@ -499,7 +499,15 @@ local function craftguide_craft(player, formname, fields)
 	local alternate = ui.alternate[player_name]
 
 	local craft = crafts[alternate]
-	if not craft.width or craft.width > 3 then return end
+	if not craft.width then
+		if not craft.output then
+			minetest.log("warning", "[unified_inventory] Craft has no output.")
+		else
+			minetest.log("warning", ("[unified_inventory] Craft for '%s' has no width."):format(craft.output))
+		end
+		return
+	end
+	if craft.width > 3 then return end
 
 	ui.craftguide_match_craft(player, "main", "craft", craft, amount)
 
