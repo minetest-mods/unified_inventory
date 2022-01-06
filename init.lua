@@ -59,10 +59,16 @@ ui.style_full = {
 	formspec_y = 1,
 	formw = 17.75,
 	formh = 12.25,
+	-- Item browser size, pos
 	pagecols = 8,
 	pagerows = 9,
 	page_x = 10.75,
 	page_y = 2.30,
+	-- Item browser controls
+	page_buttons_x = 11.60,
+	page_buttons_y = 10.15,
+	searchwidth = 3.4,
+	-- Crafting grid positions
 	craft_x = 2.8,
 	craft_y = 1.15,
 	craftresult_x = 7.8,
@@ -74,13 +80,15 @@ ui.style_full = {
 	craft_guide_resultstr_x = 0.3,
 	craft_guide_resultstr_y = 0.6,
 	give_btn_x = 0.25,
+	-- Tab switching buttons
 	main_button_x = 0.4,
 	main_button_y = 11.0,
-	page_buttons_x = 11.60,
-	page_buttons_y = 10.15,
-	searchwidth = 3.4,
+	main_button_cols = 12,
+	main_button_rows = 1,
+	-- Tab title position
 	form_header_x = 0.4,
 	form_header_y = 0.4,
+	-- Generic sizes
 	btn_spc = 0.85,
 	btn_size = 0.75,
 	std_inv_x = 0.3,
@@ -92,10 +100,16 @@ ui.style_lite = {
 	formspec_y =  0.6,
 	formw = 14,
 	formh = 9.75,
+	-- Item browser size, pos
 	pagecols = 4,
 	pagerows = 5,
 	page_x = 10.5,
 	page_y = 2.15,
+	-- Item browser controls
+	page_buttons_x = 10.5,
+	page_buttons_y = 6.15,
+	searchwidth = 1.6,
+	-- Crafting grid positions
 	craft_x = 2.6,
 	craft_y = 0.75,
 	craftresult_x = 5.75,
@@ -107,13 +121,15 @@ ui.style_lite = {
 	craft_guide_resultstr_x = 0.15,
 	craft_guide_resultstr_y = 0.35,
 	give_btn_x = 0.15,
+	-- Tab switching buttons
 	main_button_x = 10.5,
 	main_button_y = 8.15,
-	page_buttons_x = 10.5,
-	page_buttons_y = 6.15,
-	searchwidth = 1.6,
+	main_button_cols = 4,
+	main_button_rows = 2,
+	-- Tab title position
 	form_header_x =  0.2,
 	form_header_y =  0.2,
+	-- Generic sizes
 	btn_spc = 0.8,
 	btn_size = 0.7,
 	std_inv_x = 0.1,

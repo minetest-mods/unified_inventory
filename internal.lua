@@ -18,7 +18,7 @@ function ui.demangle_for_formspec(str)
 	return string.gsub(str, "_([0-9]+)_", function (v) return string.char(v) end)
 end
 
-
+-- Get the player-specific unified_inventory style
 function ui.get_per_player_formspec(player_name)
 	local draw_lite_mode = ui.lite_mode and not minetest.check_player_privs(player_name, {ui_full=true})
 
@@ -27,6 +27,7 @@ function ui.get_per_player_formspec(player_name)
 	return style
 end
 
+-- Creates an item image or regular image button with a tooltip
 local function formspec_button(ui_peruser, name, image, offset, pos, scale, label)
 	local element = 'image_button'
 	if minetest.registered_items[image] then
@@ -43,9 +44,8 @@ local function formspec_button(ui_peruser, name, image, offset, pos, scale, labe
 		string.format("tooltip[%s;%s]", name, F(label or name))
 end
 
-local function formspec_add_filters(player, formspec, style)
-	local button_row = 0
-	local button_col = 0
+-- Add registered buttons (tabs)
+local function formspec_tab_buttons(player, formspec, style)
 	local n = #formspec + 1
 
 	-- Main buttons
@@ -58,32 +58,50 @@ local function formspec_add_filters(player, formspec, style)
 		end
 	end
 
+	local needs_scrollbar = #filtered_inv_buttons > style.main_button_cols * style.main_button_rows
+
+	formspec[n] = ("scroll_container[%g,%g;%g,%g;tabbtnscroll;vertical]"):format(
+		style.main_button_x, style.main_button_y, -- position
+		style.main_button_cols * style.btn_spc, style.main_button_rows -- size
+	)
+	n = n + 1
+
 	for i, def in pairs(filtered_inv_buttons) do
-		if style.is_lite_mode and i > 4 then
-			button_row = 1
-			button_col = 1
-		end
+		local pos_x =           ((i - 1) % style.main_button_cols) * style.btn_spc
+		local pos_y = math.floor((i - 1) / style.main_button_cols) * style.btn_spc
 
 		if def.type == "image" then
-			local pos_x = style.main_button_x + style.btn_spc * (i - 1) - button_col * style.btn_spc * 4
-			local pos_y = style.main_button_y + button_row * style.btn_spc
 			if (def.condition == nil or def.condition(player) == true) then
-				formspec[n] = string.format("image_button[%f,%f;%f,%f;%s;%s;]",
+				formspec[n] = string.format("image_button[%g,%g;%g,%g;%s;%s;]",
 					pos_x, pos_y, style.btn_size, style.btn_size,
 					F(def.image),
 					F(def.name))
 				formspec[n+1] = "tooltip["..F(def.name)..";"..(def.tooltip or "").."]"
 				n = n+2
 			else
-				formspec[n] = string.format("image[%f,%f;%f,%f;%s^[colorize:#808080:alpha]",
+				formspec[n] = string.format("image[%g,%g;%g,%g;%s^[colorize:#808080:alpha]",
 					pos_x, pos_y, style.btn_size, style.btn_size,
 					def.image)
 				n = n+1
 			end
 		end
 	end
+	formspec[n] = "scroll_container_end[]"
+	if needs_scrollbar then
+		formspec[n+1] = ("scrollbaroptions[max=%i;arrows=hide]"):format(
+			-- This calculation is not 100% accurate but "good enough"
+			math.ceil((#filtered_inv_buttons - 1) / style.main_button_cols) * style.btn_spc * 5
+		)
+		formspec[n+2] = ("scrollbar[%g,%g;0.4,%g;vertical;tabbtnscroll;0]"):format(
+			style.main_button_x + style.main_button_cols * style.btn_spc - 0.1, -- x pos
+			style.main_button_y, -- y pos
+			style.main_button_rows * style.btn_spc -- height
+		)
+		formspec[n+3] = "scrollbaroptions[max=1000;arrows=default]"
+	end
 end
 
+-- Add category GUI elements (top right)
 local function formspec_add_categories(player, formspec, ui_peruser)
 	local player_name = player:get_player_name()
 	local n = #formspec + 1
@@ -280,7 +298,7 @@ function ui.get_formspec(player, page)
 
 	fs[#fs + 1] = fsdata.formspec
 
-	formspec_add_filters(player, fs, ui_peruser)
+	formspec_tab_buttons(player, fs, ui_peruser)
 
 	if fsdata.draw_inventory ~= false then
 		-- Player inventory
