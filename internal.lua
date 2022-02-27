@@ -115,9 +115,9 @@ local function formspec_add_categories(player, formspec, ui_peruser)
 		ui_peruser.form_header_y - (ui_peruser.is_lite_mode and 0 or 0.2)
 	}
 
-	formspec[n] = string.format("background9[%f,%f;%f,%f;%s;false;3]",
-		ui_peruser.page_x-0.1, categories_scroll_pos[2],
-		(ui_peruser.btn_spc * ui_peruser.pagecols) + 0.13, 1.4 + (ui_peruser.is_lite_mode and 0 or 0.2),
+	formspec[n] = string.format("background9[%f,%f;%f,%f;%s;false;16]",
+		ui_peruser.page_x-0.15, categories_scroll_pos[2],
+		(ui_peruser.btn_spc * ui_peruser.pagecols) + 0.2, 1.4 + (ui_peruser.is_lite_mode and 0 or 0.2),
 		"ui_smallbg_9_sliced.png")
 	n = n + 1
 

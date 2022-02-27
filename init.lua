@@ -50,7 +50,7 @@ unified_inventory = {
 	trash_enabled = (minetest.settings:get_bool("unified_inventory_trash") ~= false),
 	imgscale = 1.25,
 	list_img_offset = 0.13,
-	standard_background = "background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
+	standard_background = "bgcolor[#0000]background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
 
 	version = 4
 }
