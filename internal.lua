@@ -1,6 +1,7 @@
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
 local ui = unified_inventory
+local hide_disabled_buttons = ui.hide_disabled_buttons
 
 -- This pair of encoding functions is used where variable text must go in
 -- button names, where the text might contain formspec metacharacters.
@@ -65,8 +66,9 @@ local function formspec_tab_buttons(player, formspec, style)
 		style.main_button_cols * style.btn_spc, style.main_button_rows -- size
 	)
 	n = n + 1
+	local i = 1
 
-	for i, def in pairs(filtered_inv_buttons) do
+	for _, def in pairs(filtered_inv_buttons) do
 		local pos_x =           ((i - 1) % style.main_button_cols) * style.btn_spc
 		local pos_y = math.floor((i - 1) / style.main_button_cols) * style.btn_spc
 
@@ -78,11 +80,14 @@ local function formspec_tab_buttons(player, formspec, style)
 					F(def.name))
 				formspec[n+1] = "tooltip["..F(def.name)..";"..(def.tooltip or "").."]"
 				n = n+2
-			else
+				i = i + 1
+
+			elseif not hide_disabled_buttons then
 				formspec[n] = string.format("image[%g,%g;%g,%g;%s^[colorize:#808080:alpha]",
 					pos_x, pos_y, style.btn_size, style.btn_size,
 					def.image)
 				n = n+1
+				i = i + 1
 			end
 		end
 	end

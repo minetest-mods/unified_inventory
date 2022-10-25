@@ -10,5 +10,8 @@ unified_inventory_bags (Enable bags) bool true
 #and the give privilege.
 unified_inventory_trash (Enable trash) bool true
 
+#If enabled, disabled buttons will be hidden instead of grayed out.
+unified_inventory_hide_disabled_buttons (Hide disabled buttons) bool false
+
 
 unified_inventory_automatic_categorization (Items automatically added to categories) bool true

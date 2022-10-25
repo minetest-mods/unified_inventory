@@ -52,6 +52,8 @@ unified_inventory = {
 	list_img_offset = 0.13,
 	standard_background = "bgcolor[#0000]background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
 
+	hide_disabled_buttons = minetest.settings:get_bool("unified_inventory_hide_disabled_buttons", false),
+
 	version = 4
 }
 
