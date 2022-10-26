@@ -1,7 +1,6 @@
 local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
 local ui = unified_inventory
-local hide_disabled_buttons = ui.hide_disabled_buttons
 
 -- This pair of encoding functions is used where variable text must go in
 -- button names, where the text might contain formspec metacharacters.
@@ -55,7 +54,7 @@ local function formspec_tab_buttons(player, formspec, style)
 
 	for _, def in pairs(ui.buttons) do
 		if not (style.is_lite_mode and def.hide_lite) then
-			if (def.condition == nil or def.condition(player) or not hide_disabled_buttons) then
+			if def.condition == nil or def.condition(player) or not ui.hide_disabled_buttons then
 				table.insert(filtered_inv_buttons, def)
 			end
 		end
