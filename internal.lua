@@ -91,9 +91,10 @@ local function formspec_tab_buttons(player, formspec, style)
 	end
 	formspec[n] = "scroll_container_end[]"
 	if needs_scrollbar then
+		local total_rows = math.ceil(#filtered_inv_buttons / style.main_button_cols)
 		formspec[n+1] = ("scrollbaroptions[max=%i;arrows=hide]"):format(
 			-- This calculation is not 100% accurate but "good enough"
-			math.ceil((#filtered_inv_buttons - 1) / style.main_button_cols) * style.btn_spc * 5
+			(total_rows - style.main_button_rows) * style.btn_spc * 10
 		)
 		formspec[n+2] = ("scrollbar[%g,%g;0.4,%g;vertical;tabbtnscroll;0]"):format(
 			style.main_button_x + style.main_button_cols * style.btn_spc - 0.1, -- x pos
