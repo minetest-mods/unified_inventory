@@ -274,9 +274,11 @@ local function formspec_add_item_browser(player, formspec, ui_peruser)
 			end
 		end
 	end
-	formspec[n] = string.format("label[%f,%f;%s: %s]",
-		ui_peruser.page_buttons_x + ui_peruser.btn_spc * (ui_peruser.is_lite_mode and 1 or 2),
-		ui_peruser.page_buttons_y + 0.1 + ui_peruser.btn_spc * 2,
+	formspec[n] = "style[page_number;content_offset=0]"
+	formspec[n + 1] = string.format("image_button[%f,%f;%f,0.4;;page_number;%s: %s;false;false;]",
+		ui_peruser.page_buttons_x,
+		ui_peruser.page_buttons_y + ui_peruser.btn_spc * 2 - 0.1,
+		ui_peruser.btn_spc * (bn - 1) + ui_peruser.btn_size,
 		F(S("Page")), S("@1 of @2",page2,pagemax))
 end
 
