@@ -24,7 +24,9 @@ Grouped by use-case, afterwards sorted alphabetically.
 Callbacks
 ---------
 
-Register a callback that will be run whenever a craft is registered via unified_inventory.register_craft:
+Register a callback that will be run whenever a craft is registered via unified_inventory.register_craft.
+This callback is run before any recipe ingredients checks, hence it is also executed on recipes that are
+purged after all mods finished loading.
 
 	unified_inventory.register_on_craft_registered(
 		function (item_name, options)

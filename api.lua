@@ -145,14 +145,18 @@ minetest.after(0.01, function()
 		end
 	end
 
-	-- Step 1: group-indexed lookup table for items
+	-- Step 1: Initialize cache for looking up groups
 	unified_inventory.init_matching_cache()
 
 	-- Step 2: Find all matching items for the given spec (groups)
 	local get_matching_spec_items = unified_inventory.get_matching_items
 
-	for _, recipes in pairs(ui.crafts_for.recipe) do
+	for outputitemname, recipes in pairs(ui.crafts_for.recipe) do
 		-- List of crafts that return this item string (variable "_")
+
+		-- Problem: The group cache must be initialized after all mods finished loading
+		-- thus, invalid recipes might be indexed. Hence perform filtering with `new_recipe_list`
+		local new_recipe_list = {}
 		for _, recipe in ipairs(recipes) do
 			local ingredient_items = {}
 			for _, spec in pairs(recipe.items) do
@@ -168,7 +172,14 @@ minetest.after(0.01, function()
 				end
 				table.insert(ui.crafts_for.usage[name], recipe)
 			end
+
+			if next(ingredient_items) then
+				-- There's at least one known ingredient: mark as good recipe
+				-- PS: What whatll be done about partially incomplete recipes?
+				table.insert(new_recipe_list, recipe)
+			end
 		end
+		ui.crafts_for.recipe[outputitemname] = new_recipe_list
 	end
 
 	for _, callback in ipairs(ui.initialized_callbacks) do
