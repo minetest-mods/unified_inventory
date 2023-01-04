@@ -146,46 +146,10 @@ minetest.after(0.01, function()
 	end
 
 	-- Step 1: group-indexed lookup table for items
-	local spec_matcher = {}
-	for _, name in ipairs(ui.items_list) do
-		-- we only need to care about groups, exact items are handled separately
-		for group, value in pairs(minetest.registered_items[name].groups) do
-			if value and value ~= 0 then
-				if not spec_matcher[group] then
-					spec_matcher[group] = {}
-				end
-				spec_matcher[group][name] = true
-			end
-		end
-	end
+	unified_inventory.init_matching_cache()
 
 	-- Step 2: Find all matching items for the given spec (groups)
-	local function get_matching_spec_items(specname)
-		if specname:sub(1,6) ~= "group:" then
-			return { [specname] = true }
-		end
-
-		local accepted = {}
-		for i, group in ipairs(specname:sub(7):split(",")) do
-			if i == 1 then
-				-- First step: Copy all possible item names in this group
-				for name, _ in pairs(spec_matcher[group] or {}) do
-					accepted[name] = true
-				end
-			else
-				-- Perform filtering
-				if spec_matcher[group] then
-					for name, _ in pairs(accepted) do
-						accepted[name] = spec_matcher[group][name]
-					end
-				else
-					-- No matching items
-					return {}
-				end
-			end
-		end
-		return accepted
-	end
+	local get_matching_spec_items = unified_inventory.get_matching_items
 
 	for _, recipes in pairs(ui.crafts_for.recipe) do
 		-- List of crafts that return this item string (variable "_")

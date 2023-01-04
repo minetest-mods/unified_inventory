@@ -126,25 +126,18 @@ Example output:
 	}
 --]]
 function unified_inventory.find_usable_items(inv_items, craft_items)
-	local get_group = minetest.get_item_group
 	local result = {}
 
 	for craft_item in pairs(craft_items) do
-		local group = craft_item:match("^group:(.+)")
-		local found = {}
+		-- may specify group:type1,type2
+		local items = unified_inventory.get_matching_items(craft_item)
 
-		if group ~= nil then
-			for inv_item in pairs(inv_items) do
-				if get_group(inv_item, group) > 0 then
-					found[inv_item] = true
-				end
-			end
-		else
-			if inv_items[craft_item] ~= nil then
-				found[craft_item] = true
+		local found = {}
+		for itemname, _ in pairs(items) do
+			if inv_items[itemname] then
+				found[itemname] = true
 			end
 		end
-
 		result[craft_item] = found
 	end
 
