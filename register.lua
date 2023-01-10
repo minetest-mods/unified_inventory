@@ -23,8 +23,8 @@ local trash = minetest.create_detached_inventory("trash", {
 	--end,
 	on_put = function(inv, listname, index, stack, player)
 		inv:set_stack(listname, index, nil)
-		local player_name = player:get_player_name()
-		minetest.sound_play("trash", {to_player=player_name, gain = 1.0})
+		-- local player_name = player:get_player_name()
+		-- minetest.sound_play("trash", {to_player=player_name, gain = 1.0})
 	end,
 })
 trash:set_size("main", 1)
@@ -52,8 +52,8 @@ ui.register_button("home_gui_set", {
 			ui.set_home(player, player:get_pos())
 			local home = ui.home_pos[player_name]
 			if home ~= nil then
-				minetest.sound_play("dingdong",
-						{to_player=player_name, gain = 1.0})
+				-- minetest.sound_play("dingdong",
+				-- 		{to_player=player_name, gain = 1.0})
 				minetest.chat_send_player(player_name,
 					S("Home position set to: @1", minetest.pos_to_string(home)))
 			end
@@ -76,9 +76,10 @@ ui.register_button("home_gui_go", {
 	action = function(player)
 		local player_name = player:get_player_name()
 		if minetest.check_player_privs(player_name, {home=true}) then
-			if ui.go_home(player) then
-				minetest.sound_play("teleport", {to_player = player_name})
-			end
+			-- if ui.go_home(player) then
+			ui.go_home(player)
+			-- 	minetest.sound_play("teleport", {to_player = player_name})
+			-- end
 		else
 			minetest.chat_send_player(player_name,
 				S("You don't have the \"home\" privilege!"))
@@ -98,8 +99,8 @@ ui.register_button("misc_set_day", {
 	action = function(player)
 		local player_name = player:get_player_name()
 		if minetest.check_player_privs(player_name, {settime=true}) then
-			minetest.sound_play("birds",
-					{to_player=player_name, gain = 1.0})
+			-- minetest.sound_play("birds",
+			-- 		{to_player=player_name, gain = 1.0})
 			minetest.set_timeofday((6000 % 24000) / 24000)
 			minetest.chat_send_player(player_name,
 				S("Time of day set to 6am"))
@@ -122,8 +123,8 @@ ui.register_button("misc_set_night", {
 	action = function(player)
 		local player_name = player:get_player_name()
 		if minetest.check_player_privs(player_name, {settime=true}) then
-			minetest.sound_play("owl",
-					{to_player=player_name, gain = 1.0})
+			-- minetest.sound_play("owl",
+			-- 		{to_player=player_name, gain = 1.0})
 			minetest.set_timeofday((21000 % 24000) / 24000)
 			minetest.chat_send_player(player_name,
 					S("Time of day set to 9pm"))
@@ -155,8 +156,8 @@ ui.register_button("clear_inv", {
 		end
 		player:get_inventory():set_list("main", {})
 		minetest.chat_send_player(player_name, S('Inventory cleared!'))
-		minetest.sound_play("trash_all",
-				{to_player=player_name, gain = 1.0})
+		-- minetest.sound_play("trash_all",
+		-- 		{to_player=player_name, gain = 1.0})
 	end,
 	condition = function(player)
 		return ui.is_creative(player:get_player_name())

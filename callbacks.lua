@@ -39,8 +39,8 @@ minetest.register_on_joinplayer(function(player)
 			local handle_refill = (minetest.registered_items[stack:get_name()] or {}).on_refill or default_refill
 			stack = handle_refill(stack)
 			inv:set_stack(listname, index, stack)
-			minetest.sound_play("electricity",
-					{to_player=player_name, gain = 1.0})
+			-- minetest.sound_play("electricity",
+			-- 		{to_player=player_name, gain = 1.0})
 		end,
 	}, player_name)
 	refill:set_size("main", 1)
@@ -57,7 +57,7 @@ end)
 local function apply_new_filter(player, search_text, new_dir)
 	local player_name = player:get_player_name()
 
-	minetest.sound_play("click", {to_player=player_name, gain = 0.1})
+	-- minetest.sound_play("click", {to_player=player_name, gain = 0.1})
 	ui.apply_filter(player, search_text, new_dir)
 	ui.current_searchbox[player_name] = search_text
 	ui.set_inventory_formspec(player, ui.current_page[player_name])
@@ -114,8 +114,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	for i, def in pairs(unified_inventory.buttons) do
 		if fields[def.name] then
 			def.action(player)
-			minetest.sound_play("click",
-					{to_player=player_name, gain = 0.1})
+			-- minetest.sound_play("click",
+			-- 		{to_player=player_name, gain = 0.1})
 			return
 		end
 	end
@@ -153,8 +153,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		start_i = pagemax
 	end
 	if start_i ~= start then
-		minetest.sound_play("paperflip1",
-				{to_player=player_name, gain = 1.0})
+		-- minetest.sound_play("paperflip1",
+		-- 		{to_player=player_name, gain = 1.0})
 		unified_inventory.current_index[player_name] = (start_i - 1) * ui_peruser.items_per_page + 1
 		unified_inventory.set_inventory_formspec(player,
 				unified_inventory.current_page[player_name])
@@ -179,8 +179,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 	if clicked_item then
-		minetest.sound_play("click",
-				{to_player=player_name, gain = 0.1})
+		-- minetest.sound_play("click",
+		-- 		{to_player=player_name, gain = 0.1})
 		local page = unified_inventory.current_page[player_name]
 		local player_creative = unified_inventory.is_creative(player_name)
 		if not player_creative then
@@ -206,8 +206,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if dirty_search_filter then
 			ui.apply_filter(player, ui.current_searchbox[player_name], "nochange")
 			ui.set_inventory_formspec(player, ui.current_page[player_name])
-			minetest.sound_play("paperflip2",
-					{to_player=player_name, gain = 1.0})
+			-- minetest.sound_play("paperflip2",
+			-- 		{to_player=player_name, gain = 1.0})
 		end
 	elseif fields.searchresetbutton then
 		if ui.activefilter[player_name] ~= "" then
@@ -219,8 +219,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if not (fields.alternate or fields.alternate_prev) then
 		return
 	end
-	minetest.sound_play("click",
-			{to_player=player_name, gain = 0.1})
+	-- minetest.sound_play("click",
+	-- 		{to_player=player_name, gain = 0.1})
 	local item_name = unified_inventory.current_item[player_name]
 	if not item_name then
 		return
