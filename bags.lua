@@ -10,25 +10,26 @@ local F = minetest.formspec_escape
 local ui = unified_inventory
 
 ui.register_page("bags", {
-	get_formspec = function(player)
+	get_formspec = function(player, perplayer_formspec)
 		local player_name = player:get_player_name()
-		return { formspec = table.concat({
-			ui.style_full.standard_inv_bg,
-			ui.single_slot(0.925, 1.5),
-			ui.single_slot(3.425, 1.5),
-			ui.single_slot(5.925, 1.5),
-			ui.single_slot(8.425, 1.5),
-			"label["..ui.style_full.form_header_x..","..ui.style_full.form_header_y..";" .. F(S("Bags")) .. "]",
-			"button[0.6125,2.75;1.875,0.75;bag1;" .. F(S("Bag @1", 1)) .. "]",
-			"button[3.1125,2.75;1.875,0.75;bag2;" .. F(S("Bag @1", 2)) .. "]",
-			"button[5.6125,2.75;1.875,0.75;bag3;" .. F(S("Bag @1", 3)) .. "]",
-			"button[8.1125,2.75;1.875,0.75;bag4;" .. F(S("Bag @1", 4)) .. "]",
+		local std_inv_x = perplayer_formspec.std_inv_x
+		local formspec = {
+			perplayer_formspec.standard_inv_bg,
+			"label[", perplayer_formspec.form_header_x, ",",
+				perplayer_formspec.form_header_y, ";", F(S("Bags")), "]",
 			"listcolors[#00000000;#00000000]",
-			"list[detached:" .. F(player_name) .. "_bags;bag1;1.075,1.65;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag2;3.575,1.65;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag3;6.075,1.65;1,1;]",
-			"list[detached:" .. F(player_name) .. "_bags;bag4;8.575,1.65;1,1;]"
-		}) }
+		}
+
+		for i = 1, 4 do
+			local x = std_inv_x + i * 2.5
+			formspec[#formspec + 1] = ui.single_slot(x - 1.875, 1.5)
+			formspec[#formspec + 1] = string.format("list[detached:%s_bags;bag%i;%.3f,1.65;1,1;]",
+				F(player_name), i, x - 1.725)
+			formspec[#formspec + 1] = string.format("button[%.4f,2.75;1.875,0.75;bag%i;%s]",
+				x - 2.1875, i, F(S("Bag @1", i)))
+		end
+
+		return { formspec = table.concat(formspec) }
 	end,
 })
 
@@ -36,7 +37,6 @@ ui.register_button("bags", {
 	type = "image",
 	image = "ui_bags_icon.png",
 	tooltip = S("Bags"),
-	hide_lite=true
 })
 
 local function get_player_bag_stack(player, i)
@@ -48,23 +48,38 @@ end
 
 for bag_i = 1, 4 do
 	ui.register_page("bag" .. bag_i, {
-		get_formspec = function(player)
+		get_formspec = function(player, perplayer_formspec)
 			local stack = get_player_bag_stack(player, bag_i)
 			local image = stack:get_definition().inventory_image
 			local slots = stack:get_definition().groups.bagslots
+			local std_inv_x = perplayer_formspec.std_inv_x
+			local lite_mode = perplayer_formspec.is_lite_mode
+
+			local bag_inv_y, header_x, header_y = 1.5, 0.3, 0.65
+			if lite_mode then
+				bag_inv_y = 0.5
+				header_x = perplayer_formspec.form_header_x
+				header_y = perplayer_formspec.form_header_y
+			end
 
 			local formspec = {
-				ui.style_full.standard_inv_bg,
-				ui.make_inv_img_grid(0.3, 1.5, 8, slots/8),
-				"image[9.2,0.4;1,1;" .. image .. "]",
-				"label[0.3,0.65;" .. F(S("Bag @1", bag_i)) .. "]",
+				perplayer_formspec.standard_inv_bg,
+				ui.make_inv_img_grid(std_inv_x, bag_inv_y, 8, slots/8),
+				"label[", header_x, ",", header_y, ";", F(S("Bag @1", bag_i)), "]",
 				"listcolors[#00000000;#00000000]",
 				"listring[current_player;main]",
 				string.format("list[current_player;bag%icontents;%f,%f;8,3;]",
-				    bag_i, 0.3 + ui.list_img_offset, 1.5 + ui.list_img_offset),
-				"listring[current_name;bag" .. bag_i .. "contents]",
+				    bag_i, std_inv_x + ui.list_img_offset, bag_inv_y + ui.list_img_offset),
+				"listring[current_name;bag", bag_i, "contents]",
 			}
+
+			if lite_mode then
+				return { formspec = table.concat(formspec) }
+			end
+
 			local n = #formspec + 1
+			formspec[n] = "image[" .. std_inv_x + 8.9 .. ",0.4;1,1;" .. image .. "]"
+			n = n + 1
 
 			local player_name = player:get_player_name() -- For if statement.
 			if ui.trash_enabled
