@@ -190,6 +190,9 @@ dofile(modpath.."/register.lua")
 
 if minetest.settings:get_bool("unified_inventory_bags") ~= false then
 	dofile(modpath.."/bags.lua")
+	if minetest.settings:get_bool("unified_inventory_keep_bags_on_death") == false then
+		dofile(modpath.."/bags_death.lua")
+	end
 end
 
 dofile(modpath.."/item_names.lua")

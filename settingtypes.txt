@@ -6,6 +6,10 @@ unified_inventory_lite (Lite mode) bool false
 #inventory storage size.
 unified_inventory_bags (Enable bags) bool true
 
+#If enabled, bags and their contents will be inserted into bones and/or
+#dropped on death
+unified_inventory_keep_bags_on_death (Enable bags) bool true
+
 #If enabled, the trash slot can be used by those without both creative
 #and the give privilege.
 unified_inventory_trash (Enable trash) bool true
