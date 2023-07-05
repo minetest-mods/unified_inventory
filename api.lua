@@ -12,8 +12,14 @@ local function is_recipe_craftable(recipe)
 			end
 		else
 			-- Possibly an item
-			if not minetest.registered_items[itemname]
-					or minetest.get_item_group(itemname, "not_in_craft_guide") ~= 0 then
+			local itemname_cleaned = ""
+			for s in itemname:gmatch("%S+") do
+				if itemname_cleaned == "" then
+					itemname_cleaned = s
+				end
+			end
+			if not minetest.registered_items[itemname_cleaned]
+					or minetest.get_item_group(itemname_cleaned, "not_in_craft_guide") ~= 0 then
 				return false
 			end
 		end
