@@ -12,12 +12,7 @@ local function is_recipe_craftable(recipe)
 			end
 		else
 			-- Possibly an item
-			local itemname_cleaned = ""
-			for s in itemname:gmatch("%S+") do
-				if itemname_cleaned == "" then
-					itemname_cleaned = s
-				end
-			end
+			local itemname_cleaned = ItemStack(itemname):get_name()
 			if not minetest.registered_items[itemname_cleaned]
 					or minetest.get_item_group(itemname_cleaned, "not_in_craft_guide") ~= 0 then
 				return false
