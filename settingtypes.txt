@@ -15,3 +15,5 @@ unified_inventory_hide_disabled_buttons (Hide disabled buttons) bool false
 
 
 unified_inventory_automatic_categorization (Items automatically added to categories) bool true
+
+unified_inventory_enable_item_names (Item names are shown above hotbar) bool true
