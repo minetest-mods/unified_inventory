@@ -4,7 +4,6 @@ local item_names = {} -- [player_name] = { hud, dtime, itemname }
 local dlimit = 3  -- HUD element will be hidden after this many seconds
 local hudbars_mod = minetest.get_modpath("hudbars")
 local only_names = minetest.settings:get_bool("unified_inventory_only_names")
-local shorten_names = minetest.settings:get_bool("unified_inventory_shorten_names")
 local max_length = tonumber(minetest.settings:get("unified_inventory_max_item_name_length")) or 80
 
 local function set_hud(player)
@@ -75,16 +74,10 @@ minetest.register_globalstep(function(dtime)
 			if only_names and desc and string.find(desc, "\n") then
 				desc = string.match(desc, "([^\n]*)")
 			end
-			if shorten_names and string.len(desc) > max_length then
-				local prefix_end = string.find(desc, ")") -- Some items have prefix: @#35cdff)Desert Eagle, @default)Locked Chest
-				if not prefix_end then
-					prefix_end = 1
-				end
-				if max_length > 0 then
-					desc = string.sub(desc, prefix_end + 1 , max_length + prefix_end) .. " [...]"
-				else
-					desc = ""
-				end
+			if not (max_length <= 0) and string.len(desc) > max_length then
+				desc = minetest.strip_colors(desc) -- FIXME: @default) is not getting removed
+				desc = string.sub(desc, 1 , max_length) .. " [...]"
+
 			end
 			player:hud_change(data.hud, 'text', desc)
 		end

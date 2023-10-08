@@ -20,6 +20,4 @@ unified_inventory_item_names (Item names are shown above hotbar) bool true
 
 unified_inventory_only_names (Show only item name) bool true
 
-unified_inventory_shorten_names (Shorten long item names) bool true
-
-unified_inventory_max_item_name_length (Maximum length of an item name before it's truncated) int 80
+unified_inventory_max_item_name_length (Maximum length of an item name before it's truncated, 0 disables option) int 80
