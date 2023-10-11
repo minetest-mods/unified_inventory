@@ -62,6 +62,7 @@ minetest.register_globalstep(function(dtime)
 			data.itemname = itemname
 			data.index = index
 			data.dtime = 0
+			local lang_code = minetest.get_player_information(player:get_player_name()).lang_code
 
 			local desc = stack.get_meta
 				and stack:get_meta():get_string("description")
@@ -74,10 +75,10 @@ minetest.register_globalstep(function(dtime)
 			if only_names and desc and string.find(desc, "\n") then
 				desc = string.match(desc, "([^\n]*)")
 			end
-			if not (max_length <= 0) and string.len(desc) > max_length then
-				desc = minetest.strip_colors(desc) -- FIXME: @default) is not getting removed
-				desc = string.sub(desc, 1 , max_length) .. " [...]"
-
+			desc = minetest.get_translated_string(lang_code, desc)
+			desc = minetest.strip_colors(desc)
+			if string.len(desc) > max_length and max_length > 0 then
+				desc = string.sub(desc, 1, max_length) .. " [...]"
 			end
 			player:hud_change(data.hud, 'text', desc)
 		end
