@@ -3,7 +3,7 @@
 local item_names = {} -- [player_name] = { hud, dtime, itemname }
 local dlimit = 3  -- HUD element will be hidden after this many seconds
 local hudbars_mod = minetest.get_modpath("hudbars")
-local only_names = minetest.settings:get_bool("unified_inventory_only_names")
+local only_names = minetest.settings:get_bool("unified_inventory_only_names", true)
 local max_length = tonumber(minetest.settings:get("unified_inventory_max_item_name_length")) or 80
 
 local function set_hud(player)
