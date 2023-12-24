@@ -51,6 +51,7 @@ minetest.after(0.01, function()
 			end
 		end
 	end
+
 	table.sort(ui.items_list)
 	ui.items_list_size = #ui.items_list
 	print("Unified Inventory. Inventory size: "..ui.items_list_size)

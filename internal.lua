@@ -270,8 +270,8 @@ local function formspec_add_item_browser(player, formspec, ui_peruser)
 					button_name, minetest.formspec_escape(tooltip)
 				)
 				n = n + 2
-				list_index = list_index + 1
 			end
+			list_index = list_index + 1
 		end
 	end
 	formspec[n] = "style[page_number;content_offset=0]"
@@ -349,12 +349,25 @@ function ui.apply_filter(player, filter, search_dir)
 	end
 	local player_name = player:get_player_name()
 
+	-- Whether to show uncraftable items
+	local fprefilter = function(_)
+		return true
+	end
+	if ui.hide_uncraftable_items and not ui.is_creative(player_name) then
+		fprefilter = function(name)
+			return ui.get_recipe_list(name)
+		end
+	end
+
+	local registered_items = minetest.registered_items
 	local lfilter = string.lower(filter)
 	local ffilter
+
 	if lfilter:sub(1, 6) == "group:" then
 		-- Group filter: all groups of the item must match
 		local groups = lfilter:sub(7):split(",")
-		ffilter = function(name, def)
+		ffilter = function(name)
+			local def = registered_items[name]
 			for _, group in ipairs(groups) do
 				if not def.groups[group]
 				or def.groups[group] <= 0 then
@@ -368,7 +381,8 @@ function ui.apply_filter(player, filter, search_dir)
 		local player_info = minetest.get_player_information(player_name)
 		local lang = player_info and player_info.lang_code or ""
 
-		ffilter = function(name, def)
+		ffilter = function(name)
+			local def = registered_items[name]
 			local lname = string.lower(name)
 			local ldesc = string.lower(def.description)
 			local llocaldesc = minetest.get_translated_string
@@ -378,32 +392,29 @@ function ui.apply_filter(player, filter, search_dir)
 		end
 	end
 
-	local is_itemdef_listable = ui.is_itemdef_listable
 	local filtered_items = {}
 
 	local category = ui.current_category[player_name] or 'all'
 	if category == 'all' then
-		for name, def in pairs(minetest.registered_items) do
-			if is_itemdef_listable(def)
-			and ffilter(name, def) then
+		for _, name in ipairs(ui.items_list) do
+			if fprefilter(name) and ffilter(name) then
 				table.insert(filtered_items, name)
 			end
 		end
 	elseif category == 'uncategorized' then
-		for name, def in pairs(minetest.registered_items) do
-			if is_itemdef_listable(def)
-			and not ui.find_category(name)
-			and ffilter(name, def) then
+		for _, name in ipairs(ui.items_list) do
+			if not ui.find_category(name)
+					and fprefilter(name)
+					and ffilter(name) then
 				table.insert(filtered_items, name)
 			end
 		end
 	else
 		-- Any other category is selected
 		for name, exists in pairs(ui.registered_category_items[category]) do
-			local def = minetest.registered_items[name]
-			if exists and def
-			and is_itemdef_listable(def)
-			and ffilter(name, def) then
+			if exists
+					and fprefilter(name)
+					and ffilter(name) then
 				table.insert(filtered_items, name)
 			end
 		end

@@ -53,8 +53,9 @@ unified_inventory = {
 	standard_background = "bgcolor[#0000]background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]",
 
 	hide_disabled_buttons = minetest.settings:get_bool("unified_inventory_hide_disabled_buttons", false),
+	hide_uncraftable_items = minetest.settings:get_bool("unified_inventory_hide_uncraftable_items", false),
 
-	version = 4
+	version = 5
 }
 
 local ui = unified_inventory

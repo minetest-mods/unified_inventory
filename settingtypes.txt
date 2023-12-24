@@ -16,6 +16,10 @@ unified_inventory_waypoints (Enable waypoints) bool true
 # If enabled, disabled buttons will be hidden instead of grayed out.
 unified_inventory_hide_disabled_buttons (Hide disabled buttons) bool false
 
+# Hides items with no known craft recipe from the category "all" (default).
+# This setting has no effect on players in creative mode.
+unified_inventory_hide_uncraftable_items (Hide uncraftable items) bool false
+
 # Automatically categorizes registered items based on their
 # groups. This is based on a fuzzy match, thus is not 100% accurate.
 unified_inventory_automatic_categorization (Categories: add items automatically) bool true
