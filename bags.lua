@@ -249,20 +249,27 @@ minetest.register_allow_player_inventory_action(function(player, action, invento
 	end
 end)
 
--- register bag tools
-minetest.register_tool("unified_inventory:bag_small", {
+local register
+if minetest.settings:get_bool("unified_inventory_stackable_bags", false) then
+	register = minetest.register_craftitem
+else
+	register = minetest.register_tool
+end
+
+-- register bags
+register("unified_inventory:bag_small", {
 	description = S("Small Bag"),
 	inventory_image = "bags_small.png",
 	groups = {bagslots=8},
 })
 
-minetest.register_tool("unified_inventory:bag_medium", {
+register("unified_inventory:bag_medium", {
 	description = S("Medium Bag"),
 	inventory_image = "bags_medium.png",
 	groups = {bagslots=16},
 })
 
-minetest.register_tool("unified_inventory:bag_large", {
+register("unified_inventory:bag_large", {
 	description = S("Large Bag"),
 	inventory_image = "bags_large.png",
 	groups = {bagslots=24},

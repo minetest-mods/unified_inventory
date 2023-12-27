@@ -30,3 +30,6 @@ unified_inventory_only_names (HUD item name: first line only) bool true
 # Crops the shown description to the specified length.
 # 0 disables this functionality.
 unified_inventory_max_item_name_length (HUD item names: character limit) int 80
+
+# If true, bags will be stackable to the default stack max
+unified_inventory_stackable_bags (Stackable bags) bool false
