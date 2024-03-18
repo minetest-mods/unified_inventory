@@ -198,11 +198,21 @@ minetest.after(0.01, function()
 				]]
 				cat_def[itemname] = nil
 			end
+			if minetest.registered_items[itemname] and minetest.registered_items[itemname].groups.not_in_creative_inventory then
+				total_removed = total_removed + 1
+				--[[
+				-- For analysis
+				minetest.log("warning", "[unified_inventory] Removed item '"
+					.. itemname .. "' from category '" .. cat_name
+					.. "'. Reason: item is in 'not_in_creative_inventory' group")
+				--]]
+				cat_def[itemname] = nil
+			end
 		end
 	end
 	if total_removed > 0 then
 		minetest.log("info", "[unified_inventory] Removed " .. total_removed ..
-			" unknown items from the categories.")
+			" items from the categories.")
 	end
 
 	for _, callback in ipairs(ui.initialized_callbacks) do
