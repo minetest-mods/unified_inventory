@@ -205,7 +205,7 @@ minetest.after(0.01, function()
 				minetest.log("warning", "[unified_inventory] Removed item '"
 					.. itemname .. "' from category '" .. cat_name
 					.. "'. Reason: item is in 'not_in_creative_inventory' group")
-				--]]
+				]]
 				cat_def[itemname] = nil
 			end
 		end
