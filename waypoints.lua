@@ -103,7 +103,7 @@ local function get_waypoint_data(player)
 end
 
 ui.register_page("waypoints", {
-	get_formspec = function(player)
+	get_formspec = function(player, perplayer_formspec)
 		local player_name = player:get_player_name()
 		local wp_info_x = ui.style_full.form_header_x + 1.25
 		local wp_info_y = ui.style_full.form_header_y + 0.5
@@ -115,12 +115,16 @@ ui.register_page("waypoints", {
 		local sel = waypoints.selected or 1
 
 		local formspec = {
-			ui.style_full.standard_inv_bg,
 			string.format("label[%f,%f;%s]",
 				ui.style_full.form_header_x, ui.style_full.form_header_y, F(S("Waypoints"))),
 			"image["..wp_info_x..","..wp_info_y..";1,1;ui_waypoints_icon.png]"
 		}
-		local n=4
+		local n=3
+
+		if not perplayer_formspec.is_lite_mode then
+			formspec[n] = ui.style_full.standard_inv_bg
+			n = n + 1
+		end
 
 		-- Tabs buttons:
 		for i = 1, COUNT do
@@ -212,7 +216,10 @@ ui.register_page("waypoints", {
 		formspec[n+2] = string.format("label[%f,%f;%s: %s]",
 			wp_info_x, wp_info_y+2.60, F(S("HUD text color")), hud_colors[waypoint.color or 1][3])
 
-		return {formspec=table.concat(formspec)}
+		return {
+			formspec = table.concat(formspec),
+			draw_inventory = not perplayer_formspec.is_lite_mode,
+		}
 	end,
 })
 
@@ -220,7 +227,6 @@ ui.register_button("waypoints", {
 	type = "image",
 	image = "ui_waypoints_icon.png",
 	tooltip = S("Waypoints"),
-	hide_lite=true
 })
 
 local function update_hud(player, waypoints, temp, i)
