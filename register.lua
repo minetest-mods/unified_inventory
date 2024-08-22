@@ -326,15 +326,14 @@ ui.register_page("craftguide", {
 				F(role_text[dir]), item_name_shown)
 		n = n + 2
 
-		local stack_max = item_def and item_def.stack_max or 99
-		local giveme_form = table.concat({
-			"label[" .. (give_x + 0.1) .. "," .. (craftguidey + 2.7) .. ";" .. F(S("Give me:")) .. "]",
-			"button[" .. (give_x) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_1;1]",
-			stack_max >= 10 and
-			"button[" .. (give_x + 0.8) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_10;10]" or "",
-			stack_max >= 99 and
-			"button[" .. (give_x + 1.6) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_99;99]" or ""
-		})
+		local giveme_form =
+			"label[" .. (give_x + 0.1) .. "," .. (craftguidey + 2.7) .. ";" .. F(S("Give me:")) .. "]" ..
+			"button[" .. (give_x) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_1;1]"
+		if item_def.type ~= "tool" then
+			giveme_form = giveme_form ..
+				"button[" .. (give_x + 0.8) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_10;10]" ..
+				"button[" .. (give_x + 1.6) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_99;99]"
+		end
 
 		if not craft then
 			-- No craft recipes available for this item.
