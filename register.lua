@@ -329,7 +329,7 @@ ui.register_page("craftguide", {
 		local giveme_form =
 			"label[" .. (give_x + 0.1) .. "," .. (craftguidey + 2.7) .. ";" .. F(S("Give me:")) .. "]" ..
 			"button[" .. (give_x) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_1;1]"
-		if item_def.type ~= "tool" then
+		if item_def and item_def.type ~= "tool" then
 			giveme_form = giveme_form ..
 				"button[" .. (give_x + 0.8) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_10;10]" ..
 				"button[" .. (give_x + 1.6) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_99;99]"
