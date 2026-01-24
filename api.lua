@@ -2,19 +2,26 @@ local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
 local ui = unified_inventory
 
+--- @return boolean. Returns `true` when all ingredients exist.
 local function is_recipe_craftable(recipe)
 	-- Ensure the ingedients exist
 	for _, itemname in pairs(recipe.items) do
 		local groups = string.find(itemname, "group:")
 		if groups then
-			if not ui.get_group_item(string.sub(groups, 8)).item then
+			local items = ui.get_matching_items(itemname)
+			if not next(items) then
+				--print("No items for group item: ", itemname)
 				return false
 			end
 		else
-			-- Possibly an item
-			local itemname_cleaned = ItemStack(itemname):get_name()
-			if not minetest.registered_items[itemname_cleaned]
-					or minetest.get_item_group(itemname_cleaned, "not_in_craft_guide") ~= 0 then
+			-- Possibly an item. Clean its name (could be "default:stick 4")
+			itemname = ItemStack(itemname):get_name()
+			local def = core.registered_items[itemname]
+			if not def then
+				return false
+			end
+			-- inlined core.get_item_group
+			if (def.groups.not_in_craft_guide or 0) ~= 0 then
 				return false
 			end
 		end
@@ -22,8 +29,7 @@ local function is_recipe_craftable(recipe)
 	return true
 end
 
--- Create detached creative inventory after loading all mods
-minetest.after(0.01, function()
+local function register_normal_craft_recipes()
 	local rev_aliases = {}
 	for original, newname in pairs(minetest.registered_aliases) do
 		if not rev_aliases[newname] then
@@ -32,23 +38,120 @@ minetest.after(0.01, function()
 		table.insert(rev_aliases[newname], original)
 	end
 
+	for _, name in ipairs(ui.items_list) do
+		-- Alias processing: Find recipes that belong to the current item name
+		local all_names = rev_aliases[name] or {}
+		table.insert(all_names, name)
+		for _, itemname in ipairs(all_names) do
+			local recipes = minetest.get_all_craft_recipes(itemname)
+			for _, recipe in ipairs(recipes or {}) do
+				if is_recipe_craftable(recipe) then
+					ui.register_craft(recipe)
+				end
+			end
+		end
+	end
+end
+
+local function register_dig_drops(name)
+	-- Analyse dropped items -> custom "digging" recipes
+	local def = minetest.registered_items[name]
+	-- Simple drops
+	if type(def.drop) == "string" then
+		local dstack = ItemStack(def.drop)
+		if not dstack:is_empty() and dstack:get_name() ~= name then
+			ui.register_craft({
+				type = "digging",
+				items = {name},
+				output = def.drop,
+				width = 0,
+			})
+
+		end
+	-- Complex drops. Yes, it's really complex!
+	elseif type(def.drop) == "table" then
+		--[[ Extract single items from the table and save them into dedicated tables
+		to register them later, in order to avoid duplicates. These tables counts
+		the total number of guaranteed drops and drops by chance (“maybes”) for each item.
+		For “maybes”, the final count is the theoretical maximum number of items, not
+		neccessarily the actual drop count. ]]
+		local drop_guaranteed = {}
+		local drop_maybe = {}
+		-- This is for catching an obscure corner case: If the top items table has
+		-- only items with rarity = 1, but max_items is set, then only the first
+		-- max_items will be part of the drop, any later entries are logically
+		-- impossible, so this variable is for keeping track of this
+		local max_items_left = def.drop.max_items
+		-- For checking whether we still encountered only guaranteed only so far;
+		-- for the first “maybe” item it will become false which will cause ALL
+		-- later items to be considered “maybes”.
+		-- A common idiom is:
+		-- { max_items 1, { items = {
+		--	{ items={"example:1"}, rarity = 5 },
+		-- 	{ items={"example:2"}, rarity = 1 }, }}}
+		-- example:2 must be considered a “maybe” because max_items is set and it
+		-- appears after a “maybe”
+		local max_start = true
+		-- Let's iterate through the items madness!
+		-- Handle invalid drop entries gracefully.
+		local drop_items = def.drop.items or { }
+		for i=1,#drop_items do
+			if max_items_left ~= nil and max_items_left <= 0 then break end
+			local itit = drop_items[i]
+			for j=1,#itit.items do
+				local dstack = ItemStack(itit.items[j])
+				if not dstack:is_empty() and dstack:get_name() ~= name then
+					local dname = dstack:get_name()
+					local dcount = dstack:get_count()
+					-- Guaranteed drops AND we are not yet in “maybe mode”
+					if #itit.items == 1 and itit.rarity == 1 and max_start then
+						if drop_guaranteed[dname] == nil then
+							drop_guaranteed[dname] = 0
+						end
+						drop_guaranteed[dname] = drop_guaranteed[dname] + dcount
+
+						if max_items_left ~= nil then
+							max_items_left = max_items_left - 1
+							if max_items_left <= 0 then break end
+						end
+					-- Drop was a “maybe”
+					else
+						if max_items_left ~= nil then max_start = false end
+						if drop_maybe[dname] == nil then
+							drop_maybe[dname] = 0
+						end
+						drop_maybe[dname] = drop_maybe[dname] + dcount
+					end
+				end
+			end
+		end
+		for itemstring, count in pairs(drop_guaranteed) do
+			ui.register_craft({
+				type = "digging",
+				items = {name},
+				output = itemstring .. " " .. count,
+				width = 0,
+			})
+		end
+		for itemstring, count in pairs(drop_maybe) do
+			ui.register_craft({
+				type = "digging_chance",
+				items = {name},
+				output = itemstring .. " " .. count,
+				width = 0,
+			})
+		end
+	end
+end
+
+-- Create detached creative inventory after loading all mods
+minetest.after(0.01, function()
+
 	-- Filtered item list
 	ui.items_list = {}
 	for name, def in pairs(minetest.registered_items) do
 		if ui.is_itemdef_listable(def) then
 			table.insert(ui.items_list, name)
-
-			-- Alias processing: Find recipes that belong to the current item name
-			local all_names = rev_aliases[name] or {}
-			table.insert(all_names, name)
-			for _, itemname in ipairs(all_names) do
-				local recipes = minetest.get_all_craft_recipes(itemname)
-				for _, recipe in ipairs(recipes or {}) do
-					if is_recipe_craftable(recipe) then
-						ui.register_craft(recipe)
-					end
-				end
-			end
 		end
 	end
 
@@ -56,99 +159,14 @@ minetest.after(0.01, function()
 	ui.items_list_size = #ui.items_list
 	print("Unified Inventory. Inventory size: "..ui.items_list_size)
 
-	-- Analyse dropped items -> custom "digging" recipes
-	for _, name in ipairs(ui.items_list) do
-		local def = minetest.registered_items[name]
-		-- Simple drops
-		if type(def.drop) == "string" then
-			local dstack = ItemStack(def.drop)
-			if not dstack:is_empty() and dstack:get_name() ~= name then
-				ui.register_craft({
-					type = "digging",
-					items = {name},
-					output = def.drop,
-					width = 0,
-				})
-
-			end
-		-- Complex drops. Yes, it's really complex!
-		elseif type(def.drop) == "table" then
-			--[[ Extract single items from the table and save them into dedicated tables
-			to register them later, in order to avoid duplicates. These tables counts
-			the total number of guaranteed drops and drops by chance (“maybes”) for each item.
-			For “maybes”, the final count is the theoretical maximum number of items, not
-			neccessarily the actual drop count. ]]
-			local drop_guaranteed = {}
-			local drop_maybe = {}
-			-- This is for catching an obscure corner case: If the top items table has
-			-- only items with rarity = 1, but max_items is set, then only the first
-			-- max_items will be part of the drop, any later entries are logically
-			-- impossible, so this variable is for keeping track of this
-			local max_items_left = def.drop.max_items
-			-- For checking whether we still encountered only guaranteed only so far;
-			-- for the first “maybe” item it will become false which will cause ALL
-			-- later items to be considered “maybes”.
-			-- A common idiom is:
-			-- { max_items 1, { items = {
-			--	{ items={"example:1"}, rarity = 5 },
-			-- 	{ items={"example:2"}, rarity = 1 }, }}}
-			-- example:2 must be considered a “maybe” because max_items is set and it
-			-- appears after a “maybe”
-			local max_start = true
-			-- Let's iterate through the items madness!
-			-- Handle invalid drop entries gracefully.
-			local drop_items = def.drop.items or { }
-			for i=1,#drop_items do
-				if max_items_left ~= nil and max_items_left <= 0 then break end
-				local itit = drop_items[i]
-				for j=1,#itit.items do
-					local dstack = ItemStack(itit.items[j])
-					if not dstack:is_empty() and dstack:get_name() ~= name then
-						local dname = dstack:get_name()
-						local dcount = dstack:get_count()
-						-- Guaranteed drops AND we are not yet in “maybe mode”
-						if #itit.items == 1 and itit.rarity == 1 and max_start then
-							if drop_guaranteed[dname] == nil then
-								drop_guaranteed[dname] = 0
-							end
-							drop_guaranteed[dname] = drop_guaranteed[dname] + dcount
-
-							if max_items_left ~= nil then
-								max_items_left = max_items_left - 1
-								if max_items_left <= 0 then break end
-							end
-						-- Drop was a “maybe”
-						else
-							if max_items_left ~= nil then max_start = false end
-							if drop_maybe[dname] == nil then
-								drop_maybe[dname] = 0
-							end
-							drop_maybe[dname] = drop_maybe[dname] + dcount
-						end
-					end
-				end
-			end
-			for itemstring, count in pairs(drop_guaranteed) do
-				ui.register_craft({
-					type = "digging",
-					items = {name},
-					output = itemstring .. " " .. count,
-					width = 0,
-				})
-			end
-			for itemstring, count in pairs(drop_maybe) do
-				ui.register_craft({
-					type = "digging_chance",
-					items = {name},
-					output = itemstring .. " " .. count,
-					width = 0,
-				})
-			end
-		end
-	end
-
 	-- Step 1: Initialize cache for looking up groups
 	unified_inventory.init_matching_cache()
+
+	-- Index all craftable craft recipes. This depends on 'init_matching_cache'
+	register_normal_craft_recipes()
+	for _, name in ipairs(ui.items_list) do
+		register_dig_drops(name)
+	end
 
 	-- Step 2: Find all matching items for the given spec (groups)
 	local get_matching_spec_items = unified_inventory.get_matching_items
