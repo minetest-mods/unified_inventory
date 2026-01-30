@@ -39,16 +39,19 @@ ui.register_button("bags", {
 })
 
 local function get_player_bag_stack(player, i)
-	return minetest.get_inventory({
+	local inventory = minetest.get_inventory({
 		type = "detached",
 		name = player:get_player_name() .. "_bags"
-	}):get_stack("bag" .. i, 1)
+	})
+	if not inventory then return nil end
+	return inventory:get_stack("bag" .. i, 1)
 end
 
 for bag_i = 1, 4 do
 	ui.register_page("bag" .. bag_i, {
 		get_formspec = function(player, perplayer_formspec)
 			local stack = get_player_bag_stack(player, bag_i)
+			if not stack then return end
 			local image = stack:get_definition().inventory_image
 			local slots = stack:get_definition().groups.bagslots
 			local std_inv_x = perplayer_formspec.std_inv_x
@@ -90,22 +93,25 @@ for bag_i = 1, 4 do
 			end
 			local inv = player:get_inventory()
 			for i = 1, 4 do
-				local def = get_player_bag_stack(player, i):get_definition()
-				if def.groups.bagslots then
-					local list_name = "bag" .. i .. "contents"
-					local size = inv:get_size(list_name)
-					local used = 0
-					for si = 1, size do
-						local stk = inv:get_stack(list_name, si)
-						if not stk:is_empty() then
-							used = used + 1
+				local def_stack = get_player_bag_stack(player, i)
+				if def_stack then
+					local def = def_stack:get_definition()
+					if def.groups.bagslots then
+						local list_name = "bag" .. i .. "contents"
+						local size = inv:get_size(list_name)
+						local used = 0
+						for si = 1, size do
+							local stk = inv:get_stack(list_name, si)
+							if not stk:is_empty() then
+								used = used + 1
+							end
 						end
+						local img = def.inventory_image
+						local label = F(S("Bag @1", i)) .. "\n" .. used .. "/" .. size
+						formspec[n] = string.format("image_button[%f,0.4;1,1;%s;bag%i;%s]",
+								(i + 1.35)*1.25, img, i, label)
+						n = n + 1
 					end
-					local img = def.inventory_image
-					local label = F(S("Bag @1", i)) .. "\n" .. used .. "/" .. size
-					formspec[n] = string.format("image_button[%f,0.4;1,1;%s;bag%i;%s]",
-							(i + 1.35)*1.25, img, i, label)
-					n = n + 1
 				end
 			end
 			return { formspec = table.concat(formspec) }
@@ -120,7 +126,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	for i = 1, 4 do
 		if fields["bag" .. i] then
 			local stack = get_player_bag_stack(player, i)
-			if not stack:get_definition().groups.bagslots then
+			if not stack or not stack:get_definition().groups.bagslots then
 				return
 			end
 			ui.set_inventory_formspec(player, "bag" .. i)
