@@ -291,21 +291,52 @@ function ui.register_craft(options)
 	if not options.output then
 		return
 	end
-	local itemstack = ItemStack(options.output)
-	if itemstack:is_empty() then
-		return
-	end
-	if options.type == "normal" and options.width == 0 then
-		options = { type = "shapeless", items = options.items, output = options.output, width = 0 }
-	end
-	local item_name = itemstack:get_name()
-	if not ui.crafts_for.recipe[item_name] then
-		ui.crafts_for.recipe[item_name] = {}
-	end
-	table.insert(ui.crafts_for.recipe[item_name],options)
 
-	for _, callback in ipairs(ui.craft_registered_callbacks) do
-		callback(item_name, options)
+	if options.type == "normal" and options.width == 0 then
+		options = {
+			type = "shapeless",
+			items = options.items,
+			output = options.output,
+			width = 0
+		}
+	end
+
+	do
+		-- Convert the the 'output' field into a table for convenience
+		local outputs = options.output
+		if type(outputs) == "string" then
+			-- Most common
+			outputs = { outputs }
+		elseif type(outputs) == "userdata" and outputs.add_item then
+			-- Rare
+			outputs = { outputs }
+		end
+		assert(type(outputs) == "table", "Invalid 'output' field: " .. type(options.output))
+
+		options.output = {}
+		for _, itemstack in ipairs(outputs) do
+			itemstack = ItemStack(itemstack)
+			if not itemstack:is_empty() then
+				table.insert(options.output, itemstack)
+			end
+		end
+	end
+
+	-- Pre-filter: discard empty outputs
+	for _, itemstack in ipairs(options.output) do
+		local item_name = itemstack:get_name()
+		if not ui.crafts_for.recipe[item_name] then
+			ui.crafts_for.recipe[item_name] = {}
+		end
+		table.insert(ui.crafts_for.recipe[item_name], options)
+	end
+
+	-- Run callbacks
+	for _, itemstack in ipairs(options.output) do
+		local item_name = itemstack:get_name()
+		for _, callback in ipairs(ui.craft_registered_callbacks) do
+			callback(item_name, options)
+		end
 	end
 end
 
@@ -417,7 +448,32 @@ end
 
 ---------------- List getters ----------------
 
+local warned_get_recipe_list = false
 function ui.get_recipe_list(output)
+	if not warned_get_recipe_list then
+		warned_get_recipe_list = true
+		core.log("warning", debug.traceback("Deprecated call to 'get_recipe_list'. " ..
+			"Please use 'get_recipe_list2' instead."))
+	end
+
+	local recipes = ui.crafts_for.recipe[output]
+	if not recipes then
+		return nil
+	end
+
+	-- Slow backwards compat
+	local list = {}
+	for _, recipe in ipairs(recipes) do
+		if #recipe.output == 1 then
+			recipe = table.copy(recipe)
+			recipe.output = recipe.output[1]:to_string()
+			table.insert(list, recipe)
+		end
+	end
+	return list
+end
+
+function ui.get_recipe_list2(output)
 	return ui.crafts_for.recipe[output]
 end
 

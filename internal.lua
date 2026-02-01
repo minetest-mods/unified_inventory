@@ -365,9 +365,10 @@ function ui.apply_filter(player, filter, search_dir)
 	local fprefilter = function(_)
 		return true
 	end
+
 	if ui.hide_uncraftable_items and not ui.is_creative(player_name) then
 		fprefilter = function(name)
-			return ui.get_recipe_list(name)
+			return ui.get_recipe_list2(name)
 		end
 	end
 

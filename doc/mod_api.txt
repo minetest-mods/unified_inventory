@@ -12,6 +12,9 @@ API revisions within unified_inventory can be checked using:
 
 * Version `1`: Classic formspec layout (no real_coordinates)
 * Version `2`: Force formspec version 4 (includes real_coordinates)
+* Version `5` (Y2025): unified_inventory_hide_uncraftable_items
+* Version `6` (Y2026): Support for multiple craft outputs
+
 
 Misc functions
 --------------
@@ -48,24 +51,31 @@ These methods should be used instead of accessing the unified_inventory data str
 
 Get a list of recipes for a particular output item:
 
-	unified_inventory.get_recipe_list(output_item)
+	unified_inventory.get_recipe_list2(output_item)
 
 	Returns a list of tables, each holding a recipe definition, like:
 	{
 		{
 			type = "normal",
 			items = { "default:stick", "default:stick", "default:stick", "default:stick" },
-			output = "default:wood",
+			output = { ItemStack("default:wood") },
 			width = 2
 		},
 		{
 			type = "shapeless",
 			items = { "default:tree" },
-			output = "default:wood 4",
+			output = { ItemStack("default:wood 4"), ItemStack("mynaturemod:resin 2") },
 			width = 0
 		},
 		...
 	}
+
+ * `unified_inventory.get_recipe_list(output_item)`
+     * This function is depreacted and will be removed in future releases.
+     * Returns a list of recipes like `unified_inventory.get_recipe_list2` but does not
+       contain recipes with multiple outputs.
+     * The `output` field is of the type `string` (e.g. `default:stick 3`).
+
 
 Get a list of all the output items crafts have been registered for:
 
@@ -159,7 +169,7 @@ Register a non-standard craft recipe:
 			{ "default:bar" }
 		},
 		width = 3,
-		-- ^ Same as `minetest.register_recipe`
+		-- ^ Same as `core.register_craft`
 	})
 
 
@@ -206,7 +216,7 @@ Modifier functions (to be removed)
 
 Item management
 
- * `	unified_inventory.add_category_item(name, itemname)`
+ * `unified_inventory.add_category_item(name, itemname)`
      * Adds a single item to the category
      * `itemname` (string): self-explanatory
  * `unified_inventory.add_category_items(name, { itemname1, itemname2, ... }`

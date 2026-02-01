@@ -344,9 +344,14 @@ ui.register_page("craftguide", {
 				formspec[n+3] = giveme_form
 			end
 			return { formspec = table.concat(formspec) }
-		else
-			formspec[n] = stack_image_button(craftguideresultx, craftguidey, 1.2, 1.2,
-					"item_button_" .. rdir .. "_", ItemStack(craft.output))
+		end
+
+		-- List all recipes
+		for i = #craft.output, 1, -1 do
+			-- Go in reverse to not overlap the stack count
+			local itemstack = craft.output[i]
+			formspec[n] = stack_image_button(craftguideresultx + (i - 1) * 0.8, craftguidey, 1.2, 1.2,
+					"item_button_" .. rdir .. "_", itemstack)
 			n = n + 1
 		end
 

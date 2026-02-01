@@ -58,7 +58,7 @@ unified_inventory = {
 	hide_disabled_buttons = minetest.settings:get_bool("unified_inventory_hide_disabled_buttons", false),
 	hide_uncraftable_items = minetest.settings:get_bool("unified_inventory_hide_uncraftable_items", false),
 
-	version = 5
+	version = 6
 }
 
 local ui = unified_inventory
@@ -204,3 +204,5 @@ if minetest.settings:get_bool("unified_inventory_waypoints") ~= false then
 	dofile(modpath.."/waypoints.lua")
 end
 dofile(modpath.."/legacy.lua") -- mod compatibility
+
+--dofile(modpath.."/unittests.lua") -- For development purposes only!
