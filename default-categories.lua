@@ -85,7 +85,7 @@ local function register_automatic_categorization()
 				   group.sapling or
 				   group.tree then
 				unified_inventory.add_category_item('plants', name)
-			elseif def.type == 'tool' then
+			elseif def.type == 'tool' or def.tool_capabilities then
 				unified_inventory.add_category_item('tools', name)
 			elseif def.liquidtype == 'source' then
 				unified_inventory.add_category_item('environment', name)
