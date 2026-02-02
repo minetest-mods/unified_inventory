@@ -2,6 +2,8 @@ local S = minetest.get_translator("unified_inventory")
 local F = minetest.formspec_escape
 local ui = unified_inventory
 
+local recipes_initialized = false
+
 --- @return boolean. Returns `true` when all ingredients exist.
 local function is_recipe_craftable(recipe)
 	-- Ensure the ingedients exist
@@ -201,6 +203,7 @@ minetest.after(0.01, function()
 		end
 		ui.crafts_for.recipe[outputitemname] = new_recipe_list
 	end
+	recipes_initialized = true
 
 	-- Remove unknown items from all categories
 	local total_removed = 0
@@ -292,6 +295,15 @@ function ui.register_craft(options)
 		return
 	end
 
+	if recipes_initialized then
+		-- If you're getting this warning, do use either:
+		--   a)  unified_inventory.register_craft(...)
+		--   b)  core.register_on_mods_loaded(...)
+		core.log("warning", "[unified_inventory] Recipe registered too late: " ..
+			dump(options.output):gsub("[\t\n]", " ") ..
+			". It might not show up correctly.")
+	end
+
 	if options.type == "normal" and options.width == 0 then
 		options = {
 			type = "shapeless",
@@ -308,7 +320,7 @@ function ui.register_craft(options)
 			-- Most common
 			outputs = { outputs }
 		elseif type(outputs) == "userdata" and outputs.add_item then
-			-- Rare
+			-- Rare: ItemStack
 			outputs = { outputs }
 		end
 		assert(type(outputs) == "table", "Invalid 'output' field: " .. type(options.output))
