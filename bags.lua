@@ -2,7 +2,8 @@
 Bags for Minetest
 
 Copyright (c) 2012 cornernote, Brett O'Donnell <cornernote@gmail.com>
-License: GPLv3
+Relicensed under LGPL 2 (from GPLv3) as permitted by cornernote (2026-03-14).
+Approval: https://github.com/minetest-mods/unified_inventory/issues/266#issuecomment-4060493213
 --]]
 
 local S = minetest.get_translator("unified_inventory")
