@@ -197,7 +197,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 	if clicked_item then
-		if ui.current_item[player_name] == clicked_item then
+		local selected_stack = ui.current_item[player_name]
+		if selected_stack and selected_stack:get_name() == clicked_item then
 			-- Flip usage/recipe
 			local dir = ui.current_craft_direction[player_name]
 			ui.current_craft_direction[player_name] = dir == "recipe" and "usage" or "recipe"
@@ -211,7 +212,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			page = "craftguide"
 		end
 		if page == "craftguide" then
-			unified_inventory.current_item[player_name] = clicked_item
+			unified_inventory.current_item[player_name] = ItemStack(clicked_item)
 			unified_inventory.alternate[player_name] = 1
 			unified_inventory.set_inventory_formspec(player, "craftguide")
 		elseif player_creative then
@@ -232,28 +233,25 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	end
 	minetest.sound_play("ui_click",
 			{to_player=player_name, gain = 0.1})
-	local item_name = unified_inventory.current_item[player_name]
-	if not item_name then
+	local selected_item = unified_inventory.current_item[player_name]
+	if not selected_item then
 		return
 	end
-	local crafts = unified_inventory.crafts_for[unified_inventory.current_craft_direction[player_name]][item_name]
-	if not crafts then
-		return
-	end
-	local alternates = #crafts
-	if alternates <= 1 then
+	local crafts = ui.crafts_for[ui.current_craft_direction[
+		player_name]][selected_item:get_name()] or {}
+	if #crafts <= 1 then
 		return
 	end
 	local alternate
 	if fields.alternate then
 		alternate = unified_inventory.alternate[player_name] + 1
-		if alternate > alternates then
+		if alternate > #crafts then
 			alternate = 1
 		end
 	elseif fields.alternate_prev then
 		alternate = unified_inventory.alternate[player_name] - 1
 		if alternate < 1 then
-			alternate = alternates
+			alternate = #crafts
 		end
 	end
 	unified_inventory.alternate[player_name] = alternate
