@@ -12,7 +12,6 @@ local worldpath = minetest.get_worldpath()
 -- Data tables definitions
 unified_inventory = {
 	activefilter = {},
-	active_search_direction = {},
 	alternate = {},
 	current_page = {},
 	current_searchbox = {},

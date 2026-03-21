@@ -248,7 +248,6 @@ local function formspec_add_item_browser(player, formspec, ui_peruser)
 		return
 	end
 
-	local dir = ui.active_search_direction[player_name]
 	local list_index = ui.current_index[player_name]
 	local page2 = math.floor(list_index / (ui_peruser.items_per_page) + 1)
 	local pagemax = math.floor(
@@ -259,21 +258,7 @@ local function formspec_add_item_browser(player, formspec, ui_peruser)
 			local name = ui.filtered_items_list[player_name][list_index]
 			local item = minetest.registered_items[name]
 			if item then
-				-- Clicked on current item: Flip crafting direction
-				if name == ui.current_item[player_name] then
-					local cdir = ui.current_craft_direction[player_name]
-					if cdir == "recipe" then
-						dir = "usage"
-					elseif cdir == "usage" then
-						dir = "recipe"
-					end
-				else
-				-- Default: use active search direction by default
-					dir = ui.active_search_direction[player_name]
-				end
-
-				local button_name = "item_button_" .. dir .. "_"
-					.. ui.mangle_for_formspec(name)
+				local button_name = "item_button_" .. ui.mangle_for_formspec(name)
 				formspec[n] = ("item_image_button[%f,%f;%f,%f;%s;%s;]"):format(
 					ui_peruser.page_x + x * ui_peruser.btn_spc,
 					ui_peruser.page_y + y * ui_peruser.btn_spc,
@@ -361,7 +346,7 @@ function ui.is_itemdef_listable(def)
 end
 
 --apply filter to the inventory list (create filtered copy of full one)
-function ui.apply_filter(player, filter, search_dir)
+function ui.apply_filter(player, filter)
 	if not player then
 		return false
 	end
@@ -452,7 +437,6 @@ function ui.apply_filter(player, filter, search_dir)
 	ui.filtered_items_list[player_name] = filtered_items
 	ui.current_index[player_name] = 1
 	ui.activefilter[player_name] = filter
-	ui.active_search_direction[player_name] = search_dir
 	ui.set_inventory_formspec(player, ui.current_page[player_name])
 end
 

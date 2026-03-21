@@ -233,10 +233,6 @@ local prev_alt_text = {
 	recipe = S("Show previous recipe"),
 	usage = S("Show previous usage"),
 }
-local other_dir = {
-	recipe = "usage",
-	usage = "recipe",
-}
 
 ui.register_page("craftguide", {
 	get_formspec = function(player, perplayer_formspec)
@@ -271,8 +267,6 @@ ui.register_page("craftguide", {
 		end
 
 		local dir = ui.current_craft_direction[player_name]
-		local rdir = dir == "recipe" and "usage" or "recipe"
-
 		local crafts = ui.crafts_for[dir][item_name]
 		local alternate = ui.alternate[player_name]
 		local alternates, craft
@@ -307,7 +301,7 @@ ui.register_page("craftguide", {
 			local item_pos = dir == "recipe" and craftguideresultx or (craftguidex+2.5)
 			formspec[n+1] = "image["..no_pos..","..craftguidey..";1.2,1.2;ui_no.png]"
 			formspec[n+2] = stack_image_button(item_pos, craftguidey, 1.2, 1.2,
-				"item_button_" .. other_dir[dir] .. "_", ItemStack(item_name))
+				"item_button_", ItemStack(item_name))
 			if has_give then
 				formspec[n+3] = giveme_form
 			end
@@ -319,7 +313,7 @@ ui.register_page("craftguide", {
 			-- Go in reverse to not overlap the stack count
 			local itemstack = craft.output[i]
 			formspec[n] = stack_image_button(craftguideresultx + (i - 1) * 0.8, craftguidey, 1.2, 1.2,
-					"item_button_" .. rdir .. "_", itemstack)
+					"item_button_", itemstack)
 			n = n + 1
 		end
 
@@ -376,7 +370,7 @@ ui.register_page("craftguide", {
 				if item then
 					formspec[n] = stack_image_button(
 							xoffset - xof, craftguidey - 1.25 + yof, bsize, bsize,
-							"item_button_recipe_",
+							"item_button_",
 							ItemStack(item))
 				else
 					-- Fake buttons just to make grid

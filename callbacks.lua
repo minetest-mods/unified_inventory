@@ -18,7 +18,6 @@ minetest.register_on_joinplayer(function(player)
 	unified_inventory.filtered_items_list[player_name] =
 		unified_inventory.items_list
 	unified_inventory.activefilter[player_name] = ""
-	unified_inventory.active_search_direction[player_name] = "nochange"
 	unified_inventory.current_searchbox[player_name] = ""
 	unified_inventory.current_category[player_name] = "all"
 	unified_inventory.current_category_scroll[player_name] = 0
@@ -49,16 +48,16 @@ end)
 minetest.register_on_mods_loaded(function()
        minetest.register_on_joinplayer(function(player)
                -- After everything is initialized, set up the formspec
-               ui.apply_filter(player, "", "nochange")
+               ui.apply_filter(player, "")
                ui.set_inventory_formspec(player, unified_inventory.default)
        end)
 end)
 
-local function apply_new_filter(player, search_text, new_dir)
+local function apply_new_filter(player, search_text)
 	local player_name = player:get_player_name()
 
 	minetest.sound_play("ui_click", {to_player=player_name, gain = 0.1})
-	ui.apply_filter(player, search_text, new_dir)
+	ui.apply_filter(player, search_text)
 	ui.current_searchbox[player_name] = search_text
 	ui.set_inventory_formspec(player, ui.current_page[player_name])
 end
@@ -76,14 +75,14 @@ local function receive_fields_searchbox(player, formname, fields)
 			or fields.key_enter_field == "searchbox" then
 
 		if ui.current_searchbox[player_name] ~= ui.activefilter[player_name] then
-			ui.apply_filter(player, ui.current_searchbox[player_name], "nochange")
+			ui.apply_filter(player, ui.current_searchbox[player_name])
 			ui.set_inventory_formspec(player, ui.current_page[player_name])
 			minetest.sound_play("paperflip2",
 					{to_player=player_name, gain = 1.0})
 		end
 	elseif fields.searchresetbutton then
 		if ui.activefilter[player_name] ~= "" then
-			apply_new_filter(player, "", "nochange")
+			apply_new_filter(player, "")
 		end
 	end
 end
@@ -109,7 +108,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 
 	if clicked_category and clicked_category ~= ui.current_category[player_name] then
 		ui.current_category[player_name] = clicked_category
-		ui.apply_filter(player, ui.current_searchbox[player_name], "nochange")
+		ui.apply_filter(player, ui.current_searchbox[player_name])
 		ui.set_inventory_formspec(player, ui.current_page[player_name])
 		return
 	end
@@ -185,22 +184,25 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	-- Check clicked item image button
 	local clicked_item
 	for name, value in pairs(fields) do
-		local new_dir, mangled_item = string.match(name, "^[0-9]*_?item_button_([a-z]+)_(.*)$")
-		if new_dir and mangled_item then
+		local mangled_item = string.match(name, "^[0-9]*_?item_button_(.*)$")
+		if mangled_item then
 			clicked_item = unified_inventory.demangle_for_formspec(mangled_item)
 			if string.sub(clicked_item, 1, 6) == "group:" then
 				-- Change search filter to this group
 				unified_inventory.current_category[player_name] = "all"
-				apply_new_filter(player, clicked_item, new_dir)
+				apply_new_filter(player, clicked_item)
 				return
-			end
-			if new_dir == "recipe" or new_dir == "usage" then
-				unified_inventory.current_craft_direction[player_name] = new_dir
 			end
 			break
 		end
 	end
 	if clicked_item then
+		if ui.current_item[player_name] == clicked_item then
+			-- Flip usage/recipe
+			local dir = ui.current_craft_direction[player_name]
+			ui.current_craft_direction[player_name] = dir == "recipe" and "usage" or "recipe"
+		end
+
 		minetest.sound_play("ui_click",
 				{to_player=player_name, gain = 0.1})
 		local page = unified_inventory.current_page[player_name]
