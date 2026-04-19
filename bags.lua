@@ -1,13 +1,13 @@
 --[[
-Bags for Minetest
+Bags for Luanti
 
 Copyright (c) 2012 cornernote, Brett O'Donnell <cornernote@gmail.com>
 Relicensed under LGPL 2 (from GPLv3) as permitted by cornernote (2026-03-14).
 Approval: https://github.com/minetest-mods/unified_inventory/issues/266#issuecomment-4060493213
 --]]
 
-local S = minetest.get_translator("unified_inventory")
-local F = minetest.formspec_escape
+local S = core.get_translator("unified_inventory")
+local F = core.formspec_escape
 local ui = unified_inventory
 
 ui.register_page("bags", {
@@ -40,7 +40,7 @@ ui.register_button("bags", {
 })
 
 local function get_player_bag_stack(player, i)
-	return minetest.get_inventory({
+	return core.get_inventory({
 		type = "detached",
 		name = player:get_player_name() .. "_bags"
 	}):get_stack("bag" .. i, 1)
@@ -85,7 +85,7 @@ for bag_i = 1, 4 do
 			local player_name = player:get_player_name() -- For if statement.
 			if ui.trash_enabled
 				or ui.is_creative(player_name)
-				or minetest.get_player_privs(player_name).give then
+				or core.get_player_privs(player_name).give then
 					formspec[n] = ui.make_trash_slot(7.8, 0.25)
 					n = n + 1
 			end
@@ -114,7 +114,7 @@ for bag_i = 1, 4 do
 	})
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname ~= "" then
 		return
 	end
@@ -148,7 +148,7 @@ local function save_bags_metadata(player, bags_inv)
 		meta:set_string("unified_inventory:bags", "")
 	else
 		meta:set_string("unified_inventory:bags",
-			minetest.serialize(bags))
+			core.serialize(bags))
 	end
 end
 
@@ -156,7 +156,7 @@ local function load_bags_metadata(player, bags_inv)
 	local player_inv = player:get_inventory()
 	local meta = player:get_meta()
 	local bags_meta = meta:get("unified_inventory:bags")
-	local bags = bags_meta and minetest.deserialize(bags_meta) or {}
+	local bags = bags_meta and core.deserialize(bags_meta) or {}
 	local dirty_meta = false
 	if not bags_meta then
 		-- Backwards compatiblity
@@ -188,9 +188,9 @@ local function load_bags_metadata(player, bags_inv)
 	end
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local player_name = player:get_player_name()
-	local bags_inv = minetest.create_detached_inventory(player_name .. "_bags", {
+	local bags_inv = core.create_detached_inventory(player_name .. "_bags", {
 		allow_put = function(inv, listname, index, stack, player)
 			local new_slots = stack:get_definition().groups.bagslots
 			if not new_slots then
@@ -203,7 +203,7 @@ minetest.register_on_joinplayer(function(player)
 			-- current API.
 
 			if not player:get_inventory():is_empty(listname .. "contents") then
-				-- Legacy: in case `allow_take` is not executed on old Minetest versions.
+				-- Legacy: in case `allow_take` is not executed on old Luanti versions.
 				return 0
 			end
 			return 1
@@ -237,7 +237,7 @@ minetest.register_on_joinplayer(function(player)
 end)
 
 
-minetest.register_allow_player_inventory_action(function(player, action, inventory, info)
+core.register_allow_player_inventory_action(function(player, action, inventory, info)
 	-- From detached inventory -> player inventory: put & take callbacks
 	if action ~= "put" or not info.listname:find("bag%dcontents") then
 		return
@@ -251,27 +251,27 @@ minetest.register_allow_player_inventory_action(function(player, action, invento
 end)
 
 -- register bag tools
-minetest.register_tool("unified_inventory:bag_small", {
+core.register_tool("unified_inventory:bag_small", {
 	description = S("Small Bag"),
 	inventory_image = "bags_small.png",
 	groups = {bagslots=8},
 })
 
-minetest.register_tool("unified_inventory:bag_medium", {
+core.register_tool("unified_inventory:bag_medium", {
 	description = S("Medium Bag"),
 	inventory_image = "bags_medium.png",
 	groups = {bagslots=16},
 })
 
-minetest.register_tool("unified_inventory:bag_large", {
+core.register_tool("unified_inventory:bag_large", {
 	description = S("Large Bag"),
 	inventory_image = "bags_large.png",
 	groups = {bagslots=24},
 })
 
 -- register bag crafts
-if minetest.get_modpath("farming") ~= nil then
-	minetest.register_craft({
+if core.get_modpath("farming") ~= nil then
+	core.register_craft({
 		output = "unified_inventory:bag_small",
 		recipe = {
 			{"",           "farming:string", ""},
@@ -280,7 +280,7 @@ if minetest.get_modpath("farming") ~= nil then
 		},
 	})
 
-	minetest.register_craft({
+	core.register_craft({
 		output = "unified_inventory:bag_medium",
 		recipe = {
 			{"",               "",                            ""},
@@ -289,7 +289,7 @@ if minetest.get_modpath("farming") ~= nil then
 		},
 	})
 
-	minetest.register_craft({
+	core.register_craft({
 		output = "unified_inventory:bag_large",
 		recipe = {
 			{"",               "",                             ""},

@@ -2,7 +2,7 @@ local ui = unified_inventory
 
 local function default_refill(stack)
 	stack:set_count(stack:get_stack_max())
-	local itemdef = minetest.registered_items[stack:get_name()]
+	local itemdef = core.registered_items[stack:get_name()]
 	if itemdef
 	and (itemdef.wear_represents or "mechanical_wear") == "mechanical_wear"
 	and stack:get_wear() ~= 0 then
@@ -11,7 +11,7 @@ local function default_refill(stack)
 	return stack
 end
 
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local player_name = player:get_player_name()
 	unified_inventory.players[player_name] = {}
 	unified_inventory.current_index[player_name] = 1 -- Item (~page) index
@@ -26,7 +26,7 @@ minetest.register_on_joinplayer(function(player)
 	unified_inventory.current_craft_direction[player_name] = "recipe"
 
 	-- Refill slot
-	local refill = minetest.create_detached_inventory(player_name.."refill", {
+	local refill = core.create_detached_inventory(player_name.."refill", {
 		allow_put = function(inv, listname, index, stack, player)
 			if unified_inventory.is_creative(player_name) then
 				return stack:get_count()
@@ -35,18 +35,18 @@ minetest.register_on_joinplayer(function(player)
 			end
 		end,
 		on_put = function(inv, listname, index, stack, player)
-			local handle_refill = (minetest.registered_items[stack:get_name()] or {}).on_refill or default_refill
+			local handle_refill = (core.registered_items[stack:get_name()] or {}).on_refill or default_refill
 			stack = handle_refill(stack)
 			inv:set_stack(listname, index, stack)
-			minetest.sound_play("electricity",
+			core.sound_play("electricity",
 					{to_player=player_name, gain = 1.0})
 		end,
 	}, player_name)
 	refill:set_size("main", 1)
 end)
 
-minetest.register_on_mods_loaded(function()
-       minetest.register_on_joinplayer(function(player)
+core.register_on_mods_loaded(function()
+       core.register_on_joinplayer(function(player)
                -- After everything is initialized, set up the formspec
                ui.apply_filter(player, "")
                ui.set_inventory_formspec(player, unified_inventory.default)
@@ -56,7 +56,7 @@ end)
 local function apply_new_filter(player, search_text)
 	local player_name = player:get_player_name()
 
-	minetest.sound_play("ui_click", {to_player=player_name, gain = 0.1})
+	core.sound_play("ui_click", {to_player=player_name, gain = 0.1})
 	ui.apply_filter(player, search_text)
 	ui.current_searchbox[player_name] = search_text
 	ui.set_inventory_formspec(player, ui.current_page[player_name])
@@ -77,7 +77,7 @@ local function receive_fields_searchbox(player, formname, fields)
 		if ui.current_searchbox[player_name] ~= ui.activefilter[player_name] then
 			ui.apply_filter(player, ui.current_searchbox[player_name])
 			ui.set_inventory_formspec(player, ui.current_page[player_name])
-			minetest.sound_play("paperflip2",
+			core.sound_play("paperflip2",
 					{to_player=player_name, gain = 1.0})
 		end
 	elseif fields.searchresetbutton then
@@ -87,7 +87,7 @@ local function receive_fields_searchbox(player, formname, fields)
 	end
 end
 
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname ~= "" then
 		return
 	end
@@ -129,7 +129,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if fields[def.name] then
 			if def.condition == nil or def.condition(player) then
 				def.action(player)
-				minetest.sound_play("ui_click",
+				core.sound_play("ui_click",
 						{to_player=player_name, gain = 0.1})
 			else
 				-- This branch may be executed if relevant permissions were revoked.
@@ -173,7 +173,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		start_i = pagemax
 	end
 	if start_i ~= start then
-		minetest.sound_play("paperflip1",
+		core.sound_play("paperflip1",
 				{to_player=player_name, gain = 1.0})
 		unified_inventory.current_index[player_name] = (start_i - 1) * ui_peruser.items_per_page + 1
 		unified_inventory.set_inventory_formspec(player,
@@ -204,7 +204,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			ui.current_craft_direction[player_name] = dir == "recipe" and "usage" or "recipe"
 		end
 
-		minetest.sound_play("ui_click",
+		core.sound_play("ui_click",
 				{to_player=player_name, gain = 0.1})
 		local page = unified_inventory.current_page[player_name]
 		local player_creative = unified_inventory.is_creative(player_name)
@@ -231,7 +231,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if not (fields.alternate or fields.alternate_prev) then
 		return
 	end
-	minetest.sound_play("ui_click",
+	core.sound_play("ui_click",
 			{to_player=player_name, gain = 0.1})
 	local selected_item = unified_inventory.current_item[player_name]
 	if not selected_item then
@@ -259,8 +259,8 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			unified_inventory.current_page[player_name])
 end)
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
 	local player_name = player:get_player_name()
-	minetest.remove_detached_inventory(player_name.."_bags")
-	minetest.remove_detached_inventory(player_name.."refill")
+	core.remove_detached_inventory(player_name.."_bags")
+	core.remove_detached_inventory(player_name.."refill")
 end)

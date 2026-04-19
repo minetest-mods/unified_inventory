@@ -1,4 +1,4 @@
-local S = minetest.get_translator("unified_inventory")
+local S = core.get_translator("unified_inventory")
 local ui = unified_inventory
 
 function unified_inventory.extract_groupnames(groupname)
@@ -76,7 +76,7 @@ e.g. find all items that match "group:flower,yellow" (flower AND yellow groups)
 function unified_inventory.init_matching_cache()
 	for _, name in ipairs(ui.items_list) do
 		-- we only need to care about groups, exact items are handled separately
-		for group, value in pairs(minetest.registered_items[name].groups) do
+		for group, value in pairs(core.registered_items[name].groups) do
 			if value and value ~= 0 then
 				if not group_to_item_list[group] then
 					group_to_item_list[group] = {}

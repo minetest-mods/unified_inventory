@@ -7,7 +7,7 @@ Retrieve items from inventory lists and calculate their total count.
 Return a table of "item name" - "total count" pairs.
 
 Arguments:
-	inv: minetest inventory reference
+	inv: Luanti inventory reference
 	lists: names of inventory lists to use
 
 Example usage:
@@ -55,7 +55,7 @@ if items were placed on a 3x3 grid. Also note that craft can contain
 groups of items with "group:" prefix.
 
 Arguments:
-	craft: minetest craft recipe
+	craft: Luanti craft recipe
 
 Example output:
 	-- Bed recipe
@@ -227,9 +227,9 @@ This function replicates the inv:remove_item function but can accept
 multiple lists.
 
 Arguments:
-	inv: minetest inventory reference
+	inv: Luanti inventory reference
 	lists: names of inventory lists
-	stack: minetest item stack
+	stack: Luanti item stack
 --]]
 function unified_inventory.remove_item(inv, lists, stack)
 	local removed = ItemStack(nil)
@@ -256,9 +256,9 @@ This function replicates the inv:add_item function but can accept
 multiple lists.
 
 Arguments:
-	inv: minetest inventory reference
+	inv: Luanti inventory reference
 	lists: names of inventory lists
-	stack: minetest item stack
+	stack: Luanti item stack
 --]]
 function unified_inventory.add_item(inv, lists, stack)
 	local leftover = ItemStack(stack)
@@ -279,7 +279,7 @@ Move items from source list to destination list if possible.
 Skip positions specified in exclude set.
 
 Arguments:
-	inv: minetest inventory reference
+	inv: Luanti inventory reference
 	src_list: name of source list
 	dst_list: name of destination list
 	exclude: set of positions to skip
@@ -314,7 +314,7 @@ then function tries to (in that order):
 3. Drop it to the ground if nothing else is possible.
 
 Arguments:
-	player: minetest player object
+	player: Luanti player object
 	src_list: name of source list
 	dst_list: name of destination list
 	match_table: table of matched items
@@ -322,7 +322,7 @@ Arguments:
 --]]
 function unified_inventory.move_match(player, src_list, dst_list, match_table, amount)
 	local inv = player:get_inventory()
-	local item_drop = minetest.item_drop
+	local item_drop = core.item_drop
 	local src_dst_list = {src_list, dst_list}
 	local dst_src_list = {dst_list, src_list}
 
@@ -376,10 +376,10 @@ If amount passed is -1 then amount is defined by match count itself.
 This is used to indicate "craft All" case.
 
 Arguments:
-	player: minetest player object
+	player: Luanti player object
 	src_list: name of source list
 	dst_list: name of destination list
-	craft: minetest craft recipe
+	craft: Luanti craft recipe
 	amount: desired amount of output items
 --]]
 function unified_inventory.craftguide_match_craft(player, src_list, dst_list, craft, amount)
