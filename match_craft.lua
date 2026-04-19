@@ -7,7 +7,7 @@ Retrieve items from inventory lists and calculate their total count.
 Return a table of "item name" - "total count" pairs.
 
 Arguments:
-	inv: Luanti inventory reference
+	inv: InvRef
 	lists: names of inventory lists to use
 
 Example usage:
@@ -55,7 +55,7 @@ if items were placed on a 3x3 grid. Also note that craft can contain
 groups of items with "group:" prefix.
 
 Arguments:
-	craft: Luanti craft recipe
+	craft: Craft recipe (same as for `core.register_craft`)
 
 Example output:
 	-- Bed recipe
@@ -227,9 +227,9 @@ This function replicates the inv:remove_item function but can accept
 multiple lists.
 
 Arguments:
-	inv: Luanti inventory reference
+	inv: InvRef
 	lists: names of inventory lists
-	stack: Luanti item stack
+	stack: ItemStack
 --]]
 function unified_inventory.remove_item(inv, lists, stack)
 	local removed = ItemStack(nil)
@@ -256,9 +256,9 @@ This function replicates the inv:add_item function but can accept
 multiple lists.
 
 Arguments:
-	inv: Luanti inventory reference
+	inv: InvRef
 	lists: names of inventory lists
-	stack: Luanti item stack
+	stack: ItemStack
 --]]
 function unified_inventory.add_item(inv, lists, stack)
 	local leftover = ItemStack(stack)
@@ -279,7 +279,7 @@ Move items from source list to destination list if possible.
 Skip positions specified in exclude set.
 
 Arguments:
-	inv: Luanti inventory reference
+	inv: InvRef
 	src_list: name of source list
 	dst_list: name of destination list
 	exclude: set of positions to skip
@@ -314,7 +314,7 @@ then function tries to (in that order):
 3. Drop it to the ground if nothing else is possible.
 
 Arguments:
-	player: Luanti player object
+	player: ObjectRef
 	src_list: name of source list
 	dst_list: name of destination list
 	match_table: table of matched items
@@ -376,10 +376,10 @@ If amount passed is -1 then amount is defined by match count itself.
 This is used to indicate "craft All" case.
 
 Arguments:
-	player: Luanti player object
+	player: ObjectRef
 	src_list: name of source list
 	dst_list: name of destination list
-	craft: Luanti craft recipe
+	craft: Craft recipe (same as for `core.register_craft`)
 	amount: desired amount of output items
 --]]
 function unified_inventory.craftguide_match_craft(player, src_list, dst_list, craft, amount)
