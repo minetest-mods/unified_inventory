@@ -4,7 +4,7 @@ local warned_funcs = {}
 local function LOG_ONCE(funcname)
 	if warned_funcs[funcname] then return end
 	warned_funcs[funcname] = true
-	minetest.log("error", "Call to undocumented, deprecated API '" .. funcname .. "'."
+	core.log("error", "Call to undocumented, deprecated API '" .. funcname .. "'."
 		.. " In a future version of Unified Inventory this will result in a real error.")
 end
 
@@ -19,7 +19,7 @@ function unified_inventory.canonical_item_spec_matcher(spec)
 
 	local group_names = specname:sub(7):split(",")
 	return function (itemname)
-		local itemdef = minetest.registered_items[itemname]
+		local itemdef = core.registered_items[itemname]
 		for _, group_name in ipairs(group_names) do
 			if (itemdef.groups[group_name] or 0) == 0 then
 				return false

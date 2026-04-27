@@ -1,4 +1,4 @@
-local S = minetest.get_translator("unified_inventory")
+local S = core.get_translator("unified_inventory")
 local ui = unified_inventory
 
 unified_inventory.register_category('plants', {
@@ -28,7 +28,7 @@ unified_inventory.register_category('lighting', {
 
 local function register_automatic_categorization()
 	-- Add biome nodes to environment category
-	for _,def in pairs(minetest.registered_biomes) do
+	for _,def in pairs(core.registered_biomes) do
 		local env_nodes = {
 			def.node_riverbed, def.node_top, def.node_filler, def.node_dust,
 		}
@@ -57,7 +57,7 @@ local function register_automatic_categorization()
 	end
 
 	-- Add minable ores to minerals and everything else (pockets of stone & sand variations) to environment
-	for _, odef in pairs(minetest.registered_ores) do
+	for _, odef in pairs(core.registered_ores) do
 		local drops = possible_node_dig_drops[odef.ore]
 		if drops and odef.ore_type == "scatter" then
 			ui.add_category_item('minerals', odef.ore)
@@ -70,7 +70,7 @@ local function register_automatic_categorization()
 	end
 
 	-- Add items by item definition
-	for name, def in pairs(minetest.registered_items) do
+	for name, def in pairs(core.registered_items) do
 		local group = def.groups or {}
 		if not group.not_in_creative_inventory then
 			if group.stair or
@@ -92,7 +92,7 @@ local function register_automatic_categorization()
 			elseif def.light_source and def.light_source > 0 then
 				unified_inventory.add_category_item('lighting', name)
 			elseif group.door or
-				   minetest.global_exists("doors") and (
+				   core.global_exists("doors") and (
 					 doors.registered_doors and doors.registered_doors[name..'_a'] or
 					 doors.registered_trapdoors and doors.registered_trapdoors[name]
 				   ) then
@@ -688,17 +688,17 @@ unified_inventory.add_category_items('lighting', {
 --]]
 
 --[[ LIST UNCATEGORIZED AFTER LOAD
-minetest.register_on_mods_loaded(function()
-	minetest.after(1, function ( )
+core.register_on_mods_loaded(function()
+	core.after(1, function ( )
 		local l = {}
-		for name,_ in pairs(minetest.registered_items) do
+		for name,_ in pairs(core.registered_items) do
 			if not unified_inventory.find_category(name) then
-				-- minetest.log("error", minetest.serialize(minetest.registered_items[name]))
+				-- core.log("error", core.serialize(core.registered_items[name]))
 				table.insert(l, name)
 			end
 		end
 		table.sort(l)
-		minetest.log(table.concat(l, '",'.."\n"..'"'))
+		core.log(table.concat(l, '",'.."\n"..'"'))
 	end)
 end)
 --]]

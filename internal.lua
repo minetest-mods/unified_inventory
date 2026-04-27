@@ -1,5 +1,5 @@
-local S = minetest.get_translator("unified_inventory")
-local F = minetest.formspec_escape
+local S = core.get_translator("unified_inventory")
+local F = core.formspec_escape
 local ui = unified_inventory
 
 local MIN_FORMSPEC_VERSION = 4
@@ -22,7 +22,7 @@ end
 
 -- Get the player-specific unified_inventory style
 function ui.get_per_player_formspec(player_name)
-	local draw_lite_mode = ui.lite_mode and not minetest.check_player_privs(player_name, {ui_full=true})
+	local draw_lite_mode = ui.lite_mode and not core.check_player_privs(player_name, {ui_full=true})
 
 	local style = table.copy(draw_lite_mode and ui.style_lite or ui.style_full)
 	style.is_lite_mode = draw_lite_mode
@@ -32,7 +32,7 @@ end
 -- Creates an item image or regular image button with a tooltip
 local function formspec_button(ui_peruser, name, image, offset, pos, scale, label)
 	local element = 'image_button'
-	if minetest.registered_items[image] then
+	if core.registered_items[image] then
 		element = 'item_image_button'
 	elseif image:find(":", 1, true) then
 		image = "unknown_item.png"
@@ -256,7 +256,7 @@ local function formspec_add_item_browser(player, formspec, ui_peruser)
 	for y = 0, ui_peruser.pagerows - 1 do
 		for x = 0, ui_peruser.pagecols - 1 do
 			local name = ui.filtered_items_list[player_name][list_index]
-			local item = minetest.registered_items[name]
+			local item = core.registered_items[name]
 			if item then
 				local button_name = "item_button_" .. ui.mangle_for_formspec(name)
 				formspec[n] = ("item_image_button[%f,%f;%f,%f;%s;%s;]"):format(
@@ -272,7 +272,7 @@ local function formspec_add_item_browser(player, formspec, ui_peruser)
 					tooltip = tooltip .. " [" .. item.mod_origin .. "]"
 				end
 				formspec[n + 1] = ("tooltip[%s;%s]"):format(
-					button_name, minetest.formspec_escape(tooltip)
+					button_name, core.formspec_escape(tooltip)
 				)
 				n = n + 2
 			end
@@ -363,7 +363,7 @@ function ui.apply_filter(player, filter)
 		end
 	end
 
-	local registered_items = minetest.registered_items
+	local registered_items = core.registered_items
 	local lfilter = string.lower(filter)
 	local ffilter
 
@@ -386,7 +386,7 @@ function ui.apply_filter(player, filter)
 		end
 	else
 		-- Name filter: fuzzy match item names and descriptions
-		local player_info = minetest.get_player_information(player_name)
+		local player_info = core.get_player_information(player_name)
 		local lang = player_info and player_info.lang_code or ""
 
 		ffilter = function(name)
@@ -397,8 +397,8 @@ function ui.apply_filter(player, filter)
 
 			local lname = string.lower(name)
 			local ldesc = string.lower(def.description)
-			local llocaldesc = minetest.get_translated_string
-				and string.lower(minetest.get_translated_string(lang, def.description))
+			local llocaldesc = core.get_translated_string
+				and string.lower(core.get_translated_string(lang, def.description))
 			return string.find(lname, lfilter, 1, true) or string.find(ldesc, lfilter, 1, true)
 				or llocaldesc and string.find(llocaldesc, lfilter, 1, true)
 		end
@@ -441,11 +441,11 @@ function ui.apply_filter(player, filter)
 end
 
 -- Inform players about potential visual issues
-minetest.register_on_joinplayer(function(player)
+core.register_on_joinplayer(function(player)
 	local player_name = player:get_player_name()
-	local info = minetest.get_player_information(player_name)
+	local info = core.get_player_information(player_name)
 	if info and (info.formspec_version or 0) < MIN_FORMSPEC_VERSION then
-		minetest.chat_send_player(player_name, S("Unified Inventory: Your Luanti/Minetest is"
+		core.chat_send_player(player_name, S("Unified Inventory: Your Luanti/Minetest is"
 			.. " no longer supported. You might experience visual issues."))
 	end
 end)

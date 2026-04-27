@@ -1,4 +1,4 @@
-local S = minetest.get_translator("unified_inventory")
+local S = core.get_translator("unified_inventory")
 
 unified_inventory.registered_categories = {}
 unified_inventory.registered_category_items = {}
@@ -116,7 +116,7 @@ function unified_inventory.set_category_index(category_name, index)
 end
 function unified_inventory.add_category_item(category_name, item)
 	if type(item) ~= "string" then
-		minetest.log("warning", "[unified_inventory] Cannot register category item: " .. dump(item))
+		core.log("warning", "[unified_inventory] Cannot register category item: " .. dump(item))
 		return
 	end
 
