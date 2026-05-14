@@ -56,8 +56,9 @@ unified_inventory = {
 
 	hide_disabled_buttons = core.settings:get_bool("unified_inventory_hide_disabled_buttons", false),
 	hide_uncraftable_items = core.settings:get_bool("unified_inventory_hide_uncraftable_items", false),
+	hide_groups_ifempty = { "stair" }, -- TODO: make customizable
 
-	version = 6
+	version = 7
 }
 
 local ui = unified_inventory
