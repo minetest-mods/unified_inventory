@@ -14,6 +14,7 @@ API revisions within unified_inventory can be checked using:
 * Version `2`: Force formspec version 4 (includes real_coordinates)
 * Version `5` (Y2025): unified_inventory_hide_uncraftable_items
 * Version `6` (Y2026): Support for multiple craft outputs
+* Version `7` (Y2026): Per-player settings support
 
 
 Misc functions

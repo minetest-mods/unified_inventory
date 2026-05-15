@@ -22,8 +22,7 @@ end
 
 -- Get the player-specific unified_inventory style
 function ui.get_per_player_formspec(player_name)
-	local draw_lite_mode = ui.lite_mode and not core.check_player_privs(player_name, {ui_full=true})
-
+	local draw_lite_mode = ui.get_setting(player_name, "lite")
 	local style = table.copy(draw_lite_mode and ui.style_lite or ui.style_full)
 	style.is_lite_mode = draw_lite_mode
 	return style
@@ -53,12 +52,13 @@ local function formspec_tab_buttons(player, formspec, style)
 	-- LUT. Key: button name, value: true/false
 	local is_button_enabled = {}
 
+	local hide_disabled_buttons = ui.get_setting(player, "hide_disabled_buttons")
 	for _, def in pairs(ui.buttons) do
 		if not (style.is_lite_mode and def.hide_lite) then
 			local enabled = def.condition == nil or def.condition(player)
 			is_button_enabled[def.name] = enabled
 
-			if enabled or not ui.hide_disabled_buttons then
+			if enabled or not hide_disabled_buttons then
 				table.insert(filtered_inv_buttons, def)
 			end
 		end
@@ -357,7 +357,7 @@ function ui.apply_filter(player, filter)
 		return true
 	end
 
-	if ui.hide_uncraftable_items and not ui.is_creative(player_name) then
+	if ui.get_setting(player_name, "hide_uncraftable_items") and not ui.is_creative(player_name) then
 		fprefilter = function(name)
 			return ui.get_recipe_list2(name)
 		end

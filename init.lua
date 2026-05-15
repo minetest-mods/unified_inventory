@@ -39,9 +39,6 @@ unified_inventory = {
 	-- Default inventory page
 	default = "craft",
 
-	-- "Lite" mode
-	lite_mode = core.settings:get_bool("unified_inventory_lite"),
-
 	-- Items automatically added to categories based on item definitions
 	automatic_categorization = (core.settings:get_bool("unified_inventory_automatic_categorization") ~= false),
 
@@ -54,10 +51,7 @@ unified_inventory = {
 		"background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]"
 	),
 
-	hide_disabled_buttons = core.settings:get_bool("unified_inventory_hide_disabled_buttons", false),
-	hide_uncraftable_items = core.settings:get_bool("unified_inventory_hide_uncraftable_items", false),
-
-	version = 6
+	version = 7
 }
 
 local ui = unified_inventory
@@ -185,6 +179,7 @@ if sfinv then
 	sfinv.enabled = false
 end
 
+dofile(modpath.."/settings.lua")
 dofile(modpath.."/group.lua")
 dofile(modpath.."/category.lua")
 dofile(modpath.."/default-categories.lua")
