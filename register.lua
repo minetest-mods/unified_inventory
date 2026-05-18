@@ -330,7 +330,23 @@ ui.register_page("craftguide", {
 					craftguidearrowx+0.35, craftguidey, 0.5, 0.5, craft_type.icon)
 			n = n + 1
 		end
-		formspec[n] = string.format("label[%f,%f;%s]", craftguidearrowx + 0.15, craftguidey + 1.4, F(craft_type.description))
+
+		local label = F(craft_type.description)
+
+		-- Append the cook time to the craft type label
+		if craft.type == "cooking" then
+			local res = core.get_craft_result({
+				method = "cooking",
+				width = 1,
+				items = { ItemStack(craft.items[1]) }
+			})
+			if res.time then
+				label = label .. " " .. S("(@1 seconds)", res.time)
+			end
+		end
+
+		formspec[n] = string.format("textarea[%f,%f;%f,%f;;;%s]",
+				craftguidearrowx + 0.15, craftguidey + 1.4, 10.3 - (craftguidearrowx + 0.15), 0.75, label)
 		n = n + 1
 
 		local display_size = craft_type.dynamic_display_size
