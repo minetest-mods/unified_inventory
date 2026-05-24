@@ -51,8 +51,6 @@ unified_inventory = {
 		"background9[0,0;1,1;ui_formbg_9_sliced.png;true;16]"
 	),
 
-	hide_groups_ifempty = { "stair" }, -- TODO: make customizable
-
 	version = 7
 }
 
