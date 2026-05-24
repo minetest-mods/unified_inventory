@@ -366,12 +366,18 @@ function ui.apply_filter(player, filter)
 	local fgroupfilter = function(_)
 		return true
 	end
-	if #ui.hide_groups_ifempty > 0 then
+	local blacklist_groups = string.split(ui.get_setting(player_name, "hide_groups_ifempty"), ",")
+	if #blacklist_groups > 0 then
+		for i, group in ipairs(blacklist_groups) do
+			-- Remove spaces around the group string
+			blacklist_groups[i] = string.trim(group)
+		end
+
 		fgroupfilter = function(def)
 			if #filter > 0 then
 				return true
 			end
-			for _, group in ipairs(ui.hide_groups_ifempty) do
+			for _, group in ipairs(blacklist_groups) do
 				if (def.groups[group] or 0) ~= 0 then
 					return false
 				end

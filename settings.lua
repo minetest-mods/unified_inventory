@@ -5,12 +5,20 @@ local settings = {
 		conf_value = core.settings:get_bool("unified_inventory_lite", false),
 		-- title
 		-- desc
+		-- (values)
 	},
 	hide_disabled_buttons = {
 		conf_value = core.settings:get_bool("unified_inventory_hide_disabled_buttons", false),
 	},
 	hide_uncraftable_items = {
 		conf_value = core.settings:get_bool("unified_inventory_hide_uncraftable_items", false),
+	},
+	hide_groups_ifempty = {
+		conf_value = "stair",
+		title = "Automatically hidden groups",
+		desc = "Comma-separated list of groups to hide from the item browser " ..
+			"when no filter is applied (i.e. empty search box).",
+		values = "group1, group2, ...",
 	},
 }
 
@@ -76,6 +84,7 @@ local function on_setting_changed(player_name, old, new)
 		return
 	end
 	local player = core.get_player_by_name(player_name)
+	ui.apply_filter(player, ui.current_searchbox[player_name])
 	ui.set_inventory_formspec(player, ui.current_page[player_name])
 end
 
@@ -85,11 +94,12 @@ local function register_playersettings()
 	for key, def in pairs(settings) do
 		--print("register", key, dump(def))
 		playersettings.register("unified_inventory:" .. key, {
-			type = "boolean",
+			type = type(def.conf_value),
 			shortdesc = "Unified Inventory: " .. def.title,
 			longdesc  = def.desc,
 			default   = def.conf_value,
 			afterchange = on_setting_changed,
+			values = def.values
 		})
 	end
 end
