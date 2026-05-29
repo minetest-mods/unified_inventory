@@ -197,8 +197,9 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 	if clicked_item then
+		local page = ui.current_page[player_name]
 		local selected_stack = ui.current_item[player_name]
-		if selected_stack and selected_stack:get_name() == clicked_item then
+		if page == "craftguide" and selected_stack and selected_stack:get_name() == clicked_item then
 			-- Flip usage/recipe
 			local dir = ui.current_craft_direction[player_name]
 			ui.current_craft_direction[player_name] = dir == "recipe" and "usage" or "recipe"
@@ -206,7 +207,6 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 
 		core.sound_play("ui_click",
 				{to_player=player_name, gain = 0.1})
-		local page = unified_inventory.current_page[player_name]
 		local player_creative = unified_inventory.is_creative(player_name)
 		if not player_creative then
 			page = "craftguide"

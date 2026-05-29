@@ -26,14 +26,10 @@ Example output:
 function unified_inventory.count_items(inv, lists)
 	local counts = {}
 
-	for i = 1, #lists do
-		local name = lists[i]
-		local size = inv:get_size(name)
-		local list = inv:get_list(name)
+	for _, listname in ipairs(lists) do
+		local items = inv:get_list(listname)
 
-		for j = 1, size do
-			local stack = list[j]
-
+		for _, stack in ipairs(items) do
 			if not stack:is_empty() then
 				local item = stack:get_name()
 				local count = stack:get_count()
@@ -369,32 +365,32 @@ end
 --[[
 Find craft match and move matched items to the destination list.
 
-If match cannot be found or match count is smaller than the desired
-amount then do nothing.
+If match cannot be found, do nothing.
 
-If amount passed is -1 then amount is defined by match count itself.
-This is used to indicate "craft All" case.
+If the match count is smaller than the desired
+amount then do as many as possible.
+
+amount == -1 means "Craft All". Take the largest possible amount.
 
 Arguments:
 	player: ObjectRef
 	src_list: name of source list
 	dst_list: name of destination list
 	craft: Craft recipe (same as for `core.register_craft`)
-	amount: desired amount of output items
+	amount: Desired count of craft steps to match and move
 --]]
 function unified_inventory.craftguide_match_craft(player, src_list, dst_list, craft, amount)
 	local inv = player:get_inventory()
-	local src_dst_list = {src_list, dst_list}
 
-	local counts = unified_inventory.count_items(inv, src_dst_list)
+	local counts = unified_inventory.count_items(inv, {src_list, dst_list})
 	local positions = unified_inventory.count_craft_positions(craft)
 	local match_table, match_count = unified_inventory.match_items(counts, positions)
 
-	if match_table == nil or match_count < amount then
+	if not match_table then
 		return
 	end
 
-	if amount == -1 then
+	if amount == -1 or match_count < amount then
 		amount = match_count
 	end
 
