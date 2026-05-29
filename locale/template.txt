@@ -91,3 +91,4 @@ Finish editing=
 World position=
 Name=
 HUD text color=
+(@1 seconds)=
