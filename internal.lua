@@ -363,6 +363,31 @@ function ui.apply_filter(player, filter)
 		end
 	end
 
+	local fgroupfilter = function(_)
+		return true
+	end
+	local blacklist_groups = string.split(ui.get_setting(player_name, "hide_groups_ifempty"), ",")
+	if #blacklist_groups > 0 then
+		for i, group in ipairs(blacklist_groups) do
+			-- Remove spaces around the group string
+			blacklist_groups[i] = string.trim(group)
+		end
+
+		fgroupfilter = function(def)
+			if #filter > 0 then
+				return true
+			end
+			for _, group in ipairs(blacklist_groups) do
+				if (def.groups[group] or 0) ~= 0 then
+					return false
+				end
+			end
+			return true
+		end
+	end
+
+	-- 'ui.items_list' is created after ServerEnvironment has started. Hence, all items
+	-- in that list must be registered and found in 'core.registered_items'.
 	local registered_items = core.registered_items
 	local lfilter = string.lower(filter)
 	local ffilter
@@ -372,13 +397,8 @@ function ui.apply_filter(player, filter)
 		local groups = lfilter:sub(7):split(",")
 		ffilter = function(name)
 			local def = registered_items[name]
-			if not def then
-				return false
-			end
-
 			for _, group in ipairs(groups) do
-				if not def.groups[group]
-				or def.groups[group] <= 0 then
+				if (def.groups[group] or 0) == 0 then
 					return false
 				end
 			end
@@ -391,16 +411,15 @@ function ui.apply_filter(player, filter)
 
 		ffilter = function(name)
 			local def = registered_items[name]
-			if not def then
+			if not fgroupfilter(def) then
 				return false
 			end
 
 			local lname = string.lower(name)
 			local ldesc = string.lower(def.description)
-			local llocaldesc = core.get_translated_string
-				and string.lower(core.get_translated_string(lang, def.description))
+			local llocaldesc = string.lower(core.get_translated_string(lang, def.description))
 			return string.find(lname, lfilter, 1, true) or string.find(ldesc, lfilter, 1, true)
-				or llocaldesc and string.find(llocaldesc, lfilter, 1, true)
+				or string.find(llocaldesc, lfilter, 1, true)
 		end
 	end
 
@@ -431,7 +450,6 @@ function ui.apply_filter(player, filter)
 			end
 		end
 	end
-	table.sort(filtered_items)
 
 	ui.filtered_items_list_size[player_name] = #filtered_items
 	ui.filtered_items_list[player_name] = filtered_items
