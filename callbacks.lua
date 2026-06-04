@@ -24,7 +24,7 @@ core.register_on_joinplayer(function(player)
 	unified_inventory.alternate[player_name] = 1
 	unified_inventory.current_item[player_name] = nil
 	unified_inventory.current_craft_direction[player_name] = "recipe"
-	unified_inventory.current_craft_type_toggles[player_name] = {} -- values are reversed, so false means true (so that nil means true)
+	unified_inventory.current_craft_type_toggles[player_name] = {} -- values are reversed, false means true (so that nil means true)
 
 	-- Refill slot
 	local refill = core.create_detached_inventory(player_name.."refill", {
