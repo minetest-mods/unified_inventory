@@ -487,7 +487,6 @@ ui.register_page("craftguide", {
 						craftguidearrowx+1.35, craftguidey + 2.6)
 			formspec[n+3] = "tooltip[alternate_prev;" .. F(prev_alt_text[dir]) .. "]"
 			formspec[n+4] = "tooltip[alternate;" .. F(next_alt_text[dir]) .. "]"
-			n = n + 5
 		end
 
 		return { formspec = table.concat(formspec) }
