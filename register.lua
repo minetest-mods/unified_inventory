@@ -269,12 +269,6 @@ ui.register_page("craftguide", {
 
 		local dir = ui.current_craft_direction[player_name]
 		local crafts = ui.crafts_for[dir][item_name]
-		local alternate = ui.alternate[player_name]
-		local alternates, craft
-		if crafts and #crafts > 0 then
-			alternates = #crafts
-			craft = crafts[alternate]
-		end
 		local has_give = player_privs.give or ui.is_creative(player_name)
 
 		local n = #formspec + 1
@@ -293,6 +287,68 @@ ui.register_page("craftguide", {
 			giveme_form = giveme_form ..
 				"button[" .. (give_x + 0.8) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_10;10]" ..
 				"button[" .. (give_x + 1.6) .. "," .. (craftguidey + 2.9) .. ";0.75,0.5;craftguide_giveme_99;99]"
+		end
+
+		if crafts then
+			local found_recipe_types = {}
+			for _, craft in ipairs(crafts) do
+				found_recipe_types[craft.type] = true
+			end
+
+			ui.current_visible_craft_type_toggles[player_name] = found_recipe_types
+
+			formspec[n] = ("label[%f,%f;%s]"):format(0.5, 4.8, F(S("Show recipe types:")))
+			n = n + 1
+
+			local buttonx = 0.5
+			local buttony = 5
+			local button_size = 0.5
+			local button_spacing = 0.25
+			local button_interval = button_size + button_spacing
+			local allbuttonx = buttonx
+			local allbutton_width = button_size * 3/2
+			buttonx = buttonx + allbutton_width + button_spacing
+
+			local has_any = true
+
+			local toggles = ui.current_craft_type_toggles[player_name]
+			local type_i = 0
+			for recipe_type in pairs(found_recipe_types) do
+				local inactive = toggles[recipe_type]
+				if inactive then has_any = false end
+				local def = ui.registered_craft_types[recipe_type]
+				formspec[n] = ("style[craftguide_toggle_recipe_type_visibility_%s;bgcolor=#%s;bgimg=%s]")
+						:format(recipe_type, inactive and "808080" or "ffffff", def.icon)
+				formspec[n+1] = ("button[%f,%f;%f,%f;craftguide_toggle_recipe_type_visibility_%s;]")
+						:format(buttonx, buttony, button_size, button_size, recipe_type)
+				formspec[n+2] = ("tooltip[craftguide_toggle_recipe_type_visibility_%s;%s]")
+						:format(recipe_type, def.description)
+				n = n + 3
+				type_i = type_i + 1
+				buttonx = buttonx + button_interval
+			end
+			toggles.all = not has_any
+
+			formspec[n] = ("style[craftguide_toggle_recipe_type_visibility_%s;bgcolor=#%s;textcolor=#%s]")
+					:format("all", has_any and "3e3e3e" or "000000", has_any and "ffffff" or "808080")
+			formspec[n+1] = ("button[%f,%f;%f,%f;craftguide_toggle_recipe_type_visibility_%s;%s]")
+					:format(allbuttonx, buttony, allbutton_width, button_size, "all", F(S("All")))
+			n = n + 2
+
+			local filtered_crafts = {}
+			for _, craft in ipairs(crafts) do
+				if not toggles[craft.type] then
+					table.insert(filtered_crafts, craft)
+				end
+			end
+			crafts = filtered_crafts
+		end
+
+		local alternate = ui.alternate[player_name]
+		local alternates, craft
+		if crafts and #crafts > 0 then
+			alternates = #crafts
+			craft = crafts[alternate]
 		end
 
 		if not craft then
@@ -431,6 +487,7 @@ ui.register_page("craftguide", {
 						craftguidearrowx+1.35, craftguidey + 2.6)
 			formspec[n+3] = "tooltip[alternate_prev;" .. F(prev_alt_text[dir]) .. "]"
 			formspec[n+4] = "tooltip[alternate;" .. F(next_alt_text[dir]) .. "]"
+			n = n + 5
 		end
 
 		return { formspec = table.concat(formspec) }

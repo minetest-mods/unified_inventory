@@ -24,6 +24,7 @@ core.register_on_joinplayer(function(player)
 	unified_inventory.alternate[player_name] = 1
 	unified_inventory.current_item[player_name] = nil
 	unified_inventory.current_craft_direction[player_name] = "recipe"
+	unified_inventory.current_craft_type_toggles[player_name] = {} -- values are reversed, so false means true (so that nil means true)
 
 	-- Refill slot
 	local refill = core.create_detached_inventory(player_name.."refill", {
@@ -87,6 +88,21 @@ local function receive_fields_searchbox(player, formname, fields)
 	end
 end
 
+local function craftguide_toggle_recipe_type_visibility(player, field_name)
+	local player_name = player:get_player_name()
+	local toggled_recipe_type = field_name:match("craftguide_toggle_recipe_type_visibility_(.*)")
+
+	local toggles = ui.current_craft_type_toggles[player_name]
+	if toggled_recipe_type == "all" then
+		local all_state = toggles.all
+		for recipe_type in pairs(ui.current_visible_craft_type_toggles[player_name]) do
+			toggles[recipe_type] = not all_state
+		end
+	else
+		toggles[toggled_recipe_type] = not toggles[toggled_recipe_type]
+	end
+end
+
 core.register_on_player_receive_fields(function(player, formname, fields)
 	if formname ~= "" then
 		return
@@ -97,6 +113,16 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	local player_name = player:get_player_name()
 
 	local ui_peruser, _ = unified_inventory.get_per_player_formspec(player_name)
+
+	for name in pairs(fields) do
+		if name:match("craftguide_toggle_recipe_type_visibility_") then
+			craftguide_toggle_recipe_type_visibility(player, name)
+			unified_inventory.alternate[player_name] = 1
+			unified_inventory.set_inventory_formspec(player,
+					unified_inventory.current_page[player_name])
+			return
+		end
+	end
 
 	local clicked_category
 	for _, cat in ipairs(ui.category_list) do
@@ -239,6 +265,14 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 	end
 	local crafts = ui.crafts_for[ui.current_craft_direction[
 		player_name]][selected_item:get_name()] or {}
+	local toggles = ui.current_craft_type_toggles[player_name]
+	local filtered_crafts = {}
+	for _, craft in ipairs(crafts) do
+		if not toggles[craft.type] then
+			table.insert(filtered_crafts, craft)
+		end
+	end
+	crafts = filtered_crafts
 	if #crafts <= 1 then
 		return
 	end
