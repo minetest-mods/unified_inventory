@@ -389,6 +389,9 @@ function ui.apply_filter(player, filter)
 		local player_info = core.get_player_information(player_name)
 		local lang = player_info and player_info.lang_code or ""
 
+		-- < 5.14.0 backwards compatibility
+		local strip_escapes = core.strip_escapes or (function(str) return str end)
+
 		ffilter = function(name)
 			local def = registered_items[name]
 			if not def then
@@ -396,7 +399,8 @@ function ui.apply_filter(player, filter)
 			end
 
 			local lname = string.lower(name)
-			local ldesc = string.lower(def.description)
+			-- Strip escapes to only match visible text (and not textdomains)
+			local ldesc = string.lower(strip_escapes(def.description))
 			local llocaldesc = core.get_translated_string
 				and string.lower(core.get_translated_string(lang, def.description))
 			return string.find(lname, lfilter, 1, true) or string.find(ldesc, lfilter, 1, true)
