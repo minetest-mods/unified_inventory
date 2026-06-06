@@ -183,6 +183,9 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		local group_item = ui.get_group_item(group_name)
 		show_is_group = not group_item.sole
 		displayitem = group_item.item or name
+		if item:get_count() > 1 then
+			displayitem = displayitem.." "..item:get_count()
+		end
 		selectitem = group_item.sole and displayitem or name
 	end
 	local label = show_is_group and "G" or ""
