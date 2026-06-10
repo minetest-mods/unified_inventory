@@ -92,3 +92,4 @@ World position=
 Name=
 HUD text color=
 (@1 seconds)=
+Show recipe types:
