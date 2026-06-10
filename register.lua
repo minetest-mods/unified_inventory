@@ -297,17 +297,17 @@ ui.register_page("craftguide", {
 
 			ui.current_visible_craft_type_toggles[player_name] = found_recipe_types
 
-			formspec[n] = ("label[%f,%f;%s]"):format(0.5, 4.8, F(S("Show recipe types:")))
-			n = n + 1
-
-			local buttonx = 0.5
-			local buttony = 5
+			local buttonx = give_x
+			local buttony = craftguidey + 3.9
 			local button_size = 0.5
 			local button_spacing = 0.25
 			local button_interval = button_size + button_spacing
 			local allbuttonx = buttonx
 			local allbutton_width = button_size * 3/2
 			buttonx = buttonx + allbutton_width + button_spacing
+
+			formspec[n] = ("label[%f,%f;%s]"):format(allbuttonx + 0.1, buttony - 0.2, F(S("Show recipe types:")))
+			n = n + 1
 
 			local has_any = true
 
