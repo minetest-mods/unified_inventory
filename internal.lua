@@ -391,6 +391,7 @@ function ui.apply_filter(player, filter)
 	local registered_items = core.registered_items
 	local lfilter = string.lower(filter)
 	local ffilter
+	local fsort = function(t) return t; end
 
 	if lfilter:sub(1, 6) == "group:" then
 		-- Group filter: all groups of the item must match
@@ -406,8 +407,19 @@ function ui.apply_filter(player, filter)
 		end
 	elseif lfilter:sub(1, 5) == "type:" then
 		local type_name = lfilter:sub(6)
+		local recipes_list = type_name == "fuel" and ui.crafts_for.usage or ui.crafts_for.recipe
+
+		local tools = ui.registered_crafting_tools[type_name] or {}
+		local tools_flat = {}
+
 		ffilter = function(name)
-			local recipes = ui.crafts_for.recipe[name] or {}
+			if tools[name] then
+				-- Prepend later
+				table.insert(tools_flat, name)
+				return false
+			end
+
+			local recipes = recipes_list[name] or {}
 			-- WARNING! O(n²) complexity. It is still fast enough (for now?).
 			for _, recipe in pairs(recipes) do
 				if recipe.type == type_name then
@@ -415,6 +427,14 @@ function ui.apply_filter(player, filter)
 				end
 			end
 			return false
+		end
+
+		fsort = function(items)
+			-- Appending a long list is faster than inserting in front
+			for _, v in ipairs(items) do
+				tools_flat[#tools_flat + 1] = v
+			end
+			return tools_flat
 		end
 	else
 		-- Name filter: fuzzy match item names and descriptions
@@ -470,6 +490,8 @@ function ui.apply_filter(player, filter)
 			end
 		end
 	end
+
+	filtered_items = fsort(filtered_items)
 
 	local measure_time = false -- luacheck trickery
 	if measure_time then

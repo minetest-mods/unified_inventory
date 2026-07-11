@@ -13,6 +13,7 @@ end
 
 core.register_on_joinplayer(function(player)
 	local player_name = player:get_player_name()
+	-- TODO: Move everything to `ui.players` for easy clean-up on leave.
 	unified_inventory.players[player_name] = {}
 	unified_inventory.current_index[player_name] = 1 -- Item (~page) index
 	unified_inventory.filtered_items_list[player_name] =

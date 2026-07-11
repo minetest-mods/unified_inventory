@@ -522,3 +522,11 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 end)
+
+-- Register known tools
+ui.register_on_initialized(function()
+	if core.get_modpath("default") then
+		ui.register_crafting_tool("fuel", "default:furnace")
+		ui.register_crafting_tool("cooking", "default:furnace")
+	end
+end)

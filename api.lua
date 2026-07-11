@@ -382,9 +382,20 @@ function ui.craft_type_defaults(name, options)
 	return options
 end
 
+ui.registered_crafting_tools = {
+	--[[
+		key: (string) craft type name
+		value: {
+			[item_name] = true,
+			...
+		}
+	]]
+}
 
 function ui.register_craft_type(name, options)
 	ui.registered_craft_types[name] = ui.craft_type_defaults(name, options)
+
+	ui.registered_crafting_tools[name] = ui.registered_crafting_tools[name] or {}
 end
 
 
@@ -449,6 +460,21 @@ ui.register_craft_type("digging_chance", {
 	width = 1,
 	height = 1,
 })
+
+function ui.register_crafting_tool(type_name, item_name)
+	assert(type(type_name) == "string")
+	assert(type(item_name) == "string")
+
+	local tools = ui.registered_crafting_tools[type_name]
+	if not tools then
+		-- Type yet not registered
+		tools = {}
+		ui.registered_crafting_tools[type_name] = tools
+	end
+
+	tools[item_name] = true
+end
+
 
 ---------------- GUI registrations ----------------
 
