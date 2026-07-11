@@ -169,8 +169,7 @@ core.after(0.01, function()
 	end
 
 	table.sort(ui.items_list)
-	ui.items_list_size = #ui.items_list
-	print("Unified Inventory. Inventory size: "..ui.items_list_size)
+	print("Unified Inventory. Inventory size: " .. #ui.items_list)
 
 	-- Step 1: Initialize cache for looking up groups
 	unified_inventory.init_matching_cache()

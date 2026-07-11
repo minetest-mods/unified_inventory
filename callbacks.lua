@@ -140,6 +140,18 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 
+	for k, v in pairs(fields) do
+		local type_name = k:match("crafttype_(.*)")
+		if type_name then
+			if not ui.registered_craft_types[type_name] then
+				return
+			end
+
+			apply_new_filter(player, "type:" .. type_name)
+			return
+		end
+	end
+
 	-- Inventory page controls
 	local start = math.floor(
 		unified_inventory.current_index[player_name] / ui_peruser.items_per_page + 1)

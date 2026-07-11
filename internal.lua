@@ -404,6 +404,18 @@ function ui.apply_filter(player, filter)
 			end
 			return true
 		end
+	elseif lfilter:sub(1, 5) == "type:" then
+		local type_name = lfilter:sub(6)
+		ffilter = function(name)
+			local recipes = ui.crafts_for.recipe[name] or {}
+			-- WARNING! O(n²) complexity. It is still fast enough (for now?).
+			for _, recipe in pairs(recipes) do
+				if recipe.type == type_name then
+					return true
+				end
+			end
+			return false
+		end
 	else
 		-- Name filter: fuzzy match item names and descriptions
 		local player_info = core.get_player_information(player_name)
@@ -417,6 +429,9 @@ function ui.apply_filter(player, filter)
 			if not fgroupfilter(def) then
 				return false
 			end
+			if #lfilter == 0 then
+				return true
+			end
 
 			local lname = string.lower(name)
 			-- Strip escapes to only match visible text (and not textdomains)
@@ -427,6 +442,7 @@ function ui.apply_filter(player, filter)
 		end
 	end
 
+	local t_start = core.get_us_time()
 	local filtered_items = {}
 
 	local category = ui.current_category[player_name] or 'all'
@@ -455,7 +471,13 @@ function ui.apply_filter(player, filter)
 		end
 	end
 
-	ui.filtered_items_list_size[player_name] = #filtered_items
+	local measure_time = false -- luacheck trickery
+	if measure_time then
+		print(("[u_i] apply_filter(?, '%s') took %.1f ms"):format(
+			filter, (core.get_us_time() - t_start) / 1000)
+		)
+	end
+
 	ui.filtered_items_list[player_name] = filtered_items
 	ui.current_index[player_name] = 1
 	ui.activefilter[player_name] = filter

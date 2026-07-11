@@ -328,13 +328,19 @@ ui.register_page("craftguide", {
 
 		local craft_type = ui.registered_craft_types[craft.type] or
 				ui.craft_type_defaults(craft.type, {})
-		if craft_type.icon then
-			formspec[n] = string.format("image[%f,%f;%f,%f;%s]",
-					craftguidearrowx+0.35, craftguidey, 0.5, 0.5, craft_type.icon)
-			n = n + 1
-		end
-
 		local label = F(craft_type.description)
+
+		-- Craft type button
+		formspec[n] = string.format("image_button[%f,%f;%f,%f;%s;%s;]",
+			craftguidearrowx + 0.35, craftguidey, 0.5, 0.5,
+			craft_type.icon or "ui_craftguide_icon.png",
+			"crafttype_" .. craft.type
+		)
+		formspec[n + 1] = string.format("tooltip[%s;%s]",
+			"crafttype_" .. craft.type,
+			F(S("Show recipes of the same craft type"))
+		)
+		n = n + 2
 
 		-- Append the cook time to the craft type label
 		if craft.type == "cooking" or craft.type == "fuel" then
