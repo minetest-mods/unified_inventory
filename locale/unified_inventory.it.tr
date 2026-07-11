@@ -1,13 +1,14 @@
 # textdomain: unified_inventory
+Mixing=Unione
+Burning=
+Cooking=Cottura
+Digging=Scavo
+Crafting=Assemblaggio
 Bags=Borse
 Bag @1=Borsa @1
 Small Bag=Borsa piccola
 Medium Bag=Borsa media
 Large Bag=Borsa grande
-Mixing=Unione
-Cooking=Cottura
-Digging=Scavo
-Crafting=Assemblaggio
 All Items=
 Misc. Items=
 Plant Life=
@@ -16,7 +17,7 @@ Tools=
 Minerals and Metals=
 Environment and Worldgen=
 Lighting=
- and = e 
+and=e
 Category:=
 Scroll categories left=
 Scroll categories right=
@@ -40,15 +41,12 @@ Crafting Grid=Griglia di assemblaggio
 Crafting Guide=Guida di assemblaggio
 Set home position=Imposta la residenza
 Home position set to: @1=Residenza impostata su: @1
-You don't have the "home" privilege!=Non hai il privilegio "home"!
 Go home=Torna a casa
 Set time to day=Imposta l'orario sul giorno
 Time of day set to 6am=Orario impostato sulle 6am
-You don't have the settime privilege!=Non hai il privilegio "time"!
 Set time to night=Imposta l'orario sulla notte
 Time of day set to 9pm=Orario impostato sulle 9am
 Clear inventory=Ripulisci l'inventario
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=
 Inventory cleared!=Inventario ripulito!
 Trash:=Butta:
 Refill:=Riempi:
@@ -66,6 +64,8 @@ Show previous recipe=Mostra la ricetta precedente
 Show previous usage=Mostra l'utilizzo precedente
 @1 (@2)=
 Give me:=Dammi:
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=
 To craft grid:=Alla griglia di assemblaggio:
 All=Tutto
@@ -91,13 +91,3 @@ Finish editing=Termina la modifica
 World position=Posizione del mondo
 Name=Nome
 HUD text color=Colore del testo del visore
-
-
-##### not used anymore #####
-
-invisible=invisibile
-visible=visibile
-Make waypoint @1=Crea tappa @1
-Disable=Disabilita
-Enable=Abilita
-@1 display of waypoint coordinates=@1 la visualizzazione delle coordinate della tappa

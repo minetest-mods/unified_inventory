@@ -1,13 +1,14 @@
 # textdomain: unified_inventory
+Mixing=混合
+Burning=
+Cooking=烹飪
+Digging=挖出
+Crafting=合成
 Bags=揹包
 Bag @1=揹包@1
 Small Bag=小揹包
 Medium Bag=中揹包
 Large Bag=大揹包
-Mixing=混合
-Cooking=烹飪
-Digging=挖出
-Crafting=合成
 All Items=所有物品
 Misc. Items=雜項
 Plant Life=植物
@@ -16,7 +17,7 @@ Tools=工具
 Minerals and Metals=礦物與金屬
 Environment and Worldgen=自然環境
 Lighting=光源
- and = 和 
+and=和
 Category:=
 Scroll categories left=向左滾動分類欄
 Scroll categories right=向右滾動分類欄
@@ -40,15 +41,12 @@ Crafting Grid=合成表
 Crafting Guide=合成指南
 Set home position=設置家的位置
 Home position set to: @1=家的位置設置到： @1
-You don't have the "home" privilege!=你沒有“home”權限！
 Go home=回家
 Set time to day=設置時間到白天
 Time of day set to 6am=時間設置到早晨6點
-You don't have the settime privilege!=你沒有“settime”權限！
 Set time to night=設置時間到晚上
 Time of day set to 9pm=時間設置到晚上9點
 Clear inventory=清空揹包
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=此按鈕已在非創造模式中禁用以防止意外的背包清空。@n請使用垃圾桶欄。
 Inventory cleared!=清空揹包
 Trash:=丟棄：
 Refill:=填滿：
@@ -66,6 +64,8 @@ Show previous recipe=顯示上一個配方
 Show previous usage=顯示上一個用法
 @1 (@2)=@1 (@2)
 Give me:=給予：
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=
 To craft grid:=填充物品到合成表
 All=全部
@@ -91,12 +91,3 @@ Finish editing=完成編輯
 World position=世界位置
 Name=名稱
 HUD text color=HUD文本顏色
-
-
-##### not used anymore #####
-
-This recipe is too@@large to be displayed.=該配方太@@大，不能顯示。
-invisible=不可見的
-visible=可見的
-Make waypoint @1=設置航路點 @1
-@1 display of waypoint coordinates=顯示航路點@1座標

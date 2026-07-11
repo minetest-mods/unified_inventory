@@ -1,13 +1,14 @@
 # textdomain: unified_inventory
+Mixing=Karıştırma
+Burning=
+Cooking=Pişirme
+Digging=Kazma
+Crafting=Üretim
 Bags=Çantalarım
 Bag @1=@1. Çanta
 Small Bag=Küçük Çanta
 Medium Bag=Çanta
 Large Bag=Büyük Çanta
-Mixing=Karıştırma
-Cooking=Pişirme
-Digging=Kazma
-Crafting=Üretim
 All Items=
 Misc. Items=
 Plant Life=
@@ -16,7 +17,7 @@ Tools=
 Minerals and Metals=
 Environment and Worldgen=
 Lighting=
- and = ve 
+and=ve
 Category:=
 Scroll categories left=
 Scroll categories right=
@@ -40,15 +41,12 @@ Crafting Grid=Üretim tablosu
 Crafting Guide=Kılavuz
 Set home position=Set ev pozisyon
 Home position set to: @1=Yeni eviniz: @1
-You don't have the "home" privilege!="home" yetkiniz yok!
 Go home=Eve git
 Set time to day=Güne zaman ayarla
 Time of day set to 6am=Saat 06:00 olarak ayarlandı
-You don't have the settime privilege!="settime" yetkiniz yok!
 Set time to night=Geceye zaman ayarla
 Time of day set to 9pm=Saat 19:00 olarak ayarlandı
 Clear inventory=
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=
 Inventory cleared!=Envanter temizlendi!
 Trash:=Çöp
 Refill:=Doldur
@@ -66,6 +64,8 @@ Show previous recipe=
 Show previous usage=
 @1 (@2)=
 Give me:=Ver bana:
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=
 To craft grid:=Üretim tablosuna kopyala
 All=Tümü
@@ -91,12 +91,3 @@ Finish editing=Düzenleme bitti
 World position=Dünya konumu
 Name=İsim
 HUD text color=Metin rengi
-
-
-##### not used anymore #####
-
-msgid ""=Yaratıcı modu dışında iken bu tuş kullanılamaz.
-invisible=görünmez
-visible=görünür
-Make waypoint @1=Yol noktası @1
-@1 display of waypoint coordinates=Yol noktası koordinatlarının görüntülenmesini @1

@@ -1,13 +1,14 @@
 # textdomain: unified_inventory
+Mixing=Перемішати
+Burning=
+Cooking=Виплавити
+Digging=Викопати
+Crafting=Крафт
 Bags=Сумки
 Bag @1=Сумка @1
 Small Bag=Мала сумка
 Medium Bag=Середня сумка
 Large Bag=Велика сумка
-Mixing=Перемішати
-Cooking=Виплавити
-Digging=Викопати
-Crafting=Крафт
 All Items=Все
 Misc. Items=Різне
 Plant Life=Рослини
@@ -16,7 +17,7 @@ Tools=Інструменти
 Minerals and Metals=Руди й метали
 Environment and Worldgen=Оточення та генерація світу
 Lighting=Освітлення
- and = та
+and=та
 Category:=Категорії:
 Scroll categories left=Ліворуч
 Scroll categories right=Праворуч
@@ -40,15 +41,12 @@ Crafting Grid=Сітка майстрування
 Crafting Guide=Книга рецептів
 Set home position=Встановити позицію дому
 Home position set to: @1=Тепер дім розташований по координатам: @1
-You don't have the "home" privilege!=У вас немає привілею "home"!
 Go home=Додому
 Set time to day=День
 Time of day set to 6am=Час встановлено на 6:00
-You don't have the settime privilege!=Ви не можете встановлювати час (нема привілею "settime")
 Set time to night=Ніч
 Time of day set to 9pm=Час встановлено на 21:00
 Clear inventory=Очистити інвентар
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=Цю кнопку було вимкнено в творчому режимі, щоб запобігти випадковому очищенню інвентаря.@nВикористовуйте слот смітника натомість.
 Inventory cleared!=Інвентар очищено!
 Trash:=Смітник:
 Refill:=Заповнити:
@@ -66,6 +64,8 @@ Show previous recipe=Попередній рецепт
 Show previous usage=Попереднє використання
 @1 (@2)=@1 (@2)
 Give me:=Дай мені:
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=
 To craft grid:=На сітку крафту:
 All=Все
@@ -91,9 +91,3 @@ Finish editing=Закінчити редагування
 World position=Світова позиція
 Name=Назва
 HUD text color=Колір тексту
-
-
-##### not used anymore #####
-
-Replaces the default inventory and adds a number of features, such as a crafting guide=Замінює стандартний інвентар та додає ряд особливостей, таких як книга рецептів
-This recipe is too@@large to be displayed.=Цей рецепт надто великий, щоб його відобразити

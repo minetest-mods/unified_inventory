@@ -1,13 +1,14 @@
 # textdomain: unified_inventory
+Mixing=Miksowanie
+Burning=
+Cooking=Gotowanie
+Digging=Kopanie
+Crafting=Crafting
 Bags=Plecaki
 Bag @1=Plecak @1
 Small Bag=Mały plecak
 Medium Bag=Średni plecak
 Large Bag=Duży plecak
-Mixing=Miksowanie
-Cooking=Gotowanie
-Digging=Kopanie
-Crafting=Crafting
 All Items=Wszystkie przedmioty
 Misc. Items=Różne przedmioty
 Plant Life=Życie roślin
@@ -16,7 +17,7 @@ Tools=Narzędzia
 Minerals and Metals=Minerały i metale
 Environment and Worldgen=Otoczenie i generowanie świata
 Lighting=Oświetlenie
- and = i 
+and=i
 Category:=Kategorie:
 Scroll categories left=Przewiń kategorię w lewo
 Scroll categories right=Przewiń kategorię w prawo
@@ -40,15 +41,12 @@ Crafting Grid=Siatka craftingu
 Crafting Guide=Przewodnik craftingu
 Set home position=Ustaw pozycję domu
 Home position set to: @1=Pozycja domu ustawiona na: @1
-You don't have the "home" privilege!=Brak uprawnień "home"!
 Go home=Idź do domu
 Set time to day=Ustaw czas na dzień
 Time of day set to 6am=Czas ustawiony na 6:00
-You don't have the settime privilege!=Brak uprawnień "settime"!
 Set time to night=Ustaw czas na noc
 Time of day set to 9pm=Czas ustawiony na 21:00
 Clear inventory=Wyczyść ekwipunek
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=Aby zapobiec przypadkowemu skasowaniu ekwipunku, ten przycisk został wyłączony poza trybem kreatywnym.@nUżyj zamiast tego ikony śmietnika.
 Inventory cleared!=Ekwipunek został wyczyszczony!
 Trash:=Śmietnik:
 Refill:=Uzupełnianie:
@@ -66,6 +64,8 @@ Show previous recipe=Pokaż poprzednią recepturę
 Show previous usage=Pokaż poprzednie użycie
 @1 (@2)=@1 (@2)
 Give me:=Daj mi:
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=
 To craft grid:=Do siatki craftingu.
 All=Wszystko
@@ -91,8 +91,3 @@ Finish editing=Zakończ edycję
 World position=Pozycja
 Name=Nazwa
 HUD text color=Kolor tekstu HUD
-
-
-##### not used anymore #####
-
-This recipe is too@@large to be displayed.=Receptura jest zbyt@@duża aby ją wyświetlić.

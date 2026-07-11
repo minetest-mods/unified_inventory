@@ -1,15 +1,16 @@
 # textdomain: unified_inventory
 # api.lua
 # bags.lua
+Mixing=Mezclar
+Burning=
+Cooking=Hornear
+Digging=Recoger
+Crafting=Elaboración
 Bags=Bolsos
 Bag @1=Bolso @1
 Small Bag=Bolso Pequeño
 Medium Bag=Bolso Mediano
 Large Bag=Bolso Grande
-Mixing=Mezclar
-Cooking=Hornear
-Digging=Recoger
-Crafting=Elaboración
 All Items=
 Misc. Items=
 Plant Life=
@@ -19,7 +20,7 @@ Minerals and Metals=
 Environment and Worldgen=
 Lighting=
 # group.lua
- and = y
+and=y
 Category:=
 Scroll categories left=
 Scroll categories right=
@@ -45,15 +46,12 @@ Crafting Grid=Cuadricula de Elaboración
 Crafting Guide=Guía de Elaboración
 Set home position=Establecer posición de la casa
 Home position set to: @1=Posición de la casa cambiada a: @1
-You don't have the "home" privilege!=
 Go home=Ir a casa
 Set time to day=Cambiar a dia
 Time of day set to 6am=Hora del día cambiada a 6 AM
-You don't have the settime privilege!=¡No tienes el privilegio "settime"!
 Set time to night=Cambiar a noche
 Time of day set to 9pm=Hora del día cambiada a 9 PM
 Clear inventory=Limpiar inventario
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=
 Inventory cleared!=¡Inventario limpio!
 Trash:=Basura:
 Refill:=Rellenar:
@@ -71,6 +69,8 @@ Show previous recipe=Mostrar la receta anterior
 Show previous usage=Mostrar el uso anterior
 @1 (@2)=@1 (@2)
 Give me:=Dame:
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=Esta receta es demasiado@ngrande para ser mostrada.
 To craft grid:=Construir:
 All=Todos
@@ -96,15 +96,3 @@ Finish editing=Terminar edición
 World position=Posición en el mundo
 Name=Nombre
 HUD text color=Color del texto de la Interfaz
-
-
-##### not used anymore #####
-
-Make waypoint @1=Hacer punto @1
-invisible=invisible
-visible=visible
-@1 display of waypoint coordinates=Visualizar coordenadas del punto @1
-Disable=Deshabilitado
-Enable=Habilitado
-You don't have the \"home\" privilege!=¡No tienes el privilegio \"home\"!
-This button has been disabled outside=Este botón ha sido deshabilitado
