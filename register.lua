@@ -333,7 +333,7 @@ ui.register_page("craftguide", {
 		-- Craft type button
 		formspec[n] = string.format("image_button[%f,%f;%f,%f;%s;%s;]",
 			craftguidearrowx + 0.35, craftguidey, 0.5, 0.5,
-			craft_type.icon or "ui_craftguide_icon.png",
+			craft_type.icon,
 			"crafttype_" .. craft.type
 		)
 		formspec[n + 1] = string.format("tooltip[%s;%s]",

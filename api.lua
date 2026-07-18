@@ -369,6 +369,7 @@ function ui.register_craft(options)
 end
 
 local craft_type_defaults = {
+	icon = "ui_craftguide_icon.png",
 	width = 3,
 	height = 3,
 	uses_crafting_grid = false,
@@ -393,7 +394,17 @@ ui.registered_crafting_tools = {
 }
 
 function ui.register_craft_type(name, options)
-	ui.registered_craft_types[name] = ui.craft_type_defaults(name, options)
+	options = ui.craft_type_defaults(name, options)
+	assert(type(options.description) == "string")
+	assert(type(options.icon) == "string")
+	assert(type(options.width) == "number")
+	assert(type(options.height) == "number")
+	if options.dynamic_display_size then
+		assert(type(options.dynamic_display_size) == "function")
+		-- Cannot test return value. Needs fitting recipe.
+	end
+
+	ui.registered_craft_types[name] = options
 
 	ui.registered_crafting_tools[name] = ui.registered_crafting_tools[name] or {}
 end
@@ -429,18 +440,32 @@ ui.register_craft_type("shapeless", {
 	uses_crafting_grid = true,
 })
 
-local have_default_furnace = core.get_modpath("default") or core.get_modpath("mcl_furnaces")
+local function pick_by_mod(t)
+	for k, v in pairs(t) do
+		if core.get_modpath(k) then
+			return v
+		end
+	end
+	return nil
+end
 
 ui.register_craft_type("fuel", {
 	description = S("Burning"),
-	icon = have_default_furnace and "default_furnace_fire_fg.png" or nil,
+	icon = pick_by_mod({
+		["default"]      = "default_furnace_fire_fg.png",
+		["mcl_furnaces"] = "default_furnace_fire_fg.png",
+	}),
 	width = 1,
 	height = 1,
 })
 
 ui.register_craft_type("cooking", {
 	description = S("Cooking"),
-	icon = have_default_furnace and "default_furnace_front_active.png" or nil,
+	icon = pick_by_mod({
+		-- CANNOT FIX: Texture packs may use more animation frames.
+		["default"]      = "default_furnace_front_active.png^[verticalframe:8:1",
+		["mcl_furnaces"] = "default_furnace_front_active.png",
+	}),
 	width = 1,
 	height = 1,
 })
