@@ -92,6 +92,11 @@ Other files from Wikimedia Commons:
 	ui_sethome_icon.png
 		http://commons.wikimedia.org/wiki/File:Home_256x256.png (GPL v2+)
 
+Krock (CC BY-SA 4.0)
+
+	ui_craft_mapgen_ore.png
+		Derived from "default_stone.png" (celeron55) and "default_tin_lump.png" (paramat)
+
 RealBadAngel: (CC-BY-4.0)
 
 	Everything else.
