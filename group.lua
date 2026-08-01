@@ -7,7 +7,7 @@ function unified_inventory.extract_groupnames(groupname)
 		return nil, 0
 	end
 	local group_names = specname:sub(7):split(",")
-	return table.concat(group_names, S(" and ")), #group_names
+	return table.concat(group_names, " " .. S("and") .. " "), #group_names
 end
 
 

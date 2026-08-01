@@ -363,47 +363,106 @@ function ui.apply_filter(player, filter)
 		end
 	end
 
+	local fgroupfilter = function(_)
+		return true
+	end
+	local blacklist_groups = string.split(ui.get_setting(player_name, "hide_groups_ifempty"), ",")
+	if #blacklist_groups > 0 then
+		for i, group in ipairs(blacklist_groups) do
+			-- Remove spaces around the group string
+			blacklist_groups[i] = string.trim(group)
+		end
+
+		fgroupfilter = function(def)
+			if #filter > 0 then
+				return true
+			end
+			for _, group in ipairs(blacklist_groups) do
+				if (def.groups[group] or 0) ~= 0 then
+					return false
+				end
+			end
+			return true
+		end
+	end
+
+	-- 'ui.items_list' is created after ServerEnvironment has started. Hence, all items
+	-- in that list must be registered and found in 'core.registered_items'.
 	local registered_items = core.registered_items
 	local lfilter = string.lower(filter)
 	local ffilter
+	local fsort = function(t) return t; end
 
 	if lfilter:sub(1, 6) == "group:" then
 		-- Group filter: all groups of the item must match
 		local groups = lfilter:sub(7):split(",")
 		ffilter = function(name)
 			local def = registered_items[name]
-			if not def then
-				return false
-			end
-
 			for _, group in ipairs(groups) do
-				if not def.groups[group]
-				or def.groups[group] <= 0 then
+				if (def.groups[group] or 0) == 0 then
 					return false
 				end
 			end
 			return true
+		end
+	elseif lfilter:sub(1, 5) == "type:" then
+		local type_name = lfilter:sub(6)
+		local recipes_list = type_name == "fuel" and ui.crafts_for.usage or ui.crafts_for.recipe
+
+		local tools = ui.registered_crafting_tools[type_name] or {}
+		local tools_flat = {}
+
+		ffilter = function(name)
+			if tools[name] then
+				-- Prepend later
+				table.insert(tools_flat, name)
+				return false
+			end
+
+			local recipes = recipes_list[name] or {}
+			-- WARNING! O(n²) complexity. It is still fast enough (for now?).
+			for _, recipe in pairs(recipes) do
+				if recipe.type == type_name then
+					return true
+				end
+			end
+			return false
+		end
+
+		fsort = function(items)
+			-- Appending a long list is faster than inserting in front
+			for _, v in ipairs(items) do
+				tools_flat[#tools_flat + 1] = v
+			end
+			return tools_flat
 		end
 	else
 		-- Name filter: fuzzy match item names and descriptions
 		local player_info = core.get_player_information(player_name)
 		local lang = player_info and player_info.lang_code or ""
 
+		-- < 5.14.0 backwards compatibility
+		local strip_escapes = core.strip_escapes or (function(str) return str end)
+
 		ffilter = function(name)
 			local def = registered_items[name]
-			if not def then
+			if not fgroupfilter(def) then
 				return false
+			end
+			if #lfilter == 0 then
+				return true
 			end
 
 			local lname = string.lower(name)
-			local ldesc = string.lower(def.description)
-			local llocaldesc = core.get_translated_string
-				and string.lower(core.get_translated_string(lang, def.description))
+			-- Strip escapes to only match visible text (and not textdomains)
+			local ldesc = string.lower(strip_escapes(def.description))
+			local llocaldesc = string.lower(core.get_translated_string(lang, def.description))
 			return string.find(lname, lfilter, 1, true) or string.find(ldesc, lfilter, 1, true)
-				or llocaldesc and string.find(llocaldesc, lfilter, 1, true)
+				or string.find(llocaldesc, lfilter, 1, true)
 		end
 	end
 
+	local t_start = core.get_us_time()
 	local filtered_items = {}
 
 	local category = ui.current_category[player_name] or 'all'
@@ -431,9 +490,16 @@ function ui.apply_filter(player, filter)
 			end
 		end
 	end
-	table.sort(filtered_items)
 
-	ui.filtered_items_list_size[player_name] = #filtered_items
+	filtered_items = fsort(filtered_items)
+
+	local measure_time = false -- luacheck trickery
+	if measure_time then
+		print(("[u_i] apply_filter(?, '%s') took %.1f ms"):format(
+			filter, (core.get_us_time() - t_start) / 1000)
+		)
+	end
+
 	ui.filtered_items_list[player_name] = filtered_items
 	ui.current_index[player_name] = 1
 	ui.activefilter[player_name] = filter

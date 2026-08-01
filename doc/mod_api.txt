@@ -175,6 +175,13 @@ Provide information to display custom craft types:
 		--   For example, `false` hides the "To craft grid:" buttons.
 	})
 
+Register a tool which can be used to craft a recipe:
+
+ * `unified_inventory.register_crafting_tool(type_name, item_name)`
+     * Associates an item to a craft type.
+     * `type_name` (string): e.g. `"mytype"`
+     * `item_name` (string): Any item name. e.g. `"default:pick_diamond"`
+
 Register a non-standard craft recipe:
 
 	unified_inventory.register_craft({
@@ -182,7 +189,7 @@ Register a non-standard craft recipe:
 		-- ^ Craft type. This can be one provided by the engine (e.g. "cooking", "shapeless", ...)
 		--   or custom (see `register_craft_type`).
 
-		output = "default:foobar",                         -- == 1 output
+		output = "default:foobar",                  -- == 1 output
 		output = { "default:foobar", "bar:baz 5" }, -- >= 1 output
 		-- ^ Craft outputs. Entries may be an `ItemStack` or an itemstring.
 

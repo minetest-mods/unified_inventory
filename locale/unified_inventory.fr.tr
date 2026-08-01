@@ -1,13 +1,14 @@
 # textdomain: unified_inventory
+Mixing=
+Burning=
+Cooking=Cuisson
+Digging=Creuser
+Crafting=Création
 Bags=Sacs
 Bag @1=Sac @1
 Small Bag=Petit sac
 Medium Bag=Sac moyen
 Large Bag=Grand sac
-Mixing=
-Cooking=Cuisson
-Digging=Creuser
-Crafting=Création
 All Items=
 Misc. Items=
 Plant Life=
@@ -16,7 +17,7 @@ Tools=
 Minerals and Metals=
 Environment and Worldgen=
 Lighting=
- and = et 
+and=et
 Category:=
 Scroll categories left=
 Scroll categories right=
@@ -40,15 +41,12 @@ Crafting Grid=Grille de création
 Crafting Guide=Guide de création
 Set home position=Position dans le monde
 Home position set to: @1=Position de votre base fixée à: @1
-You don't have the "home" privilege!=Vous n'avez pas le privilège "home"!
 Go home=
 Set time to day=
 Time of day set to 6am=Heure fixée à 6h
-You don't have the settime privilege!=Vous n'avez pas le privilège "settime"!
 Set time to night=
 Time of day set to 9pm=Heure fixée à 21h
 Clear inventory=
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=
 Inventory cleared!=Inventaire vidé !
 Trash:=Poubelle :
 Refill:=Remplir :
@@ -66,6 +64,8 @@ Show previous recipe=
 Show previous usage=
 @1 (@2)=
 Give me:=
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=
 To craft grid:=Sur de création:
 All=Tout
@@ -91,9 +91,3 @@ Finish editing=Terminer l'édition
 World position=Position dans le monde
 Name=Nom
 HUD text color=Couleur de texte du HUD
-
-
-##### not used anymore #####
-
-Make waypoint @1=Rendre @1 le point de passage
-@1 display of waypoint coordinates=@1 montrer les coordonnées des points de passages

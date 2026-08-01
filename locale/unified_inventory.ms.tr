@@ -1,13 +1,14 @@
 # textdomain: unified_inventory
+Mixing=Pencampuran
+Burning=
+Cooking=Pemasakan
+Digging=Penggalian
+Crafting=Pertukangan
 Bags=Beg
 Bag @1=Beg @1
 Small Bag=Beg Kecil
 Medium Bag=Beg Sederhana
 Large Bag=Beg Besar
-Mixing=Pencampuran
-Cooking=Pemasakan
-Digging=Penggalian
-Crafting=Pertukangan
 All Items=
 Misc. Items=
 Plant Life=
@@ -16,7 +17,7 @@ Tools=
 Minerals and Metals=
 Environment and Worldgen=
 Lighting=
- and = dan 
+and=dan
 Category:=
 Scroll categories left=
 Scroll categories right=
@@ -40,15 +41,12 @@ Crafting Grid=Grid Pertukangan
 Crafting Guide=Panduan Pertukangan
 Set home position=Tetapkan kedudukan rumah
 Home position set to: @1=Kedudukan rumah ditetapkan ke: @1
-You don't have the "home" privilege!=Anda tidak ada keistimewaan "home"!
 Go home=Balik rumah
 Set time to day=Tetapkan masa jadi siang
 Time of day set to 6am=Masa ditetapkan ke 6 pagi
-You don't have the settime privilege!=Anda tidak ada keistimewaan settime!
 Set time to night=Tetapkan masa jadi malam
 Time of day set to 9pm=Masa ditetapkan ke 9 malam
 Clear inventory=Kosongkan inventori
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=
 Inventory cleared!=Inventori dikosongkan!
 Trash:=Buang:
 Refill:=Isi balik:
@@ -66,6 +64,8 @@ Show previous recipe=Tunjuk resipi sebelumnya
 Show previous usage=Tunjuk kegunaan sebelumnya
 @1 (@2)=@1 (@2)
 Give me:=Beri saya:
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=
 To craft grid:=Ke grid pertukangan:
 All=
@@ -91,13 +91,3 @@ Finish editing=Selesai edit
 World position=Kedudukan dunia
 Name=Nama
 HUD text color=Warna tulisan HUD
-
-
-##### not used anymore #####
-
-invisible=Sembunyikan
-visible=Paparkan
-Make waypoint @1=@1 titik arah
-Disable=Sembunyikan
-Enable=Paparkan
-@1 display of waypoint coordinates=@1 koordinat untuk titik arah

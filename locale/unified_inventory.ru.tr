@@ -1,13 +1,14 @@
 # textdomain: unified_inventory
+Mixing=Мешать
+Burning=
+Cooking=Готовить
+Digging=Копать
+Crafting=Крафт
 Bags=Сумки
 Bag @1=Сумка @1
 Small Bag=Малая сумка
 Medium Bag=Средняя сумка
 Large Bag=Большая сумка
-Mixing=Мешать
-Cooking=Готовить
-Digging=Копать
-Crafting=Крафт
 All Items=Все предметы
 Misc. Items=Разн. предметы
 Plant Life=Растения
@@ -16,7 +17,7 @@ Tools=Инструменты
 Minerals and Metals=Металлы и минералы
 Environment and Worldgen=Окружение и генер.мира
 Lighting=Освещение
- and = и 
+and=и
 Category:=Категории:
 Scroll categories left=Листать влево
 Scroll categories right=Листать вправо
@@ -40,15 +41,12 @@ Crafting Grid=Решетка крафта
 Crafting Guide=Книга рецептов
 Set home position=Установить позицию дома
 Home position set to: @1=Дом теперь расположен по коодинатам: @1
-You don't have the "home" privilege!=У вас нет привилегии "home"!
 Go home=Отправиться домой
 Set time to day=День
 Time of day set to 6am=Установлено время 6 утра
-You don't have the settime privilege!=Вам не разрешено устанавливать время! (нет привилегии "settime")
 Set time to night=Ночь
 Time of day set to 9pm=Установлено время 9 вечера
 Clear inventory=Очистить инвентарь
-This button has been disabled outside of creative mode to prevent accidental inventory trashing.@nUse the trash slot instead.=
 Inventory cleared!=Инвентарь очищен!
 Trash:=Мусор:
 Refill:=Наполнить:
@@ -66,6 +64,8 @@ Show previous recipe=Предыдущий рецепт
 Show previous usage=Предыдущая страница
 @1 (@2)=
 Give me:=Дай мне:
+Show recipes of the same craft type=
+(@1 seconds)=
 This recipe is too@nlarge to be displayed.=
 To craft grid:=На решeтку крафта:
 All=Все
@@ -91,8 +91,3 @@ Finish editing=Закончить редакцию
 World position=Позиция мира
 Name=Имя
 HUD text color=Цвет текста HUDа
-
-
-##### not used anymore #####
-
-This recipe is too@@large to be displayed.=Этот рецепт слишком большой

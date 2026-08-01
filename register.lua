@@ -183,6 +183,9 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		local group_item = ui.get_group_item(group_name)
 		show_is_group = not group_item.sole
 		displayitem = group_item.item or name
+		if item:get_count() > 1 then
+			displayitem = displayitem.." "..item:get_count()
+		end
 		selectitem = group_item.sole and displayitem or name
 	end
 	local label = show_is_group and "G" or ""
@@ -381,18 +384,24 @@ ui.register_page("craftguide", {
 
 		local craft_type = ui.registered_craft_types[craft.type] or
 				ui.craft_type_defaults(craft.type, {})
-		if craft_type.icon then
-			formspec[n] = string.format("image[%f,%f;%f,%f;%s]",
-					craftguidearrowx+0.35, craftguidey, 0.5, 0.5, craft_type.icon)
-			n = n + 1
-		end
-
 		local label = F(craft_type.description)
 
+		-- Craft type button
+		formspec[n] = string.format("image_button[%f,%f;%f,%f;%s;%s;]",
+			craftguidearrowx + 0.35, craftguidey, 0.5, 0.5,
+			craft_type.icon,
+			"crafttype_" .. craft.type
+		)
+		formspec[n + 1] = string.format("tooltip[%s;%s]",
+			"crafttype_" .. craft.type,
+			F(S("Show recipes of the same craft type"))
+		)
+		n = n + 2
+
 		-- Append the cook time to the craft type label
-		if craft.type == "cooking" then
+		if craft.type == "cooking" or craft.type == "fuel" then
 			local res = core.get_craft_result({
-				method = "cooking",
+				method = craft.type,
 				width = 1,
 				items = { ItemStack(craft.items[1]) }
 			})
@@ -567,5 +576,13 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 			craftguide_giveme(player, k)
 			return
 		end
+	end
+end)
+
+-- Register known tools
+ui.register_on_initialized(function()
+	if core.get_modpath("default") then
+		ui.register_crafting_tool("fuel", "default:furnace")
+		ui.register_crafting_tool("cooking", "default:furnace")
 	end
 end)

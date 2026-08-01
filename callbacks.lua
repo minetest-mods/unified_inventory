@@ -13,6 +13,7 @@ end
 
 core.register_on_joinplayer(function(player)
 	local player_name = player:get_player_name()
+	-- TODO: Move everything to `ui.players` for easy clean-up on leave.
 	unified_inventory.players[player_name] = {}
 	unified_inventory.current_index[player_name] = 1 -- Item (~page) index
 	unified_inventory.filtered_items_list[player_name] =
@@ -162,6 +163,18 @@ core.register_on_player_receive_fields(function(player, formname, fields)
 				core.chat_send_player(player_name, "Action disallowed. Preconditions not met.")
 				ui.set_inventory_formspec(player, ui.current_page[player_name])
 			end
+			return
+		end
+	end
+
+	for k, v in pairs(fields) do
+		local type_name = k:match("crafttype_(.*)")
+		if type_name then
+			if not ui.registered_craft_types[type_name] then
+				return
+			end
+
+			apply_new_filter(player, "type:" .. type_name)
 			return
 		end
 	end
