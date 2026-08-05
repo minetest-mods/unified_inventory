@@ -42,7 +42,8 @@ end)
 
 core.register_globalstep(function(dtime)
 	for _, player in pairs(core.get_connected_players()) do
-		local data = item_names[player:get_player_name()]
+		local name = player:get_player_name()
+		local data = item_names[name]
 		if not data or not data.hud then
 			data = {} -- Update on next step
 			set_hud(player)
@@ -63,23 +64,18 @@ core.register_globalstep(function(dtime)
 			data.itemname = itemname
 			data.index = index
 			data.dtime = 0
-			local lang_code = core.get_player_information(player:get_player_name()).lang_code
+			local lang_code = core.get_player_information(name).lang_code
 
-			local desc = stack.get_meta
-				and stack:get_meta():get_string("description")
-
-			if not desc or desc == "" then
-				-- Try to use default description when none is set in the meta
-				local def = core.registered_items[itemname]
-				desc = def and def.description or ""
-			end
-			if only_names and desc and string.find(desc, "\n") then
-				desc = string.match(desc, "([^\n]*)")
+			local desc
+			if only_names then
+				desc = stack:get_short_description()
+			else
+				desc = stack:get_description()
 			end
 			desc = core.get_translated_string(lang_code, desc)
 			desc = core.strip_colors(desc)
-			if string.len(desc) > max_length and max_length > 0 then
-				desc = string.sub(desc, 1, max_length) .. " [...]"
+			if max_length > 0 and #desc > max_length then
+				desc = desc:sub(1, max_length) .. " [...]"
 			end
 			player:hud_change(data.hud, 'text', desc)
 		end
