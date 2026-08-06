@@ -66,14 +66,19 @@ core.register_globalstep(function(dtime)
 			data.dtime = 0
 			local lang_code = core.get_player_information(name).lang_code
 
-			local desc
+			local desc = stack:get_description()
 			if only_names then
-				desc = stack:get_short_description()
-			else
-				desc = stack:get_description()
+				-- Don't use 'stack:get_short_description()' because it breaks multi-line translations
+				local short = stack:get_meta():get("short_description") or stack:get_definition().short_description
+				if short and #short > 0 then
+					desc = short
+				end
 			end
 			desc = core.get_translated_string(lang_code, desc)
 			desc = core.strip_colors(desc)
+			if only_names and desc:find("\n") then
+				desc = desc:match("([^\n]*)")
+			end
 			if max_length > 0 and #desc > max_length then
 				desc = desc:sub(1, max_length) .. " [...]"
 			end
