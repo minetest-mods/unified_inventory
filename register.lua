@@ -418,7 +418,7 @@ ui.register_page("craftguide", {
 			for _, r in ipairs(craft and craft.replacements or {}) do
 				local candidates = ui.get_matching_items(r[1])
 				for _, stack in ipairs(craft_items) do
-					-- Don't use the same stack twice
+					-- Don't use the same stack twice (`stack` is a unique userdata)
 					if not replacements[stack] then
 						if candidates[stack:get_name()] then
 							replacements[stack] = ItemStack(r[2])
@@ -448,11 +448,6 @@ ui.register_page("craftguide", {
 					-- Fake buttons just to make grid
 					formspec[n] = string.format("image_button[%f,%f;%f,%f;ui_blank_image.png;;]",
 							xoffset - xof, craftguidey - 1.25 + yof, bsize, bsize)
-				end
-
-				if stack then
-					-- Mark as handled. TODO: What if there are multiple replacements?
-					replacements[stack] = nil
 				end
 
 				n = n + 1
