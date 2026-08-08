@@ -3,10 +3,9 @@
 local item_names = {} -- [player_name] = { hud, dtime, itemname }
 local dlimit = 3  -- HUD element will be hidden after this many seconds
 local hudbars_mod = core.get_modpath("hudbars")
-local only_names = core.settings:get_bool("unified_inventory_only_names", true)
 local max_length = tonumber(core.settings:get("unified_inventory_max_item_name_length")) or 80
 
-local function set_hud(player)
+local function add_item_name_hud(player)
 	local player_name = player:get_player_name()
 	local off = {x=0, y=-65}
 	if hudbars_mod then
@@ -28,12 +27,13 @@ local function set_hud(player)
 		}),
 		dtime = dlimit,
 		index = 1,
-		itemname = ""
+		itemname = "",
+		lang_code = core.get_player_information(player_name).lang_code,
 	}
 end
 
 core.register_on_joinplayer(function(player)
-	core.after(0, set_hud, player)
+	core.after(0, add_item_name_hud, player)
 end)
 
 core.register_on_leaveplayer(function(player)
@@ -46,7 +46,7 @@ core.register_globalstep(function(dtime)
 		local data = item_names[name]
 		if not data or not data.hud then
 			data = {} -- Update on next step
-			set_hud(player)
+			add_item_name_hud(player)
 		end
 
 		local index = player:get_wield_index()
@@ -61,11 +61,12 @@ core.register_globalstep(function(dtime)
 		end
 
 		if data.hud and (itemname ~= data.itemname or index ~= data.index) then
+			-- Player changed the wielded item. Update text.
 			data.itemname = itemname
 			data.index = index
 			data.dtime = 0
-			local lang_code = core.get_player_information(name).lang_code
 
+			local only_names = unified_inventory.get_setting(name, "only_names")
 			local desc = stack:get_description()
 			if only_names then
 				-- Don't use 'stack:get_short_description()' because it breaks multi-line translations
@@ -74,7 +75,7 @@ core.register_globalstep(function(dtime)
 					desc = short
 				end
 			end
-			desc = core.get_translated_string(lang_code, desc)
+			desc = core.get_translated_string(data.lang_code, desc)
 			desc = core.strip_colors(desc)
 			if only_names and desc:find("\n") then
 				desc = desc:match("([^\n]*)")

@@ -20,6 +20,11 @@ local settings = {
 			"when no filter is applied (i.e. empty search box).",
 		values = "group1, group2, ...",
 	},
+
+	-- item_names.lua
+	only_names = {
+		conf_value = core.settings:get_bool("unified_inventory_only_names", true),
+	}
 }
 
 -- Read the descriptions from "settingtypes.txt" if available
@@ -42,6 +47,12 @@ do
 			end
 			desc = {}
 		end
+	end
+
+	-- Ensure all required fields are specified.
+	for key, def in pairs(settings) do
+		assert(def.title, key)
+		assert(def.desc, key)
 	end
 end
 
