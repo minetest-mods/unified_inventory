@@ -1,5 +1,4 @@
 unused_args = false
-allow_defined_top = true
 max_line_length = 131
 
 globals = {

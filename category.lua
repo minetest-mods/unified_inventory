@@ -38,7 +38,7 @@ local function string_to_sort_index(str)
 	return index
 end
 
-function update_category_list()
+local function update_category_list()
 	local category_list = {}
 	table.insert(category_list, {
 		name = "all",
