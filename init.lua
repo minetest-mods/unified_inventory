@@ -37,9 +37,6 @@ unified_inventory = {
 	-- Default inventory page
 	default = "craft",
 
-	-- Items automatically added to categories based on item definitions
-	automatic_categorization = (core.settings:get_bool("unified_inventory_automatic_categorization") ~= false),
-
 	-- Trash enabled
 	trash_enabled = (core.settings:get_bool("unified_inventory_trash") ~= false),
 	imgscale = 1.25,

@@ -489,6 +489,7 @@ function ui.apply_filter(player, filter)
 				table.insert(filtered_items, name)
 			end
 		end
+		table.sort(filtered_items)
 	end
 
 	filtered_items = fsort(filtered_items)

@@ -20,10 +20,6 @@ unified_inventory_hide_disabled_buttons (Hide disabled buttons) bool false
 # This setting has no effect on players in creative mode.
 unified_inventory_hide_uncraftable_items (Hide uncraftable items) bool false
 
-# Automatically categorizes registered items based on their
-# groups. This is based on a fuzzy match, thus is not 100% accurate.
-unified_inventory_automatic_categorization (Categories: add items automatically) bool true
-
 # Shows the selected wielded item description in the HUD for a few seconds.
 unified_inventory_item_names (Enable HUD item names) bool true
 
