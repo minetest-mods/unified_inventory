@@ -117,13 +117,13 @@ pageflip2.ogg
 trash.ogg
 	https://freesound.org/people/OwlStorm/sounds/151231/ by OwlStorm, CC 0 (speed up)
 trash_all.ogg
-	https://freesound.org/people/abel_K/sounds/68280/ by abel_K, Sampling Plus 1.0 (speed up)
+	https://freesound.org/people/indigosierra/sounds/82562/ "crumple.wav" by indigosierra, CC0 (reverb)
 ui_click.ogg
 	https://freesound.org/people/lartti/sounds/527569/ by lartti, CC 0 (cut)
 ui_morning.ogg
 	https://freesound.org/people/InspectorJ/sounds/439472/ by InspectorJ, CC 4.0
 ui_owl.ogg
-	https://freesound.org/people/manda_g/sounds/54987/ by manda_g, Sampling Plus 1.0 (cut)
+	https://freesound.org/people/Gorkovoy/sounds/826361/ "Ocarina Owl Like" by Gorkovoy, CC0 (cut)
 
 
 
