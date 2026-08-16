@@ -218,7 +218,7 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item, replaceme
 
 		tooltip = (tooltip == "" and item:get_description() or tooltip) ..
 			"\n\n" ..
-			S("Replaced by: @1", ("%s [%s]"):format(item:get_description(), replacement:get_name()))
+			S("Replaced by: @1", ("%s [%s]"):format(replacement:get_description(), replacement:get_name()))
 	end
 
 	-- Note: A tooltip is added automatically when the displayed item name is known.
