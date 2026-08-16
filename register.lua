@@ -171,16 +171,17 @@ ui.register_page("craft", {
 -- represented by some item in the group, along with a flag indicating
 -- that it's a group.  If the group contains only one item, it will be
 -- treated as if that item had been specified directly.
+--- @param item        ItemStack (name may be `group:...`)
+--- @param replacement Optional, ItemStack.
 
-local function stack_image_button(x, y, w, h, buttonname_prefix, item)
+local function stack_image_button(x, y, w, h, buttonname_prefix, item, replacement)
 	local name = item:get_name()
-	local description = item:get_meta():get_string("description")
 	local show_is_group = false
-	local displayitem = item:to_string()
+	local displayitem = item:to_string() -- item name for display
 	local selectitem = name
+
 	if name:sub(1, 6) == "group:" then
-		local group_name = name:sub(7)
-		local group_item = ui.get_group_item(group_name)
+		local group_item = ui.get_group_item(name:sub(7))
 		show_is_group = not group_item.sole
 		displayitem = group_item.item or name
 		if item:get_count() > 1 then
@@ -188,29 +189,44 @@ local function stack_image_button(x, y, w, h, buttonname_prefix, item)
 		end
 		selectitem = group_item.sole and displayitem or name
 	end
-	local label = show_is_group and "G" or ""
+	local label = show_is_group and "G" or "" -- center text
+
 	-- Unique id to prevent tooltip being overridden
-	local id = string.format("%i%i_", x*10, y*10)
-	local buttonname = F(id..buttonname_prefix..ui.mangle_for_formspec(selectitem))
-	local button = string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",
+	local unique_id = string.format("%i%i_", x*10, y*10)
+	local buttonname = F(unique_id .. buttonname_prefix .. ui.mangle_for_formspec(selectitem))
+	local fs = {}
+
+	fs[1] = string.format("item_image_button[%f,%f;%f,%f;%s;%s;%s]",
 			x, y, w, h,
 			F(displayitem), buttonname, label)
+
+	local tooltip = item:get_meta():get_string("description")
 	if show_is_group then
-		local groupstring, andcount = ui.extract_groupnames(name)
-		local grouptip
-		if andcount == 1 then
-			grouptip = S("Any item belonging to the @1 group", groupstring)
-		elseif andcount > 1 then
-			grouptip = S("Any item belonging to the groups @1", groupstring)
+		local groupstring, count = ui.extract_groupnames(name)
+		if count == 1 then
+			tooltip = S("Any item belonging to the @1 group", groupstring)
+		elseif count > 1 then
+			tooltip = S("Any item belonging to the groups @1", groupstring)
+		else
+			tooltip = ""
 		end
-		grouptip = F(grouptip)
-		if andcount >= 1 then
-			button = button  .. string.format("tooltip[%s;%s]", buttonname, grouptip)
-		end
-	elseif description ~= "" then
-		button = button  .. string.format("tooltip[%s;%s]", buttonname, F(description))
 	end
-	return button
+
+	if replacement then
+		-- Top left label to indicate replacement
+		fs[#fs + 1] = string.format("label[%f,%f;R]", x + w - 0.3, y + 0.25)
+
+		tooltip = (tooltip == "" and item:get_description() or tooltip) ..
+			"\n\n" ..
+			S("Replaced by: @1", ("%s [%s]"):format(item:get_description(), replacement:get_name()))
+	end
+
+	-- Note: A tooltip is added automatically when the displayed item name is known.
+	if tooltip ~= "" then
+		fs[#fs + 1] = string.format("tooltip[%s;%s]", buttonname, F(tooltip))
+	end
+
+	return table.concat(fs)
 end
 
 -- The recipe text contains parameters, hence they can yet not be translated.
@@ -387,27 +403,53 @@ ui.register_page("craftguide", {
 			bsize = 0.8 * sf
 		end
 		if (bsize > 0.35 and display_size.width) then
+			local craft_items = {
+				-- value: ItemStack
+			}
+
+			for i, item in pairs(craft and craft.items or {}) do
+				craft_items[i] = ItemStack(item)
+			end
+
+			local replacements = {
+				-- key: input name (or group)
+				-- value: name after replacement
+			}
+			for _, r in ipairs(craft and craft.replacements or {}) do
+				local candidates = ui.get_matching_items(r[1])
+				for _, stack in ipairs(craft_items) do
+					-- Don't use the same stack twice (`stack` is a unique userdata)
+					if not replacements[stack] then
+						if candidates[stack:get_name()] then
+							replacements[stack] = ItemStack(r[2])
+							break
+						end
+					end
+				end
+			end
+
 			for y = 1, display_size.height do
 			for x = 1, display_size.width do
-				local item
-				if craft and x <= craft_width then
-					item = craft.items[(y-1) * craft_width + x]
+				local stack
+				if x <= craft_width then
+					stack = craft_items[(y-1) * craft_width + x]
 				end
+
 				-- Flipped x, used to build formspec buttons from right to left
 				local fx = display_size.width - (x-1)
 				-- x offset, y offset
 				local xof = ((fx-1) * of + of) * bspc
 				local yof = ((y-1) * of + 1) * bspc
-				if item then
+				if stack then
 					formspec[n] = stack_image_button(
 							xoffset - xof, craftguidey - 1.25 + yof, bsize, bsize,
-							"item_button_",
-							ItemStack(item))
+							"item_button_", stack, replacements[stack])
 				else
 					-- Fake buttons just to make grid
 					formspec[n] = string.format("image_button[%f,%f;%f,%f;ui_blank_image.png;;]",
 							xoffset - xof, craftguidey - 1.25 + yof, bsize, bsize)
 				end
+
 				n = n + 1
 			end
 			end
