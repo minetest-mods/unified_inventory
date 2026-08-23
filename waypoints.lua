@@ -35,7 +35,7 @@ Datastorage format (per-player):
 			world_pos = <coordinates vector>,
 			color = <"hud_colors" index>,
 			active = <hud show waypoint?>,
-			display_pos = <hud display coorinates?>,
+			display_pos = <hud display coordinates?>,
 		},
 		[<waypoint index>] = { ... },
 		...

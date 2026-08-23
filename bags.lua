@@ -159,7 +159,7 @@ local function load_bags_metadata(player, bags_inv)
 	local bags = bags_meta and core.deserialize(bags_meta) or {}
 	local dirty_meta = false
 	if not bags_meta then
-		-- Backwards compatiblity
+		-- Backwards compatibility
 		for i = 1, 4 do
 			local bag = "bag" .. i
 			if not player_inv:is_empty(bag) then

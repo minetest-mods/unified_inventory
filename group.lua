@@ -55,7 +55,7 @@ local group_item_cache = {}
 --- @brief Finds "the best matching" item that has all of the specified groups.
 ---        Use-case: get an image for recipe ingredients that are a group.
 --- @param group_name string, e.g. "tree,flammable"
---- @return A table: `{ item = "mymod:best_fit", sole = boolean }`
+--- @return table # `{ item = "mymod:best_fit", sole = boolean }`
 ---         When `sole == true` --> no "G" (group) button text
 function unified_inventory.get_group_item(group_name)
 	if not group_item_cache[group_name] then
