@@ -139,7 +139,7 @@ Register a new button for the bottom row:
 		action = function(player)
 			return
 		end
-		-- ^ Optional. Called when the player (an `ObjectRef`) presses the button button.
+		-- ^ Optional. Called when the player (an `ObjectRef`) presses the button.
 		--   By default, the inventory page of the same name will be shown.
 	})
 

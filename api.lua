@@ -3,9 +3,9 @@ local ui = unified_inventory
 
 local recipes_initialized = false
 
---- @return boolean. Returns `true` when all ingredients exist.
+--- @return boolean # Returns `true` when all ingredients exist.
 local function is_recipe_craftable(recipe)
-	-- Ensure the ingedients exist
+	-- Ensure the ingredients exist
 	for _, itemname in pairs(recipe.items) do
 		local groups = string.find(itemname, "group:")
 		if groups then
@@ -151,7 +151,7 @@ local function register_dig_drops(name)
 		to register them later, in order to avoid duplicates. These tables counts
 		the total number of guaranteed drops and drops by chance (“maybes”) for each item.
 		For “maybes”, the final count is the theoretical maximum number of items, not
-		neccessarily the actual drop count. ]]
+		necessarily the actual drop count. ]]
 		local drop_guaranteed = {}
 		local drop_maybe = {}
 		-- This is for catching an obscure corner case: If the top items table has
@@ -274,7 +274,7 @@ core.after(0.01, function()
 
 			if next(ingredient_items) then
 				-- There's at least one known ingredient: mark as good recipe
-				-- PS: What whatll be done about partially incomplete recipes?
+				-- PS: What'll be done about partially incomplete recipes?
 				table.insert(new_recipe_list, recipe)
 			end
 		end
@@ -394,7 +394,7 @@ function ui.register_craft(options)
 	end
 
 	do
-		-- Convert the the 'output' field into a table for convenience
+		-- Convert the 'output' field into a table for convenience
 		local outputs = options.output
 		if type(outputs) == "string" then
 			-- Most common
