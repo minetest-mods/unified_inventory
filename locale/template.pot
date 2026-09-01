@@ -263,6 +263,10 @@ msgstr ""
 msgid "All"
 msgstr ""
 
+#: register.lua
+msgid "Show recipe types:"
+msgstr ""
+
 #: waypoints.lua
 msgid "White"
 msgstr ""

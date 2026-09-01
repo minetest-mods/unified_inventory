@@ -20,6 +20,8 @@ unified_inventory = {
 	current_index = {},
 	current_item = {},
 	current_craft_direction = {},
+	current_visible_craft_type_toggles = {},
+	current_craft_type_toggles = {}, -- values are reversed, so false means true (so that nil means true)
 	registered_craft_types = {},
 	crafts_for = {usage = {}, recipe = {} },
 	players = {},
